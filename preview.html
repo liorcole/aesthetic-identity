@@ -530,46 +530,45 @@ body {
   .engines { grid-template-columns: repeat(2, 1fr); }
   .masthead h1 { font-size: 32px; }
 }
-
-/* ── Boundary ring ── */
-.boundary-ring { fill: none; stroke: var(--line-hair); stroke-width: 0.75; stroke-dasharray: 4 6; transition: stroke 0.3s, stroke-width 0.3s; }
-.boundary-tag { font-family: 'JetBrains Mono', monospace; font-size: 7px; fill: var(--ink-dim); letter-spacing: 0.25em; text-transform: uppercase; }
-body.constraint-mode .boundary-ring { stroke: var(--accent); stroke-width: 1.5; stroke-dasharray: none; }
-body.constraint-mode .boundary-tag { fill: var(--accent); }
-body.constraint-mode .dim-node:not(.bound) .dim-node-circle { stroke: var(--line-hair); fill: var(--bg); }
-body.constraint-mode .dim-node.bound .dim-node-circle { fill: var(--accent); stroke: var(--accent); stroke-width: 1.5; }
-/* ── Engine core ring ── */
-.engine-core-bg { transition: fill 0.2s; }
-/* ── Constraints strip (mirrors modulators-strip) ── */
-.constraints-strip { display: grid; grid-template-columns: 220px 1fr; gap: 32px; align-items: stretch; margin-top: 36px; padding-top: 28px; border-top: 0.5px solid var(--line-soft); }
-.constraints-intro { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-mute); line-height: 1.7; padding-top: 4px; }
-.constraints-intro .num { color: var(--accent); display: block; font-size: 30px; font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 300; letter-spacing: 0; line-height: 1; margin-bottom: 8px; }
-.constraints-intro strong { color: var(--ink); font-weight: 400; text-transform: none; letter-spacing: 0.02em; font-size: 11px; display: block; margin-top: 6px; }
-.constraints { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
-.con-card { background: transparent; border: 0.75px solid var(--line); padding: 16px 18px; cursor: pointer; transition: background 0.18s, color 0.18s; min-height: 86px; display: flex; flex-direction: column; justify-content: space-between; position: relative; }
-.con-card:hover, .con-card.active { background: var(--ink); color: var(--paper); }
-.con-card-num { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.2em; color: var(--ink-mute); }
-.con-card:hover .con-card-num, .con-card.active .con-card-num { color: var(--accent); }
-.con-card-title { font-family: 'Cormorant Garamond', serif; font-size: 19px; font-weight: 400; line-height: 1.1; letter-spacing: -0.005em; }
-.con-card-sub { font-size: 9.5px; color: var(--ink-mute); line-height: 1.45; margin-top: 6px; }
-.con-card:hover .con-card-sub, .con-card.active .con-card-sub { color: rgba(245,242,234,0.55); }
-.panel-effect { margin: 12px 0 8px; }
-.panel-effect-row { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
-.panel-effect-key { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--ink-mute); width: 90px; flex-shrink: 0; }
-.panel-effect-bar { flex: 1; height: 6px; background: var(--line-hair); border-radius: 3px; overflow: hidden; }
-.panel-effect-fill { height: 100%; border-radius: 3px; }
-.panel-effect-fill.weak { width: 25%; background: var(--ink-mute); }
-.panel-effect-fill.moderate { width: 55%; background: var(--ink-soft); }
-.panel-effect-fill.strong { width: 85%; background: var(--accent); }
-.panel-effect-val { font-family: 'Inter', sans-serif; font-size: 9px; color: var(--ink-mute); width: 60px; text-align: right; }
-.panel-bounds { margin: 8px 0; }
-.panel-bounds-label { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--ink-mute); margin-bottom: 6px; }
-.panel-bounds-chips { display: flex; flex-wrap: wrap; gap: 5px; }
-.panel-bound-chip { font-family: 'Inter', sans-serif; font-size: 10px; padding: 3px 8px; border: 0.5px solid var(--line-soft); cursor: pointer; transition: all 0.15s; }
-.panel-bound-chip:hover { background: var(--ink); color: var(--paper); }
-@media (max-width: 900px) { .constraints-strip { grid-template-columns: 1fr; } }
-@media (max-width: 600px) { .constraints { grid-template-columns: repeat(2, 1fr); } }
-
+.modulators-strip{display:none!important}
+.engines-strip{display:none!important}
+.boundary-ring{fill:none;stroke:var(--line-hair);stroke-width:0.75;stroke-dasharray:4 6;transition:stroke 0.3s}
+.boundary-tag{font-family:'JetBrains Mono',monospace;font-size:7px;fill:var(--ink-dim);letter-spacing:0.25em;text-transform:uppercase}
+body.constraint-mode .boundary-ring{stroke:var(--accent);stroke-width:1.5;stroke-dasharray:none}
+body.constraint-mode .boundary-tag{fill:var(--accent)}
+body.constraint-mode .dim-node:not(.bound) .dim-node-circle{stroke:var(--line-hair);fill:var(--bg)}
+body.constraint-mode .dim-node.bound .dim-node-circle{fill:var(--accent);stroke:var(--accent);stroke-width:1.5}
+.engine-core-bg{transition:fill 0.2s}
+.engine-node circle{transition:fill 0.15s,stroke 0.15s}
+.engine-node:hover circle,.engine-node.active circle{fill:var(--accent);stroke:var(--accent);stroke-width:1.5}
+.constraints-strip{display:grid;grid-template-columns:220px 1fr;gap:32px;align-items:stretch;margin-top:36px;padding-top:28px;border-top:0.5px solid var(--line-soft)}
+.constraints-intro{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--ink-mute);line-height:1.7;padding-top:4px}
+.constraints-intro .num{color:var(--accent);display:block;font-size:30px;font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;letter-spacing:0;line-height:1;margin-bottom:8px}
+.constraints-intro strong{color:var(--ink);font-weight:400;text-transform:none;letter-spacing:0.02em;font-size:11px;display:block;margin-top:6px}
+.constraints{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.con-card{background:transparent;border:0.75px solid var(--line);padding:16px 18px;cursor:pointer;transition:background 0.18s,color 0.18s;min-height:86px;display:flex;flex-direction:column;justify-content:space-between}
+.con-card:hover,.con-card.active{background:var(--ink);color:var(--paper)}
+.con-card-num{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.2em;color:var(--ink-mute)}
+.con-card:hover .con-card-num,.con-card.active .con-card-num{color:var(--accent)}
+.con-card-title{font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:400;line-height:1.1}
+.con-card-sub{font-size:9.5px;color:var(--ink-mute);line-height:1.45;margin-top:6px}
+.con-card:hover .con-card-sub,.con-card.active .con-card-sub{color:rgba(245,242,234,0.55)}
+.panel-effect{margin:12px 0 8px}
+.panel-effect-row{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.panel-effect-key{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:var(--ink-mute);width:90px;flex-shrink:0}
+.panel-effect-bar{flex:1;height:6px;background:var(--line-hair);border-radius:3px;overflow:hidden}
+.panel-effect-fill{height:100%;border-radius:3px}
+.panel-effect-fill.weak{width:25%;background:var(--ink-mute)}
+.panel-effect-fill.moderate{width:55%;background:var(--ink-soft)}
+.panel-effect-fill.strong{width:85%;background:var(--accent)}
+.panel-effect-val{font-family:'Inter',sans-serif;font-size:9px;color:var(--ink-mute);width:60px;text-align:right}
+.panel-bounds{margin:8px 0}
+.panel-bounds-label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:var(--ink-mute);margin-bottom:6px}
+.panel-bounds-chips{display:flex;flex-wrap:wrap;gap:5px}
+.panel-bound-chip{font-family:'Inter',sans-serif;font-size:10px;padding:3px 8px;border:0.5px solid var(--line-soft);cursor:pointer;transition:all 0.15s}
+.panel-bound-chip:hover{background:var(--ink);color:var(--paper)}
+@media(max-width:900px){.constraints-strip{grid-template-columns:1fr}}
+@media(max-width:600px){.constraints{grid-template-columns:repeat(2,1fr)}}
 </style>
 </head>
 <body>
@@ -593,19 +592,18 @@ body.constraint-mode .dim-node.bound .dim-node-circle { fill: var(--accent); str
   <svg class="map-svg" id="map" viewBox="0 0 1360 900" preserveAspectRatio="xMidYMid meet" aria-label="Aesthetic identity map"></svg>
 </div>
 
-
-
-<!-- ============ CONSTRAINTS — Layer 04 ============ -->
-<div class="constraints-strip">
-  <div class="constraints-intro">
+<!-- ============ MODULATORS ============ -->
+<div class="modulators-strip">
+  <div class="modulators-intro">
     <span class="num">04</span>
-    Bounds
-    <strong>that the above must operate within for any given person, on any given day</strong>
+    Forces
+    <strong>that shape the above for each unique person</strong>
   </div>
-  <div class="constraints" id="constraints-grid"></div>
+  <div class="modulators" id="modulators"></div>
 </div>
 
 <!-- ============ FOOTER ============ -->
+<div class="constraints-strip"><div class="constraints-intro"><span class="num">04</span>Bounds<strong>that the above must operate within for any given person, on any given day</strong></div><div class="constraints" id="constraints-grid"></div></div>
 <div class="footer">
   <div>&mdash; ARI Framework / Identity Map v2</div>
   <div>Click any element</div>
@@ -1622,163 +1620,206 @@ wireInteractive('.shape-branch-group');
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') closePanel();
 });
+</script>
+<script>
+// Non-identity constraints — additions
+try {
 
-// ============================================================
-// NON-IDENTITY CONSTRAINTS
-// ============================================================
-const CONSTRAINTS = [
-  {key:'con-environment',num:'01',title:'Physical environment',sub:'thermal/physical viability',bounds:['dim-color','dim-texture','dim-form','dim-silhouette','dim-adornment']},
-  {key:'con-medical',num:'02',title:'Physiology & medical',sub:'body state, allergen, device',bounds:['dim-texture','dim-form','dim-silhouette','dim-body-relation','dim-adornment']},
-  {key:'con-legal',num:'03',title:'Legal & regulatory',sub:'state/institutional rules',bounds:['dim-color','dim-form','dim-silhouette','dim-signaling','dim-cultural']},
-  {key:'con-occupational',num:'04',title:'Occupational',sub:'safety, hygiene, performance',bounds:['dim-form','dim-silhouette','dim-texture','dim-color','dim-adornment']},
-  {key:'con-access',num:'05',title:'Access & availability',sub:'supply, infrastructure, economic floor',bounds:['dim-color','dim-texture','dim-pattern','dim-adornment','dim-condition']},
-  {key:'con-situational',num:'06',title:'Acute situational',sub:'time-bounded circumstance',bounds:['dim-form','dim-silhouette','dim-occasion','dim-signaling','dim-cultural']},
-  {key:'con-safety',num:'07',title:'Safety & security',sub:'threat context',bounds:['dim-color','dim-signaling','dim-adornment','dim-silhouette','dim-cultural']},
+var CONSTRAINTS = [
+  {key:"con-environment",num:"01",title:"Physical environment",sub:"thermal/physical viability",bounds:["dim-color","dim-texture","dim-form","dim-silhouette","dim-adornment"]},
+  {key:"con-medical",num:"02",title:"Physiology & medical",sub:"body state, allergen, device",bounds:["dim-texture","dim-form","dim-silhouette","dim-body-relation","dim-adornment"]},
+  {key:"con-legal",num:"03",title:"Legal & regulatory",sub:"state/institutional rules",bounds:["dim-color","dim-form","dim-silhouette","dim-signaling","dim-cultural"]},
+  {key:"con-occupational",num:"04",title:"Occupational",sub:"safety, hygiene, performance",bounds:["dim-form","dim-silhouette","dim-texture","dim-color","dim-adornment"]},
+  {key:"con-access",num:"05",title:"Access & availability",sub:"supply, infrastructure, economic floor",bounds:["dim-color","dim-texture","dim-pattern","dim-adornment","dim-condition"]},
+  {key:"con-situational",num:"06",title:"Acute situational",sub:"time-bounded circumstance",bounds:["dim-form","dim-silhouette","dim-occasion","dim-signaling","dim-cultural"]},
+  {key:"con-safety",num:"07",title:"Safety & security",sub:"threat context",bounds:["dim-color","dim-signaling","dim-adornment","dim-silhouette","dim-cultural"]}
 ];
-const CON_DATA={
-'con-environment':{eyebrow:'Constraint 01',title:'Physical environment',body:'<p>Clothing as immediate mediator against the physical environment\u2014outfit-by-outfit calibration to today\u2019s weather, altitude, UV.</p><p><strong>Strong situational.</strong> Weak long-term: population-level climate conditioning installs aesthetic preferences over time.</p>',effect:{situational:'strong',longterm:'weak'},source:'Parsons (2014); Fanger (1970); ISO 9920; WHO Air Quality Guidelines',related:['con-medical','dim-texture','dim-form']},
-'con-medical':{eyebrow:'Constraint 02',title:'Physiology & medical',body:'<p>Body state constrains what dress is physically possible\u2014material allergies, mobility limits, medical devices, pregnancy, sensory conditions.</p><p><strong>Strong situational</strong> (post-surgical recovery). <strong>Moderate long-term</strong>: chronic conditions install durable avoidances.</p>',effect:{situational:'strong',longterm:'moderate'},source:'Kabel, Dimka & McBee-Black (2017); Lamb & Kallal (1992)',related:['con-environment','dim-texture','dim-body-relation']},
-'con-legal':{eyebrow:'Constraint 03',title:'Legal & regulatory',body:'<p>State laws, religious regulations, institutional rules\u2014with legal or institutional consequence for violation.</p><p><strong>Strong situational</strong> (entering mosque, attending court). <strong>Moderate long-term</strong>: prohibited dress gains meaning when reclaimed.</p>',effect:{situational:'strong',longterm:'moderate'},source:'Entwistle (2000); EU veil rulings; sumptuary law literature',related:['con-occupational','dim-signaling','dim-cultural']},
-'con-occupational':{eyebrow:'Constraint 04',title:'Occupational & functional',body:'<p>Safety requirements, hygiene, performance necessity\u2014PPE, scrubs, clean-room suits, athletic gear.</p><p><strong>Strong situational.</strong> Weak long-term unless occupation becomes identity.</p>',effect:{situational:'strong',longterm:'weak'},source:'Rafaeli & Pratt (1993); Roach-Higgins & Eicher (1992)',related:['con-legal','con-environment','dim-form']},
-'con-access':{eyebrow:'Constraint 05',title:'Access & availability',body:'<p>What you can physically obtain\u2014limited by geography, retail infrastructure, e-commerce gaps, size availability, trade sanctions, economic floor.</p><p><strong>Moderate situational.</strong> <strong>Strong long-term</strong>: persistent access constraints shape the entire possibility set.</p>',effect:{situational:'moderate',longterm:'strong'},source:'Crane (2000); Hamilton (2012); fashion-desert literature',related:['con-situational','dim-condition','dim-pattern']},
-'con-situational':{eyebrow:'Constraint 06',title:'Acute situational',body:'<p>Time-bounded circumstances that override normal dress\u2014weddings, funerals, travel, displacement, emergency, religious sites.</p><p><strong>Strong situational.</strong> Weak long-term unless the event is identity-forming.</p>',effect:{situational:'strong',longterm:'weak'},source:'Goffman (1959); Turner (1969) liminality',related:['con-legal','dim-occasion','dim-signaling']},
-'con-safety':{eyebrow:'Constraint 07',title:'Safety & security',body:'<p>Threat context\u2014conflict zones, high-crime areas, stalking, protest under surveillance. Dress constrained by the need to avoid attention or enable escape.</p><p><strong>Strong situational.</strong> <strong>Moderate long-term</strong> in persistent threat environments.</p>',effect:{situational:'strong',longterm:'moderate'},source:'Tulloch (2010); protest-dress literature',related:['con-legal','dim-signaling','dim-cultural']},
+
+var CON_PANEL_DATA = {
+  "con-environment":{eyebrow:"Constraint 01",title:"Physical environment",body:"<p>Clothing as immediate mediator against the physical environment\u2014outfit-by-outfit calibration to weather, altitude, UV.</p><p><strong>Strong situational.</strong> Weak long-term: population-level climate conditioning installs preferences.</p>",effect:{situational:"strong",longterm:"weak"},source:"Parsons (2014); Fanger (1970); ISO 9920",related:["con-medical","dim-texture","dim-form"]},
+  "con-medical":{eyebrow:"Constraint 02",title:"Physiology & medical",body:"<p>Body state constrains what dress is physically possible\u2014allergies, mobility limits, devices, pregnancy, sensory conditions.</p><p><strong>Strong situational.</strong> <strong>Moderate long-term</strong>: chronic conditions install durable avoidances.</p>",effect:{situational:"strong",longterm:"moderate"},source:"Kabel, Dimka & McBee-Black (2017); Lamb & Kallal (1992)",related:["con-environment","dim-texture","dim-body-relation"]},
+  "con-legal":{eyebrow:"Constraint 03",title:"Legal & regulatory",body:"<p>State laws, religious regulations, institutional rules\u2014with legal consequence for violation.</p><p><strong>Strong situational.</strong> <strong>Moderate long-term</strong>: prohibited dress gains meaning when reclaimed.</p>",effect:{situational:"strong",longterm:"moderate"},source:"Entwistle (2000); sumptuary law literature",related:["con-occupational","dim-signaling","dim-cultural"]},
+  "con-occupational":{eyebrow:"Constraint 04",title:"Occupational & functional",body:"<p>Safety, hygiene, performance necessity\u2014PPE, scrubs, clean-room suits, athletic gear.</p><p><strong>Strong situational.</strong> Weak long-term unless occupation becomes identity.</p>",effect:{situational:"strong",longterm:"weak"},source:"Rafaeli & Pratt (1993); Roach-Higgins & Eicher (1992)",related:["con-legal","con-environment","dim-form"]},
+  "con-access":{eyebrow:"Constraint 05",title:"Access & availability",body:"<p>What you can physically obtain\u2014geography, retail gaps, size availability, economic floor.</p><p><strong>Moderate situational.</strong> <strong>Strong long-term</strong>: persistent access constraints shape the entire possibility set.</p>",effect:{situational:"moderate",longterm:"strong"},source:"Crane (2000); Hamilton (2012)",related:["con-situational","dim-condition","dim-pattern"]},
+  "con-situational":{eyebrow:"Constraint 06",title:"Acute situational",body:"<p>Time-bounded circumstances\u2014weddings, funerals, travel, displacement, emergency.</p><p><strong>Strong situational.</strong> Weak long-term unless the event is identity-forming.</p>",effect:{situational:"strong",longterm:"weak"},source:"Goffman (1959); Turner (1969)",related:["con-legal","dim-occasion","dim-signaling"]},
+  "con-safety":{eyebrow:"Constraint 07",title:"Safety & security",body:"<p>Threat context\u2014conflict zones, high-crime, stalking, protest under surveillance. Dress constrained by the need to avoid attention or enable escape.</p><p><strong>Strong situational.</strong> <strong>Moderate long-term</strong> in persistent threat environments.</p>",effect:{situational:"strong",longterm:"moderate"},source:"Tulloch (2010); protest-dress literature",related:["con-legal","dim-signaling","dim-cultural"]}
 };
-Object.assign(DATA, CON_DATA);
+Object.keys(CON_PANEL_DATA).forEach(function(k){ DATA[k] = CON_PANEL_DATA[k]; });
 
-// Add boundary ring to SVG
-(function(){
-  const svg = document.getElementById('map');
-  if (!svg) return;
-  const ns = 'http://www.w3.org/2000/svg';
-  const g = document.createElementNS(ns,'g');
-  g.id = 'boundary-layer';
-  const circ = document.createElementNS(ns,'circle');
-  circ.setAttribute('cx','680'); circ.setAttribute('cy','450'); circ.setAttribute('r','445');
-  circ.classList.add('boundary-ring');
-  const txt = document.createElementNS(ns,'text');
-  txt.setAttribute('x','680'); txt.setAttribute('y','18');
-  txt.setAttribute('text-anchor','middle');
-  txt.classList.add('boundary-tag');
-  txt.textContent = 'Layer 04 \u2014 Non-identity constraints (perimeter)';
-  g.appendChild(circ); g.appendChild(txt);
-  svg.insertBefore(g, svg.firstChild);
-})();
+// Boundary ring
+var _mapSvg = document.getElementById("map");
+if (_mapSvg) {
+  var _ns = "http://www.w3.org/2000/svg";
+  var bLayer = document.createElementNS(_ns, "g");
+  bLayer.id = "boundary-layer";
+  var bCirc = document.createElementNS(_ns, "circle");
+  bCirc.setAttribute("cx","680"); bCirc.setAttribute("cy","450"); bCirc.setAttribute("r","445");
+  bCirc.classList.add("boundary-ring");
+  var bTxt = document.createElementNS(_ns, "text");
+  bTxt.setAttribute("x","680"); bTxt.setAttribute("y","18");
+  bTxt.setAttribute("text-anchor","middle"); bTxt.classList.add("boundary-tag");
+  bTxt.textContent = "NON-IDENTITY CONSTRAINTS \u2014 PERIMETER";
+  bLayer.appendChild(bCirc); bLayer.appendChild(bTxt);
+  _mapSvg.insertBefore(bLayer, _mapSvg.firstChild);
+}
 
-// Add engine core circle in SVG
-(function(){
-  const svg = document.getElementById('map');
-  if (!svg) return;
-  const ns = 'http://www.w3.org/2000/svg';
-  const coreG = document.createElementNS(ns,'g');
-  coreG.id = 'engine-core';
-  const bg = document.createElementNS(ns,'circle');
-  bg.setAttribute('cx','680'); bg.setAttribute('cy','450'); bg.setAttribute('r','65');
-  bg.setAttribute('fill','var(--paper-outer)'); bg.setAttribute('stroke','var(--line)');
-  bg.setAttribute('stroke-width','0.75'); bg.setAttribute('opacity','0.55');
-  bg.classList.add('engine-core-bg');
-  coreG.appendChild(bg);
-  const lbl = document.createElementNS(ns,'text');
-  lbl.setAttribute('x','680'); lbl.setAttribute('y','390');
-  lbl.setAttribute('text-anchor','middle');
-  lbl.setAttribute('class','ring-label-tag');
-  lbl.setAttribute('style','font-size:7px;letter-spacing:0.3em;');
-  lbl.textContent = 'ENGINES';
-  coreG.appendChild(lbl);
-  const positions = [{x:680,y:410},{x:655,y:433},{x:705,y:433},{x:658,y:462},{x:702,y:462}];
-  ENGINES.forEach((e,i) => {
-    const g2 = document.createElementNS(ns,'g');
-    g2.classList.add('engine-node'); g2.dataset.key = e.key;
-    g2.setAttribute('cursor','pointer');
-    const c = document.createElementNS(ns,'circle');
-    c.setAttribute('cx',positions[i].x); c.setAttribute('cy',positions[i].y);
-    c.setAttribute('r','6'); c.setAttribute('fill','var(--bg)');
-    c.setAttribute('stroke','var(--ink)'); c.setAttribute('stroke-width','0.75');
-    c.classList.add('dim-node-circle');
-    const t = document.createElementNS(ns,'text');
-    t.setAttribute('x',positions[i].x); t.setAttribute('y',positions[i].y + 3);
-    t.setAttribute('text-anchor','middle');
-    t.setAttribute('style',"font-family:'JetBrains Mono',monospace;font-size:6px;fill:var(--ink-mute);letter-spacing:0.1em;");
-    t.textContent = e.num;
-    g2.appendChild(c); g2.appendChild(t); coreG.appendChild(g2);
+// Engine core nodes in SVG center
+if (_mapSvg && typeof ENGINES !== "undefined") {
+  var _ns2 = "http://www.w3.org/2000/svg";
+  var ecG = document.createElementNS(_ns2, "g");
+  ecG.id = "engine-core";
+  var ecBg = document.createElementNS(_ns2, "circle");
+  ecBg.setAttribute("cx","680"); ecBg.setAttribute("cy","450"); ecBg.setAttribute("r","65");
+  ecBg.setAttribute("fill","var(--paper-outer)"); ecBg.setAttribute("stroke","var(--line)");
+  ecBg.setAttribute("stroke-width","0.75"); ecBg.setAttribute("opacity","0.55");
+  ecBg.classList.add("engine-core-bg");
+  ecG.appendChild(ecBg);
+  var ecLbl = document.createElementNS(_ns2, "text");
+  ecLbl.setAttribute("x","680"); ecLbl.setAttribute("y","390");
+  ecLbl.setAttribute("text-anchor","middle");
+  ecLbl.setAttribute("style","font-family:JetBrains Mono,monospace;font-size:7px;letter-spacing:0.3em;fill:var(--ink-mute);text-transform:uppercase;");
+  ecLbl.textContent = "ENGINES";
+  ecG.appendChild(ecLbl);
+  var ecPos = [{x:680,y:405},{x:653,y:425},{x:707,y:425},{x:653,y:452},{x:707,y:452},{x:680,y:472}];
+  ENGINES.forEach(function(eng, idx) {
+    var gN = document.createElementNS(_ns2, "g");
+    gN.classList.add("engine-node");
+    gN.setAttribute("data-key", eng.key);
+    gN.setAttribute("cursor","pointer");
+    var cN = document.createElementNS(_ns2, "circle");
+    cN.setAttribute("cx", String(ecPos[idx].x));
+    cN.setAttribute("cy", String(ecPos[idx].y));
+    cN.setAttribute("r","6"); cN.setAttribute("fill","var(--bg)");
+    cN.setAttribute("stroke","var(--ink)"); cN.setAttribute("stroke-width","0.75");
+    cN.classList.add("dim-node-circle");
+    var tN = document.createElementNS(_ns2, "text");
+    tN.setAttribute("x", String(ecPos[idx].x));
+    tN.setAttribute("y", String(ecPos[idx].y + 3));
+    tN.setAttribute("text-anchor","middle");
+    tN.setAttribute("style","font-family:JetBrains Mono,monospace;font-size:6px;fill:var(--ink-mute);letter-spacing:0.1em;");
+    tN.textContent = eng.num;
+    gN.appendChild(cN); gN.appendChild(tN); ecG.appendChild(gN);
   });
-  // Insert before the center dot
-  const cdot = svg.querySelector('.center-dot');
-  if (cdot) svg.insertBefore(coreG, cdot);
-  else svg.appendChild(coreG);
-})();
+  var _cdot = _mapSvg.querySelector(".center-dot");
+  if (_cdot) _mapSvg.insertBefore(ecG, _cdot);
+  else _mapSvg.appendChild(ecG);
+}
 
 // Render constraint cards
-(function(){
-  const grid = document.getElementById('constraints-grid');
-  if (!grid) return;
-  CONSTRAINTS.forEach(c => {
-    const d = document.createElement('div');
-    d.className = 'con-card'; d.dataset.key = c.key;
-    d.innerHTML = '<div><div class="con-card-num">'+c.num+'</div><div class="con-card-title" style="margin-top:4px">'+c.title+'</div></div><div class="con-card-sub">'+c.sub+'</div>';
-    grid.appendChild(d);
+var _cGrid = document.getElementById("constraints-grid");
+if (_cGrid) {
+  CONSTRAINTS.forEach(function(c) {
+    var card = document.createElement("div");
+    card.className = "con-card";
+    card.setAttribute("data-key", c.key);
+    var inner = '<div><div class="con-card-num">' + c.num + '</div>';
+    inner += '<div class="con-card-title" style="margin-top:4px">' + c.title + '</div></div>';
+    inner += '<div class="con-card-sub">' + c.sub + '</div>';
+    card.innerHTML = inner;
+    _cGrid.appendChild(card);
   });
-})();
+}
 
-// Wire constraint interactions
-function highlightConstraint(key){
-  const con = CONSTRAINTS.find(c=>c.key===key);
-  if(!con) return;
-  document.body.classList.add('constraint-mode');
-  document.querySelectorAll('.dim-node').forEach(n=>n.classList.remove('bound'));
-  con.bounds.forEach(dk=>{const n=document.querySelector('.dim-node[data-key="'+dk+'"]');if(n)n.classList.add('bound');});
+// Highlight logic
+function highlightConstraint(key) {
+  var con = CONSTRAINTS.find(function(c){return c.key === key;});
+  if (!con) return;
+  document.body.classList.add("constraint-mode");
+  document.querySelectorAll(".dim-node").forEach(function(n){ n.classList.remove("bound"); });
+  con.bounds.forEach(function(dk) {
+    var nd = document.querySelector('.dim-node[data-key="' + dk + '"]');
+    if (nd) nd.classList.add("bound");
+  });
 }
-function clearConstraintMode(){
-  document.body.classList.remove('constraint-mode');
-  document.querySelectorAll('.dim-node.bound').forEach(n=>n.classList.remove('bound'));
+function clearConstraintMode() {
+  document.body.classList.remove("constraint-mode");
+  document.querySelectorAll(".dim-node.bound").forEach(function(n){ n.classList.remove("bound"); });
 }
-document.querySelectorAll('.con-card').forEach(card=>{
-  card.addEventListener('mouseenter',()=>{if(!panel.classList.contains('visible'))highlightConstraint(card.dataset.key);});
-  card.addEventListener('mouseleave',()=>{if(!panel.classList.contains('visible'))clearConstraintMode();});
-  card.addEventListener('click',(e)=>{e.stopPropagation();highlightConstraint(card.dataset.key);openPanel(card.dataset.key);});
+
+// Wire constraint cards
+var _panel = document.getElementById("panel");
+document.querySelectorAll(".con-card").forEach(function(card) {
+  card.addEventListener("mouseenter", function() {
+    if (_panel && !_panel.classList.contains("visible")) highlightConstraint(card.getAttribute("data-key"));
+  });
+  card.addEventListener("mouseleave", function() {
+    if (_panel && !_panel.classList.contains("visible")) clearConstraintMode();
+  });
+  card.addEventListener("click", function(e) {
+    e.stopPropagation();
+    highlightConstraint(card.getAttribute("data-key"));
+    if (typeof openPanel === "function") openPanel(card.getAttribute("data-key"));
+  });
 });
 
-// Wire engine nodes
-document.querySelectorAll('.engine-node').forEach(node=>{
-  node.addEventListener('click',(e)=>{e.stopPropagation();clearHighlights();node.classList.add('active');document.body.classList.add('dimmed-mode');openPanel(node.dataset.key);});
-  node.addEventListener('mouseenter',()=>{if(!panel.classList.contains('visible'))node.classList.add('active');});
-  node.addEventListener('mouseleave',()=>{if(!panel.classList.contains('visible'))node.classList.remove('active');});
+// Wire engine SVG nodes
+document.querySelectorAll(".engine-node").forEach(function(node) {
+  node.addEventListener("click", function(e) {
+    e.stopPropagation();
+    if (typeof clearHighlights === "function") clearHighlights();
+    node.classList.add("active");
+    document.body.classList.add("dimmed-mode");
+    if (typeof openPanel === "function") openPanel(node.getAttribute("data-key"));
+  });
+  node.addEventListener("mouseenter", function() {
+    if (_panel && !_panel.classList.contains("visible")) node.classList.add("active");
+  });
+  node.addEventListener("mouseleave", function() {
+    if (_panel && !_panel.classList.contains("visible")) node.classList.remove("active");
+  });
 });
 
-// Extend panel for constraint content
-const _origOP = openPanel;
-openPanel = function(key){
-  _origOP(key);
-  if(!key||!key.startsWith('con-'))return;
-  const d=DATA[key];if(!d)return;
-  const body=document.getElementById('panel-body');if(!body)return;
-  let html='';
-  if(d.effect){
-    html+='<div class="panel-effect">';
-    ['situational','longterm'].forEach(k=>{
-      const label=k==='longterm'?'Long-term':'Situational';
-      const val=d.effect[k]||'weak';
-      html+='<div class="panel-effect-row"><div class="panel-effect-key">'+label+'</div><div class="panel-effect-bar"><div class="panel-effect-fill '+val+'"></div></div><div class="panel-effect-val">'+val+'</div></div>';
+// Extend openPanel for constraint content
+var _baseOpenPanel = openPanel;
+openPanel = function(key) {
+  _baseOpenPanel(key);
+  if (!key || key.indexOf("con-") !== 0) return;
+  var d = DATA[key]; if (!d) return;
+  var pBody = document.getElementById("panel-body"); if (!pBody) return;
+  if (pBody.querySelector(".panel-effect")) return;
+  var extra = "";
+  if (d.effect) {
+    extra += '<div class="panel-effect">';
+    ["situational","longterm"].forEach(function(k) {
+      var label = k === "longterm" ? "Long-term" : "Situational";
+      var val = d.effect[k] || "weak";
+      extra += '<div class="panel-effect-row"><div class="panel-effect-key">' + label + '</div><div class="panel-effect-bar"><div class="panel-effect-fill ' + val + '"></div></div><div class="panel-effect-val">' + val + '</div></div>';
     });
-    html+='</div>';
+    extra += '</div>';
   }
-  const con=CONSTRAINTS.find(c=>c.key===key);
-  if(con&&con.bounds.length){
-    html+='<div class="panel-bounds"><div class="panel-bounds-label">Bounds these dimensions</div><div class="panel-bounds-chips">';
-    con.bounds.forEach(dk=>{const dd=DATA[dk];html+='<span class="panel-bound-chip" data-key="'+dk+'">'+(dd?dd.title:dk)+'</span>';});
-    html+='</div></div>';
+  var con = CONSTRAINTS.find(function(c){return c.key === key;});
+  if (con && con.bounds.length) {
+    extra += '<div class="panel-bounds"><div class="panel-bounds-label">Bounds these dimensions</div><div class="panel-bounds-chips">';
+    con.bounds.forEach(function(dk) {
+      var dd = DATA[dk];
+      extra += '<span class="panel-bound-chip" data-key="' + dk + '">' + (dd ? dd.title : dk) + '</span>';
+    });
+    extra += '</div></div>';
   }
-  const sourceDiv=body.querySelector('.panel-source');
-  if(sourceDiv)sourceDiv.insertAdjacentHTML('beforebegin',html);
-  else body.insertAdjacentHTML('beforeend',html);
-  body.querySelectorAll('.panel-bound-chip[data-key]').forEach(chip=>{
-    chip.addEventListener('click',(e)=>{e.stopPropagation();clearConstraintMode();clearHighlights();applyHighlight(chip.dataset.key);openPanel(chip.dataset.key);});
+  var srcDiv = pBody.querySelector(".panel-source");
+  if (srcDiv) srcDiv.insertAdjacentHTML("beforebegin", extra);
+  else pBody.insertAdjacentHTML("beforeend", extra);
+  pBody.querySelectorAll(".panel-bound-chip[data-key]").forEach(function(chip) {
+    chip.addEventListener("click", function(e) {
+      e.stopPropagation();
+      clearConstraintMode();
+      if (typeof clearHighlights === "function") clearHighlights();
+      if (typeof applyHighlight === "function") applyHighlight(chip.getAttribute("data-key"));
+      if (typeof openPanel === "function") openPanel(chip.getAttribute("data-key"));
+    });
   });
 };
 
-// Patch clearHighlights to also clear constraint mode
-const _origCH = clearHighlights;
-clearHighlights = function(){_origCH();clearConstraintMode();document.querySelectorAll('.con-card.active').forEach(c=>c.classList.remove('active'));};
+// Patch clearHighlights
+var _baseClearH = clearHighlights;
+clearHighlights = function() {
+  _baseClearH();
+  clearConstraintMode();
+  document.querySelectorAll(".con-card.active").forEach(function(c){ c.classList.remove("active"); });
+};
+
+console.log("[constraints] OK: " + CONSTRAINTS.length + " cards, engine-core=" + !!document.getElementById("engine-core"));
+} catch(err) { console.error("[constraints] FATAL:", err.message, err.stack); }
 
 </script>
 </body>
