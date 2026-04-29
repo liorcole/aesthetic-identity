@@ -1,8 +1,10 @@
-<html lang="en"><head>
+<!DOCTYPE html>
+<html lang="en">
+<head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The Science of Aesthetic Identity in Dress</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&amp;family=Inter:wght@300;400;500;600&amp;family=JetBrains+Mono:wght@300;400;500&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 :root {
   --bg: #eeeae0;
@@ -529,261 +531,44 @@ body {
   .masthead h1 { font-size: 32px; }
 }
 
-/* ============================================================================
-   LAYER 05 — NON-IDENTITY CONSTRAINTS
-   Mirrors .modulators-strip exactly — same grid, same card, same hover
-   state. Only addition: an inner row of effect-strength dots above the title.
-   ============================================================================ */
-
-.constraints-strip {
-  display: grid;
-  grid-template-columns: 220px 1fr;
-  gap: 32px;
-  align-items: stretch;
-  margin-top: 28px;
-  padding-top: 28px;
-  border-top: 0.5px solid var(--line-soft);
-}
-.constraints-intro {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 10px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--ink-mute);
-  line-height: 1.7;
-  padding-top: 4px;
-}
-.constraints-intro .num {
-  color: var(--accent); display: block;
-  font-size: 30px; font-family: 'Cormorant Garamond', serif;
-  font-style: italic; font-weight: 300; letter-spacing: 0;
-  line-height: 1; margin-bottom: 8px;
-}
-.constraints-intro strong {
-  color: var(--ink); font-weight: 400;
-  text-transform: none; letter-spacing: 0.02em;
-  font-size: 11px; display: block; margin-top: 6px;
-}
-.constraints {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 10px;
-}
-.con-card {
-  background: transparent;
-  border: 0.75px solid var(--line);
-  padding: 16px 18px;
-  cursor: pointer;
-  transition: background 0.18s, color 0.18s;
-  min-height: 86px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  position: relative;
-}
+/* ── Boundary ring ── */
+.boundary-ring { fill: none; stroke: var(--line-hair); stroke-width: 0.75; stroke-dasharray: 4 6; transition: stroke 0.3s, stroke-width 0.3s; }
+.boundary-tag { font-family: 'JetBrains Mono', monospace; font-size: 7px; fill: var(--ink-dim); letter-spacing: 0.25em; text-transform: uppercase; }
+body.constraint-mode .boundary-ring { stroke: var(--accent); stroke-width: 1.5; stroke-dasharray: none; }
+body.constraint-mode .boundary-tag { fill: var(--accent); }
+body.constraint-mode .dim-node:not(.bound) .dim-node-circle { stroke: var(--line-hair); fill: var(--bg); }
+body.constraint-mode .dim-node.bound .dim-node-circle { fill: var(--accent); stroke: var(--accent); stroke-width: 1.5; }
+/* ── Engine core ring ── */
+.engine-core-bg { transition: fill 0.2s; }
+/* ── Constraints strip (mirrors modulators-strip) ── */
+.constraints-strip { display: grid; grid-template-columns: 220px 1fr; gap: 32px; align-items: stretch; margin-top: 36px; padding-top: 28px; border-top: 0.5px solid var(--line-soft); }
+.constraints-intro { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-mute); line-height: 1.7; padding-top: 4px; }
+.constraints-intro .num { color: var(--accent); display: block; font-size: 30px; font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 300; letter-spacing: 0; line-height: 1; margin-bottom: 8px; }
+.constraints-intro strong { color: var(--ink); font-weight: 400; text-transform: none; letter-spacing: 0.02em; font-size: 11px; display: block; margin-top: 6px; }
+.constraints { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+.con-card { background: transparent; border: 0.75px solid var(--line); padding: 16px 18px; cursor: pointer; transition: background 0.18s, color 0.18s; min-height: 86px; display: flex; flex-direction: column; justify-content: space-between; position: relative; }
 .con-card:hover, .con-card.active { background: var(--ink); color: var(--paper); }
 .con-card-num { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.2em; color: var(--ink-mute); }
 .con-card:hover .con-card-num, .con-card.active .con-card-num { color: var(--accent); }
 .con-card-title { font-family: 'Cormorant Garamond', serif; font-size: 19px; font-weight: 400; line-height: 1.1; letter-spacing: -0.005em; }
 .con-card-sub { font-size: 9.5px; color: var(--ink-mute); line-height: 1.45; margin-top: 6px; }
 .con-card:hover .con-card-sub, .con-card.active .con-card-sub { color: rgba(245,242,234,0.55); }
-
-/* effect-strength dots: small pair in the top-right of each card,
-   only visible on hover/active. weak = single dot, mod = two dots,
-   strong = filled bar. acts as a hint of the dossier inside. */
-.con-card-pulse {
-  position: absolute; top: 12px; right: 12px;
-  display: flex; gap: 3px; align-items: center;
-  opacity: 0.45; transition: opacity 0.18s;
-}
-.con-card:hover .con-card-pulse,
-.con-card.active .con-card-pulse { opacity: 1; }
-.con-card-pulse-dot {
-  width: 4px; height: 4px; border-radius: 50%;
-  background: var(--ink-mute);
-}
-.con-card:hover .con-card-pulse-dot,
-.con-card.active .con-card-pulse-dot { background: var(--accent); }
-
-/* ============================================================================
-   PERIMETER VIZ — single dotted boundary ring inside the SVG
-   Sits at r=445, outside the branches but inside the SVG canvas (which
-   uses viewBox 0 0 1360 900, so the diagonal is ~1620 — plenty of room).
-   It's normally faint; on constraint hover it goes vermillion and the
-   bound dimensions/modulators are marked.
-   ============================================================================ */
-
-.boundary-ring {
-  fill: none;
-  stroke: var(--line-soft);
-  stroke-width: 0.5;
-  stroke-dasharray: 1.5 4;
-  pointer-events: none;
-  transition: stroke 0.2s, stroke-width 0.2s;
-}
-.boundary-tag {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 8px; letter-spacing: 0.2em;
-  fill: var(--ink-mute); text-transform: uppercase;
-  pointer-events: none;
-  opacity: 0.55;
-  transition: fill 0.2s, opacity 0.2s;
-}
-
-/* When a constraint card is hovered/active: gild the boundary ring,
-   surface the tag, and dim everything else. Reuses existing dimmed-mode
-   plumbing where possible. */
-body.constraint-mode .boundary-ring {
-  stroke: var(--accent);
-  stroke-width: 1;
-  stroke-dasharray: 2 3;
-}
-body.constraint-mode .boundary-tag {
-  fill: var(--accent); opacity: 1;
-}
-
-/* On constraint hover, the dim-nodes that the constraint BOUNDS get
-   the same pulse as :hover — vermillion fill, slightly larger. The
-   non-bound nodes fade to ink-dim so the bound set reads cleanly. */
-body.constraint-mode .dim-node:not(.bound) .dim-node-circle {
-  fill: var(--bg);
-  stroke: var(--ink-dim);
-  opacity: 0.35;
-}
-body.constraint-mode .dim-node:not(.bound) .dim-node-label {
-  fill: var(--ink-dim);
-}
-body.constraint-mode .dim-node.bound .dim-node-circle {
-  fill: var(--accent);
-  stroke: var(--accent);
-  stroke-width: 1.25;
-}
-body.constraint-mode .dim-node.bound .dim-node-label {
-  fill: var(--ink); font-weight: 400;
-}
-
-/* ============================================================================
-   PANEL ADDITIONS — effect-strength bar + duration spectrum
-   These are new components, but they're built from existing tokens and
-   they slot into the panel's existing rhythm (same paddings, same hairlines).
-   ============================================================================ */
-
-.panel-effect {
-  margin: 14px 0 6px;
-  border: 0.5px solid var(--line-soft);
-  padding: 12px 16px 14px;
-}
-.panel-effect-row {
-  display: grid;
-  grid-template-columns: 110px 1fr 80px;
-  gap: 14px;
-  align-items: center;
-  font-size: 11px;
-}
-.panel-effect-row + .panel-effect-row { margin-top: 8px; }
-.panel-effect-key {
-  font-family: 'JetBrains Mono', monospace;
-  text-transform: uppercase;
-  letter-spacing: 0.14em;
-  font-size: 8.5px;
-  color: var(--ink-mute);
-}
-.panel-effect-bar {
-  height: 6px;
-  background: var(--paper-mid);
-  position: relative;
-  border-radius: 1px;
-  overflow: hidden;
-}
-.panel-effect-fill {
-  position: absolute;
-  inset: 0 auto 0 0;
-  background: var(--accent);
-  opacity: 0.85;
-}
-.panel-effect-fill.weak     { width: 28%; opacity: 0.45; }
-.panel-effect-fill.moderate { width: 58%; opacity: 0.7; }
-.panel-effect-fill.strong   { width: 92%; opacity: 0.95; }
-.panel-effect-val {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 9px; letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--ink-soft);
-  text-align: right;
-}
-
-.panel-duration {
-  margin: 18px 0 6px;
-  position: relative;
-  padding: 4px 0 28px;
-}
-.panel-duration-track {
-  position: relative;
-  height: 1px;
-  background: var(--line-soft);
-}
-.panel-duration-tick {
-  position: absolute;
-  top: -4px;
-  width: 1px; height: 9px;
-  background: var(--line-soft);
-}
-.panel-duration-tick.active {
-  background: var(--accent);
-  height: 13px;
-  top: -6px;
-  width: 1.5px;
-}
-.panel-duration-tick-label {
-  position: absolute;
-  top: 12px;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 8.5px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--ink-mute);
-  white-space: nowrap;
-  transform: translateX(-50%);
-}
-.panel-duration-tick.active .panel-duration-tick-label {
-  color: var(--accent);
-}
-.panel-duration-anchors {
-  display: flex; justify-content: space-between;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 8px; letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--ink-mute);
-  margin-bottom: 6px;
-}
-
-/* "Bounds" chips — same primitive as panel-dim-tag/panel-profile-chip,
-   so a bound dimension reads identically to a "Modulators" chip. */
-.panel-bounds-section { margin-top: 18px; }
-.panel-bounds-list {
-  display: flex; flex-wrap: wrap; gap: 5px;
-}
-.panel-bounds-list .panel-profile-chip[data-bound-strength="strong"] {
-  border-color: var(--accent);
-  color: var(--accent);
-}
-
-/* ============================================================================
-   FOOTER LINE BUMP — bump version label so the chapter is acknowledged
-   ============================================================================ */
-
-
-/* ── Engine core — warm zone inside Stratum I ── */
-.engine-core-bg { fill: #d5ccb5; transition: fill 0.2s; }
-.engine-core-ring { fill: none; stroke: var(--ink); stroke-width: 1; }
-.engine-core-tag { font-family:'JetBrains Mono',monospace; font-size:8px; letter-spacing:0.25em; text-transform:uppercase; fill:var(--ink-mute); pointer-events:none; }
-.engine-node { cursor:pointer; }
-.engine-node-circle { fill:var(--bg); stroke:var(--ink); stroke-width:0.75; transition:fill 0.15s,stroke 0.15s,stroke-width 0.15s; }
-.engine-node:hover .engine-node-circle, .engine-node.active .engine-node-circle { fill:var(--accent); stroke:var(--accent); stroke-width:1.5; }
-.engine-node-label { font-family:'Cormorant Garamond',serif; font-size:9.5px; font-style:italic; fill:var(--ink); pointer-events:none; letter-spacing:0.01em; }
-.engine-node:hover .engine-node-label, .engine-node.active .engine-node-label { fill:var(--accent); }
-.dimmed-mode .engine-node:not(.active) .engine-node-circle { stroke:var(--line-hair); }
-.dimmed-mode .engine-node:not(.active) .engine-node-label { fill:var(--ink-dim); }
+.panel-effect { margin: 12px 0 8px; }
+.panel-effect-row { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+.panel-effect-key { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--ink-mute); width: 90px; flex-shrink: 0; }
+.panel-effect-bar { flex: 1; height: 6px; background: var(--line-hair); border-radius: 3px; overflow: hidden; }
+.panel-effect-fill { height: 100%; border-radius: 3px; }
+.panel-effect-fill.weak { width: 25%; background: var(--ink-mute); }
+.panel-effect-fill.moderate { width: 55%; background: var(--ink-soft); }
+.panel-effect-fill.strong { width: 85%; background: var(--accent); }
+.panel-effect-val { font-family: 'Inter', sans-serif; font-size: 9px; color: var(--ink-mute); width: 60px; text-align: right; }
+.panel-bounds { margin: 8px 0; }
+.panel-bounds-label { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--ink-mute); margin-bottom: 6px; }
+.panel-bounds-chips { display: flex; flex-wrap: wrap; gap: 5px; }
+.panel-bound-chip { font-family: 'Inter', sans-serif; font-size: 10px; padding: 3px 8px; border: 0.5px solid var(--line-soft); cursor: pointer; transition: all 0.15s; }
+.panel-bound-chip:hover { background: var(--ink); color: var(--paper); }
+@media (max-width: 900px) { .constraints-strip { grid-template-columns: 1fr; } }
+@media (max-width: 600px) { .constraints { grid-template-columns: repeat(2, 1fr); } }
 
 </style>
 </head>
@@ -794,37 +579,35 @@ body.constraint-mode .dim-node.bound .dim-node-label {
 <!-- ============ MASTHEAD ============ -->
 <div class="masthead">
   <div class="masthead-left">
-    <div class="masthead-eyebrow"><span class="dot"></span>A framework — Identity map</div>
+    <div class="masthead-eyebrow"><span class="dot"></span>A framework &mdash; Identity map</div>
     <h1>The Science of<br><em>Aesthetic Identity in Dress</em></h1>
   </div>
   <div class="masthead-right">
     <span class="key">Read this as</span>
-    Engines act on three strata of identity. Click anything — engine, ring, dimension, modulator — to open its full dossier.
+    Engines act on three strata of identity. Click anything &mdash; engine, ring, dimension, modulator &mdash; to open its full dossier.
   </div>
 </div>
 
 <!-- ============ MAP ============ -->
 <div class="map-shell">
-  <svg class="map-svg" id="map" viewBox="0 0 1360 900" preserveAspectRatio="xMidYMid meet" aria-label="Aesthetic identity map"><g id="boundary-layer"><circle cx="680" cy="450" r="445" class="boundary-ring"></circle><text x="680" y="20" class="boundary-tag" text-anchor="middle">Non-identity constraints — perimeter</text></g><circle cx="680" cy="450" r="405" fill="var(--paper-outer)" stroke="none"></circle><circle cx="680" cy="450" r="310" fill="var(--paper-mid)" stroke="none"></circle><circle cx="680" cy="450" r="215" fill="var(--paper)" stroke="none"></circle><circle cx="680" cy="450" r="215" class="ring"></circle><circle cx="680" cy="450" r="145" class="ring"></circle><circle cx="680" cy="450" r="80" class="ring"></circle><circle cx="680" cy="450" r="78" class="ring-hit" data-key="stratum1"></circle><circle cx="680" cy="450" r="112.5" fill="none" stroke="transparent" stroke-width="61" class="ring-hit" data-key="stratum2" pointer-events="stroke"></circle><circle cx="680" cy="450" r="180" fill="none" stroke="transparent" stroke-width="66" class="ring-hit" data-key="stratum3" pointer-events="stroke"></circle><text x="680" y="643" class="ring-label-tag" text-anchor="middle">Stratum III — outer</text><text x="680" y="657" class="ring-label" text-anchor="middle" font-style="italic">What you choose</text><text x="680" y="573" class="ring-label-tag" text-anchor="middle">Stratum II — middle</text><text x="680" y="587" class="ring-label" text-anchor="middle" font-style="italic">How you perceive</text><text x="612" y="500" class="ring-label-tag" text-anchor="end">Stratum I — core</text><text x="612" y="514" class="ring-label" text-anchor="end" font-style="italic">Why</text><g id="engine-core"><circle cx="680" cy="450" r="72" class="engine-core-bg"></circle><circle cx="680" cy="450" r="72" class="engine-core-ring"></circle><text x="680" y="392" class="engine-core-tag" text-anchor="middle">ENGINES</text><g class="engine-node" data-key="evolutionary"><circle cx="680.0" cy="410.0" r="3.5" class="engine-node-circle"></circle><text x="680.0" y="392.0" class="engine-node-label" text-anchor="middle" dominant-baseline="middle">Evolutionary signaling</text></g><g class="engine-node" data-key="selfconstruction"><circle cx="718.0" cy="437.6" r="3.5" class="engine-node-circle"></circle><text x="732.5" y="436.9" class="engine-node-label" text-anchor="start" dominant-baseline="middle">Self-construction</text></g><g class="engine-node" data-key="existential"><circle cx="703.5" cy="482.4" r="3.5" class="engine-node-circle"></circle><text x="713.6" y="495.1" class="engine-node-label" text-anchor="start" dominant-baseline="middle">Existential buffering</text></g><g class="engine-node" data-key="social"><circle cx="656.5" cy="482.4" r="3.5" class="engine-node-circle"></circle><text x="646.4" y="495.1" class="engine-node-label" text-anchor="end" dominant-baseline="middle">Social positioning</text></g><g class="engine-node" data-key="imitation"><circle cx="642.0" cy="437.6" r="3.5" class="engine-node-circle"></circle><text x="627.5" y="436.9" class="engine-node-label" text-anchor="end" dominant-baseline="middle">Imitation / contagion</text></g></g>
-<circle cx="680" cy="450" r="2" class="center-dot"></circle><g id="connectors"><path d="M 731.4 511.3 Q 814.5 587.1 926.8 592.5" class="connector primary" data-source="dim-schwartz" data-target="mod-habitus"></path><path d="M 731.4 511.3 Q 745.3 332.3 680.0 165.0" class="connector secondary" data-source="dim-schwartz" data-target="mod-gender"></path><path d="M 755.2 422.6 Q 861.7 396.0 926.8 307.5" class="connector primary" data-source="dim-tmt" data-target="mod-body"></path><path d="M 755.2 422.6 Q 607.6 327.4 433.2 307.5" class="connector secondary" data-source="dim-tmt" data-target="mod-informational"></path><path d="M 604.8 422.6 Q 680.8 305.0 680.0 165.0" class="connector primary" data-source="dim-regfocus" data-target="mod-gender"></path><path d="M 628.6 511.3 Q 767.2 590.5 926.8 592.5" class="connector primary" data-source="dim-autonomy" data-target="mod-habitus"></path><path d="M 628.6 511.3 Q 559.8 381.7 433.2 307.5" class="connector secondary" data-source="dim-autonomy" data-target="mod-informational"></path><path d="M 680.0 370.0 Q 716.9 267.5 680.0 165.0" class="connector primary" data-source="dim-selfconcept" data-target="mod-gender"></path><path d="M 680.0 370.0 Q 813.2 377.5 926.8 307.5" class="connector secondary" data-source="dim-selfconcept" data-target="mod-body"></path><path d="M 680.0 370.0 Q 566.4 300.0 433.2 307.5" class="connector secondary" data-source="dim-selfconcept" data-target="mod-informational"></path><path d="M 773.2 561.1 Q 884.2 455.0 926.8 307.5" class="connector primary" data-source="dim-sps" data-target="mod-body"></path><path d="M 785.5 350.5 Q 821.6 491.7 926.8 592.5" class="connector primary" data-source="dim-complexity" data-target="mod-habitus"></path><path d="M 824.8 458.4 Q 643.4 345.6 433.2 307.5" class="connector primary" data-source="dim-fluency" data-target="mod-informational"></path><path d="M 535.2 458.4 Q 718.1 563.3 926.8 592.5" class="connector primary" data-source="dim-expertise" data-target="mod-habitus"></path><path d="M 535.2 458.4 Q 511.4 364.6 433.2 307.5" class="connector secondary" data-source="dim-expertise" data-target="mod-informational"></path><path d="M 574.5 350.5 Q 728.0 504.5 926.8 592.5" class="connector primary" data-source="dim-cognitive" data-target="mod-habitus"></path><path d="M 680.0 305.0 Q 705.2 235.0 680.0 165.0" class="connector primary" data-source="dim-emotion" data-target="mod-gender"></path><path d="M 586.8 561.1 Q 753.1 616.6 926.8 592.5" class="connector primary" data-source="dim-uniqueness" data-target="mod-habitus"></path><path d="M 586.8 561.1 Q 544.2 413.6 433.2 307.5" class="connector secondary" data-source="dim-uniqueness" data-target="mod-informational"></path><path d="M 888.0 395.7 Q 923.3 358.6 926.8 307.5" class="connector primary" data-source="dim-color" data-target="mod-body"></path><path d="M 888.0 395.7 Q 872.0 501.1 926.8 592.5" class="connector secondary" data-source="dim-color" data-target="mod-habitus"></path><path d="M 893.4 475.9 Q 940.4 397.7 926.8 307.5" class="connector primary" data-source="dim-form" data-target="mod-body"></path><path d="M 893.4 475.9 Q 819.7 297.8 680.0 165.0" class="connector secondary" data-source="dim-form" data-target="mod-gender"></path><path d="M 818.2 614.7 Q 910.2 474.4 926.8 307.5" class="connector primary" data-source="dim-texture" data-target="mod-body"></path><path d="M 869.0 552.5 Q 890.7 582.9 926.8 592.5" class="connector primary" data-source="dim-pattern" data-target="mod-habitus"></path><path d="M 869.0 552.5 Q 670.7 395.1 433.2 307.5" class="connector secondary" data-source="dim-pattern" data-target="mod-informational"></path><path d="M 794.9 268.3 Q 853.8 311.6 926.8 307.5" class="connector primary" data-source="dim-silhouette" data-target="mod-body"></path><path d="M 794.9 268.3 Q 756.0 196.0 680.0 165.0" class="connector secondary" data-source="dim-silhouette" data-target="mod-gender"></path><path d="M 794.9 268.3 Q 823.8 445.5 926.8 592.5" class="connector secondary" data-source="dim-silhouette" data-target="mod-habitus"></path><path d="M 541.8 614.7 Q 736.6 643.5 926.8 592.5" class="connector primary" data-source="dim-adornment" data-target="mod-habitus"></path><path d="M 541.8 614.7 Q 649.1 401.6 680.0 165.0" class="connector secondary" data-source="dim-adornment" data-target="mod-gender"></path><path d="M 565.1 268.3 Q 741.6 327.7 926.8 307.5" class="connector primary" data-source="dim-body-relation" data-target="mod-body"></path><path d="M 565.1 268.3 Q 641.1 237.3 680.0 165.0" class="connector secondary" data-source="dim-body-relation" data-target="mod-gender"></path><path d="M 491.0 552.5 Q 705.2 612.3 926.8 592.5" class="connector primary" data-source="dim-signaling" data-target="mod-habitus"></path><path d="M 491.0 552.5 Q 501.0 420.8 433.2 307.5" class="connector secondary" data-source="dim-signaling" data-target="mod-informational"></path><path d="M 853.6 323.2 Q 644.9 275.4 433.2 307.5" class="connector primary" data-source="dim-temporal" data-target="mod-informational"></path><path d="M 853.6 323.2 Q 851.6 468.3 926.8 592.5" class="connector secondary" data-source="dim-temporal" data-target="mod-habitus"></path><path d="M 720.2 238.8 Q 713.4 194.7 680.0 165.0" class="connector primary" data-source="dim-occasion" data-target="mod-gender"></path><path d="M 720.2 238.8 Q 789.0 435.8 926.8 592.5" class="connector secondary" data-source="dim-occasion" data-target="mod-habitus"></path><path d="M 472.0 395.7 Q 605.7 307.2 680.0 165.0" class="connector primary" data-source="dim-identity-coherence" data-target="mod-gender"></path><path d="M 472.0 395.7 Q 468.5 344.6 433.2 307.5" class="connector secondary" data-source="dim-identity-coherence" data-target="mod-informational"></path><path d="M 506.4 323.2 Q 695.0 491.5 926.8 592.5" class="connector primary" data-source="dim-sustainability" data-target="mod-habitus"></path><path d="M 506.4 323.2 Q 472.6 302.2 433.2 307.5" class="connector secondary" data-source="dim-sustainability" data-target="mod-informational"></path><path d="M 466.6 475.9 Q 686.9 573.0 926.8 592.5" class="connector primary" data-source="dim-condition" data-target="mod-habitus"></path><path d="M 639.8 238.8 Q 752.3 440.8 926.8 592.5" class="connector primary" data-source="dim-cultural" data-target="mod-habitus"></path><path d="M 639.8 238.8 Q 524.1 235.9 433.2 307.5" class="connector secondary" data-source="dim-cultural" data-target="mod-informational"></path><path d="M 680.0 75.0 Q 663.8 120.0 680.0 165.0" class="connector distant" data-source="branch-signaling" data-target="mod-gender"></path><path d="M 680.0 75.0 Q 767.3 351.0 926.8 592.5" class="connector distant" data-source="branch-signaling" data-target="mod-habitus"></path><path d="M 680.0 75.0 Q 520.5 316.5 433.2 592.5" class="connector distant" data-source="branch-signaling" data-target="mod-material"></path><path d="M 680.0 75.0 Q 529.2 162.1 433.2 307.5" class="connector distant" data-source="branch-signaling" data-target="mod-informational"></path><path d="M 1004.8 637.5 Q 1004.7 463.3 926.8 307.5" class="connector distant" data-source="branch-extension" data-target="mod-body"></path><path d="M 1004.8 637.5 Q 875.3 378.6 680.0 165.0" class="connector distant" data-source="branch-extension" data-target="mod-gender"></path><path d="M 1004.8 637.5 Q 830.9 647.9 680.0 735.0" class="connector distant" data-source="branch-extension" data-target="mod-lifecourse"></path><path d="M 1004.8 637.5 Q 722.1 575.1 433.2 592.5" class="connector distant" data-source="branch-extension" data-target="mod-material"></path><path d="M 355.2 637.5 Q 644.2 654.9 926.8 592.5" class="connector distant" data-source="branch-identity" data-target="mod-habitus"></path><path d="M 355.2 637.5 Q 550.6 423.9 680.0 165.0" class="connector distant" data-source="branch-identity" data-target="mod-gender"></path><path d="M 355.2 637.5 Q 506.1 724.6 680.0 735.0" class="connector distant" data-source="branch-identity" data-target="mod-lifecourse"></path><path d="M 355.2 637.5 Q 433.1 481.7 433.2 307.5" class="connector distant" data-source="branch-identity" data-target="mod-informational"></path></g><g id="shapes"><g class="shape-mod-group" data-key="mod-gender"><path d="M 592.0 152.8 A 310 310 0 0 1 768.0 152.8 A 50 50 0 0 1 753.8 200.7 A 260 260 0 0 0 606.2 200.7 A 50 50 0 0 1 592.0 152.8 Z" class="shape-mod"></path><text x="680" y="159" class="shape-label-tag">01</text><text x="680" y="172" class="shape-label">Gender</text></g><g class="shape-mod-group" data-key="mod-body"><path d="M 893.4 225.1 A 310 310 0 0 1 981.4 377.6 A 50 50 0 0 1 932.8 389.3 A 260 260 0 0 0 859.0 261.4 A 50 50 0 0 1 893.4 225.1 Z" class="shape-mod"></path><text x="926.817240078565" y="301.5" class="shape-label-tag">02</text><text x="926.817240078565" y="314.5" class="shape-label">Body</text></g><g class="shape-mod-group" data-key="mod-habitus"><path d="M 981.4 522.4 A 310 310 0 0 1 893.4 674.9 A 50 50 0 0 1 859.0 638.6 A 260 260 0 0 0 932.8 510.7 A 50 50 0 0 1 981.4 522.4 Z" class="shape-mod"></path><text x="926.817240078565" y="586.5" class="shape-label-tag">03</text><text x="926.817240078565" y="599.5" class="shape-label">Habitus</text></g><g class="shape-mod-group" data-key="mod-lifecourse"><path d="M 768.0 747.2 A 310 310 0 0 1 592.0 747.2 A 50 50 0 0 1 606.2 699.3 A 260 260 0 0 0 753.8 699.3 A 50 50 0 0 1 768.0 747.2 Z" class="shape-mod"></path><text x="680" y="729" class="shape-label-tag">04</text><text x="680" y="742" class="shape-label">Life course</text></g><g class="shape-mod-group" data-key="mod-material"><path d="M 466.6 674.9 A 310 310 0 0 1 378.6 522.4 A 50 50 0 0 1 427.2 510.7 A 260 260 0 0 0 501.0 638.6 A 50 50 0 0 1 466.6 674.9 Z" class="shape-mod"></path><text x="433.18275992143504" y="586.5000000000001" class="shape-label-tag">05</text><text x="433.18275992143504" y="599.5000000000001" class="shape-label">Material</text></g><g class="shape-mod-group" data-key="mod-informational"><path d="M 378.6 377.6 A 310 310 0 0 1 466.6 225.1 A 50 50 0 0 1 501.0 261.4 A 260 260 0 0 0 427.2 389.3 A 50 50 0 0 1 378.6 377.6 Z" class="shape-mod"></path><text x="433.18275992143487" y="301.50000000000017" class="shape-label-tag">06</text><text x="433.18275992143487" y="314.50000000000017" class="shape-label">Informational</text></g><g class="shape-branch-group" data-key="branch-signaling"><path d="M 435.1 127.4 A 405 405 0 0 1 924.9 127.4 A 60 60 0 0 1 888.6 175.2 A 345 345 0 0 0 471.4 175.2 A 60 60 0 0 1 435.1 127.4 Z" class="shape-branch"></path><text x="680" y="65" class="shape-label-tag">01</text><text x="680" y="83" class="shape-label shape-label-branch">Signaling</text></g><g class="shape-branch-group" data-key="branch-extension"><path d="M 1081.8 399.2 A 405 405 0 0 1 836.9 823.4 A 60 60 0 0 1 813.7 768.0 A 345 345 0 0 0 1022.3 406.8 A 60 60 0 0 1 1081.8 399.2 Z" class="shape-branch"></path><text x="1004.7595264191646" y="627.5" class="shape-label-tag">02</text><text x="1004.7595264191646" y="645.5" class="shape-label shape-label-branch">Self-extension</text></g><g class="shape-branch-group" data-key="branch-identity"><path d="M 523.1 823.4 A 405 405 0 0 1 278.2 399.2 A 60 60 0 0 1 337.7 406.8 A 345 345 0 0 0 546.3 768.0 A 60 60 0 0 1 523.1 823.4 Z" class="shape-branch"></path><text x="355.24047358083556" y="627.5000000000001" class="shape-label-tag">03</text><text x="355.24047358083556" y="645.5000000000001" class="shape-label shape-label-branch">Social identity</text></g></g><g id="nodes"><g class="dim-node" data-key="dim-schwartz" data-stratum="1" transform="translate(731.4230087749231 511.28355544951825)"><circle cx="0" cy="0" r="4.5" class="dim-node-circle"></circle><text x="7.713451316238469" y="9.192533317427738" class="dim-node-label" text-anchor="start" dominant-baseline="middle">Schwartz values</text></g><g class="dim-node" data-key="dim-tmt" data-stratum="1" transform="translate(755.1754096628727 422.6383885339465)"><circle cx="0" cy="0" r="4.5" class="dim-node-circle"></circle><text x="11.276311449430903" y="-4.104241719908025" class="dim-node-label" text-anchor="start" dominant-baseline="middle">Existential orientation</text></g><g class="dim-node" data-key="dim-regfocus" data-stratum="1" transform="translate(604.8245903371273 422.6383885339465)"><circle cx="0" cy="0" r="4.5" class="dim-node-circle"></circle><text x="-11.276311449430903" y="-4.104241719908025" class="dim-node-label" text-anchor="end" dominant-baseline="middle">Regulatory focus</text></g><g class="dim-node" data-key="dim-autonomy" data-stratum="1" transform="translate(628.5769912250769 511.28355544951825)"><circle cx="0" cy="0" r="4.5" class="dim-node-circle"></circle><text x="-7.713451316238469" y="9.192533317427738" class="dim-node-label" text-anchor="end" dominant-baseline="middle">Autonomy orientation</text></g><g class="dim-node" data-key="dim-selfconcept" data-stratum="1" transform="translate(680 370)"><circle cx="0" cy="0" r="4.5" class="dim-node-circle"></circle><text x="0" y="-12" class="dim-node-label" text-anchor="middle" dominant-baseline="middle">Self-concept architecture</text></g><g class="dim-node" data-key="dim-sps" data-stratum="2" transform="translate(773.2042034045483 561.0764442522518)"><circle cx="0" cy="0" r="4.5" class="dim-node-circle"></circle><text x="7.713451316238475" y="9.192533317427733" class="dim-node-label" text-anchor="start" dominant-baseline="middle"><tspan x="7.713451316238475" dy="-0.55em">Sensory processing</tspan><tspan x="7.713451316238475" dy="1.15em">sensitivity</tspan></text></g><g class="dim-node" data-key="dim-complexity" data-stratum="2" transform="translate(785.4691780280921 350.4949625090336)"><circle cx="0" cy="0" r="4.5" class="dim-node-circle"></circle><text x="8.728483698876584" y="-8.234899654424805" class="dim-node-label" text-anchor="start" dominant-baseline="middle">Optimal complexity</text></g><g class="dim-node" data-key="dim-fluency" data-stratum="2" transform="translate(824.7546829493339 458.43100019201904)"><circle cx="0" cy="0" r="4.5" class="dim-node-circle"></circle><text x="11.97969789925522" y="0.6977379469257139" class="dim-node-label" text-anchor="start" dominant-baseline="middle">Processing fluency</text></g><g class="dim-node" data-key="dim-expertise" data-stratum="2" transform="translate(535.2453170506661 458.431000192019)"><circle cx="0" cy="0" r="4.5" class="dim-node-circle"></circle><text x="-11.97969789925522" y="0.6977379469257092" class="dim-node-label" text-anchor="end" dominant-baseline="middle">Aesthetic expertise</text></g><g class="dim-node" data-key="dim-cognitive" data-stratum="2" transform="translate(574.5308219719079 350.4949625090336)"><circle cx="0" cy="0" r="4.5" class="dim-node-circle"></circle><text x="-8.728483698876584" y="-8.234899654424805" class="dim-node-label" text-anchor="end" dominant-baseline="middle">Cognitive style</text></g><g class="dim-node" data-key="dim-emotion" data-stratum="2" transform="translate(680 305)"><circle cx="0" cy="0" r="4.5" class="dim-node-circle"></circle><text x="0" y="-12" class="dim-node-label" text-anchor="middle" dominant-baseline="middle">Emotional profile</text></g><g class="dim-node" data-key="dim-uniqueness" data-stratum="2" transform="translate(586.7957965954517 561.0764442522518)"><circle cx="0" cy="0" r="4.5" class="dim-node-circle"></circle><text x="-7.713451316238475" y="9.192533317427733" class="dim-node-label" text-anchor="end" dominant-baseline="middle"><tspan x="-7.713451316238475" dy="-0.55em">Need for</tspan><tspan x="-7.713451316238475" dy="1.15em">uniqueness</tspan></text></g><g class="dim-node" data-key="dim-color" data-stratum="3" transform="translate(888.0429121587963 395.7492239641923)"><circle cx="0" cy="0" r="4.5" class="dim-node-circle"></circle><text x="13.546980326619297" y="-3.532608672099106" class="dim-node-label" text-anchor="start" dominant-baseline="middle">Color palette</text></g><g class="dim-node" data-key="dim-form" data-stratum="3" transform="translate(893.4324079310816 475.9153862548945)"><circle cx="0" cy="0" r="4.5" class="dim-node-circle"></circle><text x="13.897924237372756" y="1.6875135235745249" class="dim-node-label" text-anchor="start" dominant-baseline="middle">Form language</text></g><g class="dim-node" data-key="dim-texture" data-stratum="3" transform="translate(818.1993360826059 614.6995552705803)"><circle cx="0" cy="0" r="4.5" class="dim-node-circle"></circle><text x="8.999026535611549" y="10.724622203665694" class="dim-node-label" text-anchor="start" dominant-baseline="middle"><tspan x="8.999026535611549" dy="-0.55em">Texture &amp;</tspan><tspan x="8.999026535611549" dy="1.15em">material</tspan></text></g><g class="dim-node" data-key="dim-pattern" data-stratum="3" transform="translate(869.0145027289453 552.4622748045812)"><circle cx="0" cy="0" r="4.5" class="dim-node-circle"></circle><text x="12.307921107931326" y="6.67196208029831" class="dim-node-label" text-anchor="start" dominant-baseline="middle"><tspan x="12.307921107931326" dy="-0.55em">Pattern &amp;</tspan><tspan x="12.307921107931326" dy="1.15em">complexity</tspan></text></g><g class="dim-node" data-key="dim-silhouette" data-stratum="3" transform="translate(794.9101526174773 268.2841316080841)"><circle cx="0" cy="0" r="4.5" class="dim-node-circle"></circle><text x="7.482521565789216" y="-11.832661197613126" class="dim-node-label" text-anchor="start" dominant-baseline="middle">Silhouette</text></g><g class="dim-node" data-key="dim-adornment" data-stratum="3" transform="translate(541.800663917394 614.6995552705803)"><circle cx="0" cy="0" r="4.5" class="dim-node-circle"></circle><text x="-8.999026535611552" y="10.72462220366569" class="dim-node-label" text-anchor="end" dominant-baseline="middle">Adornment layer</text></g><g class="dim-node" data-key="dim-body-relation" data-stratum="3" transform="translate(565.0898473825227 268.2841316080841)"><circle cx="0" cy="0" r="4.5" class="dim-node-circle"></circle><text x="-7.482521565789216" y="-11.832661197613126" class="dim-node-label" text-anchor="end" dominant-baseline="middle">Body relation</text></g><g class="dim-node" data-key="dim-signaling" data-stratum="3" transform="translate(490.9854972710546 552.462274804581)"><circle cx="0" cy="0" r="4.5" class="dim-node-circle"></circle><text x="-12.307921107931328" y="6.671962080298302" class="dim-node-label" text-anchor="end" dominant-baseline="middle">Signaling orientation</text></g><g class="dim-node" data-key="dim-temporal" data-stratum="3" transform="translate(853.5986980205635 323.15958039502857)"><circle cx="0" cy="0" r="4.5" class="dim-node-circle"></circle><text x="11.304101266455294" y="-8.259376160323722" class="dim-node-label" text-anchor="start" dominant-baseline="middle">Temporal preference</text></g><g class="dim-node" data-key="dim-occasion" data-stratum="3" transform="translate(720.1735617076041 238.78663645563208)"><circle cx="0" cy="0" r="4.5" class="dim-node-circle"></circle><text x="2.6159528553788722" y="-13.753428323819307" class="dim-node-label" text-anchor="middle" dominant-baseline="middle">Occasion modulation</text></g><g class="dim-node" data-key="dim-identity-coherence" data-stratum="3" transform="translate(471.9570878412037 395.7492239641923)"><circle cx="0" cy="0" r="4.5" class="dim-node-circle"></circle><text x="-13.546980326619297" y="-3.532608672099106" class="dim-node-label" text-anchor="end" dominant-baseline="middle">Identity coherence</text></g><g class="dim-node" data-key="dim-sustainability" data-stratum="3" transform="translate(506.40130197943654 323.15958039502857)"><circle cx="0" cy="0" r="4.5" class="dim-node-circle"></circle><text x="-11.304101266455294" y="-8.259376160323722" class="dim-node-label" text-anchor="end" dominant-baseline="middle">Sustainability stance</text></g><g class="dim-node" data-key="dim-condition" data-stratum="3" transform="translate(466.5675920689184 475.9153862548943)"><circle cx="0" cy="0" r="4.5" class="dim-node-circle"></circle><text x="-13.897924237372758" y="1.6875135235745136" class="dim-node-label" text-anchor="end" dominant-baseline="middle"><tspan x="-13.897924237372758" dy="-0.55em">Condition /</tspan><tspan x="-13.897924237372758" dy="1.15em">newness</tspan></text></g><g class="dim-node" data-key="dim-cultural" data-stratum="3" transform="translate(639.826438292396 238.78663645563208)"><circle cx="0" cy="0" r="4.5" class="dim-node-circle"></circle><text x="-2.615952855378865" y="-13.753428323819309" class="dim-node-label" text-anchor="middle" dominant-baseline="middle">Cultural context</text></g></g></svg>
+  <svg class="map-svg" id="map" viewBox="0 0 1360 900" preserveAspectRatio="xMidYMid meet" aria-label="Aesthetic identity map"></svg>
 </div>
 
-<div class="mod-card-sub">constitutive force, not demographic</div></div><div class="mod-card" data-key="mod-body"><div><div class="mod-card-num">02</div><div class="mod-card-title" style="margin-top:4px">Body</div></div><div class="mod-card-sub">lived body shapes what dress can mean</div></div><div class="mod-card" data-key="mod-habitus"><div><div class="mod-card-num">03</div><div class="mod-card-title" style="margin-top:4px">Habitus</div></div><div class="mod-card-sub">class, culture, subcultural capital</div></div><div class="mod-card" data-key="mod-lifecourse"><div><div class="mod-card-num">04</div><div class="mod-card-title" style="margin-top:4px">Life course</div></div><div class="mod-card-sub">stage, role, transition</div></div><div class="mod-card" data-key="mod-material"><div><div class="mod-card-num">05</div><div class="mod-card-title" style="margin-top:4px">Material</div></div><div class="mod-card-sub">fabric, climate, economic access</div></div><div class="mod-card" data-key="mod-informational"><div><div class="mod-card-num">06</div><div class="mod-card-title" style="margin-top:4px">Informational</div></div><div class="mod-card-sub">platforms, algorithms, media flows</div></div></div>
-</div>
 
-<!-- ============ CONSTRAINTS — Layer 05 ============ -->
+
+<!-- ============ CONSTRAINTS — Layer 04 ============ -->
 <div class="constraints-strip">
   <div class="constraints-intro">
     <span class="num">04</span>
     Bounds
     <strong>that the above must operate within for any given person, on any given day</strong>
   </div>
-  <div class="constraints" id="constraints"></div>
+  <div class="constraints" id="constraints-grid"></div>
 </div>
 
 <!-- ============ FOOTER ============ -->
 <div class="footer">
-  <div>— ARI Framework / Identity Map v3</div>
+  <div>&mdash; ARI Framework / Identity Map v2</div>
   <div>Click any element</div>
 </div>
 
@@ -837,7 +620,7 @@ body.constraint-mode .dim-node.bound .dim-node-label {
       <div class="panel-eyebrow" id="panel-eyebrow"></div>
       <div class="panel-title" id="panel-title"></div>
     </div>
-    <button class="panel-close" id="panel-close" aria-label="Close">×</button>
+    <button class="panel-close" id="panel-close" aria-label="Close">&times;</button>
   </div>
   <div class="panel-body" id="panel-body"></div>
 </div>
@@ -1626,11 +1409,11 @@ Object.entries(DIM_MAP).forEach(([dimKey, info]) => {
 });
 
 // ================ INTERACTION ================
-var panel = document.getElementById('panel');
-var panelEyebrow = document.getElementById('panel-eyebrow');
-var panelTitle = document.getElementById('panel-title');
-var panelBody = document.getElementById('panel-body');
-var panelClose = document.getElementById('panel-close');
+const panel = document.getElementById('panel');
+const panelEyebrow = document.getElementById('panel-eyebrow');
+const panelTitle = document.getElementById('panel-title');
+const panelBody = document.getElementById('panel-body');
+const panelClose = document.getElementById('panel-close');
 const panelHead = panel.querySelector('.panel-head');
 
 function clearHighlights() {
@@ -1831,23 +1614,6 @@ wireInteractive('.engine-card', { hoverReveal: false });
 wireInteractive('.mod-card');
 wireInteractive('.dim-node');
 wireInteractive('.ring-hit');
-
-// Wire engine nodes (inside SVG core)
-document.querySelectorAll('.engine-node').forEach(node => {
-  node.addEventListener('click', () => {
-    const key = node.dataset.key;
-    clearHighlights();
-    node.classList.add('active');
-    document.body.classList.add('dimmed-mode');
-    window.openPanel(key);
-  });
-  node.addEventListener('mouseenter', () => {
-    if (!document.body.classList.contains('dimmed-mode')) node.classList.add('active');
-  });
-  node.addEventListener('mouseleave', () => {
-    if (!document.getElementById('panel').classList.contains('visible')) node.classList.remove('active');
-  });
-});
 wireInteractive('.shape-mod-group');
 wireInteractive('.shape-branch-group');
 
@@ -1856,305 +1622,164 @@ wireInteractive('.shape-branch-group');
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') closePanel();
 });
-</script>
 
-
-<script>
-// ====== Layer 05 — Non-identity constraints (data) ===========================
-
+// ============================================================
+// NON-IDENTITY CONSTRAINTS
+// ============================================================
 const CONSTRAINTS = [
-  {key:'con-environment',  num:'01', title:'Environment',  sub:'climate, weather, terrain'},
-  {key:'con-medical',      num:'02', title:'Physiology',   sub:'body state, allergens, devices'},
-  {key:'con-legal',        num:'03', title:'Legal',        sub:'state laws, institutional codes'},
-  {key:'con-occupational', num:'04', title:'Occupational', sub:'PPE, hygiene, performance'},
-  {key:'con-access',       num:'05', title:'Access',       sub:'supply, infrastructure, floor'},
-  {key:'con-situational',  num:'06', title:'Situational',  sub:'time-bounded circumstance'},
-  {key:'con-safety',       num:'07', title:'Safety',       sub:'violence, surveillance, threat'}
+  {key:'con-environment',num:'01',title:'Physical environment',sub:'thermal/physical viability',bounds:['dim-color','dim-texture','dim-form','dim-silhouette','dim-adornment']},
+  {key:'con-medical',num:'02',title:'Physiology & medical',sub:'body state, allergen, device',bounds:['dim-texture','dim-form','dim-silhouette','dim-body-relation','dim-adornment']},
+  {key:'con-legal',num:'03',title:'Legal & regulatory',sub:'state/institutional rules',bounds:['dim-color','dim-form','dim-silhouette','dim-signaling','dim-cultural']},
+  {key:'con-occupational',num:'04',title:'Occupational',sub:'safety, hygiene, performance',bounds:['dim-form','dim-silhouette','dim-texture','dim-color','dim-adornment']},
+  {key:'con-access',num:'05',title:'Access & availability',sub:'supply, infrastructure, economic floor',bounds:['dim-color','dim-texture','dim-pattern','dim-adornment','dim-condition']},
+  {key:'con-situational',num:'06',title:'Acute situational',sub:'time-bounded circumstance',bounds:['dim-form','dim-silhouette','dim-occasion','dim-signaling','dim-cultural']},
+  {key:'con-safety',num:'07',title:'Safety & security',sub:'threat context',bounds:['dim-color','dim-signaling','dim-adornment','dim-silhouette','dim-cultural']},
 ];
+const CON_DATA={
+'con-environment':{eyebrow:'Constraint 01',title:'Physical environment',body:'<p>Clothing as immediate mediator against the physical environment\u2014outfit-by-outfit calibration to today\u2019s weather, altitude, UV.</p><p><strong>Strong situational.</strong> Weak long-term: population-level climate conditioning installs aesthetic preferences over time.</p>',effect:{situational:'strong',longterm:'weak'},source:'Parsons (2014); Fanger (1970); ISO 9920; WHO Air Quality Guidelines',related:['con-medical','dim-texture','dim-form']},
+'con-medical':{eyebrow:'Constraint 02',title:'Physiology & medical',body:'<p>Body state constrains what dress is physically possible\u2014material allergies, mobility limits, medical devices, pregnancy, sensory conditions.</p><p><strong>Strong situational</strong> (post-surgical recovery). <strong>Moderate long-term</strong>: chronic conditions install durable avoidances.</p>',effect:{situational:'strong',longterm:'moderate'},source:'Kabel, Dimka & McBee-Black (2017); Lamb & Kallal (1992)',related:['con-environment','dim-texture','dim-body-relation']},
+'con-legal':{eyebrow:'Constraint 03',title:'Legal & regulatory',body:'<p>State laws, religious regulations, institutional rules\u2014with legal or institutional consequence for violation.</p><p><strong>Strong situational</strong> (entering mosque, attending court). <strong>Moderate long-term</strong>: prohibited dress gains meaning when reclaimed.</p>',effect:{situational:'strong',longterm:'moderate'},source:'Entwistle (2000); EU veil rulings; sumptuary law literature',related:['con-occupational','dim-signaling','dim-cultural']},
+'con-occupational':{eyebrow:'Constraint 04',title:'Occupational & functional',body:'<p>Safety requirements, hygiene, performance necessity\u2014PPE, scrubs, clean-room suits, athletic gear.</p><p><strong>Strong situational.</strong> Weak long-term unless occupation becomes identity.</p>',effect:{situational:'strong',longterm:'weak'},source:'Rafaeli & Pratt (1993); Roach-Higgins & Eicher (1992)',related:['con-legal','con-environment','dim-form']},
+'con-access':{eyebrow:'Constraint 05',title:'Access & availability',body:'<p>What you can physically obtain\u2014limited by geography, retail infrastructure, e-commerce gaps, size availability, trade sanctions, economic floor.</p><p><strong>Moderate situational.</strong> <strong>Strong long-term</strong>: persistent access constraints shape the entire possibility set.</p>',effect:{situational:'moderate',longterm:'strong'},source:'Crane (2000); Hamilton (2012); fashion-desert literature',related:['con-situational','dim-condition','dim-pattern']},
+'con-situational':{eyebrow:'Constraint 06',title:'Acute situational',body:'<p>Time-bounded circumstances that override normal dress\u2014weddings, funerals, travel, displacement, emergency, religious sites.</p><p><strong>Strong situational.</strong> Weak long-term unless the event is identity-forming.</p>',effect:{situational:'strong',longterm:'weak'},source:'Goffman (1959); Turner (1969) liminality',related:['con-legal','dim-occasion','dim-signaling']},
+'con-safety':{eyebrow:'Constraint 07',title:'Safety & security',body:'<p>Threat context\u2014conflict zones, high-crime areas, stalking, protest under surveillance. Dress constrained by the need to avoid attention or enable escape.</p><p><strong>Strong situational.</strong> <strong>Moderate long-term</strong> in persistent threat environments.</p>',effect:{situational:'strong',longterm:'moderate'},source:'Tulloch (2010); protest-dress literature',related:['con-legal','dim-signaling','dim-cultural']},
+};
+Object.assign(DATA, CON_DATA);
 
-// effect strength: weak | moderate | strong — both axes
-// duration: which ticks on the acute → permanent spectrum are active
-// bounds: dimension keys this constraint can override
-// also: modulator keys whose meaning shifts under this constraint
-Object.assign(DATA, {
-  'con-environment': {
-    eyebrow: 'Constraint 01 — external force',
-    title: 'Physical environment',
-    body: 'Cold, heat, humidity, rain, UV, altitude, wind, air quality, vectors. Clothing operates as the immediate mediator against the environment — outfit-by-outfit calibration to today\'s weather, this trip\'s altitude, this season\'s UV. <strong>Strong situational effect, weak long-term.</strong> Persistent climate exposure across years installs durable preference (climate-conditioned aesthetic), but for any given outfit the environmental load is acute and recoverable.',
-    dressApply: '<strong>In dress:</strong> forces material choice (breathable, insulating, water-shedding); forces silhouette (coverage above UV thresholds, layering above thermal thresholds); time-bounds choices (winter coat 4 months, swimsuit 3 months in temperate climates).',
-    source: 'Parsons (2014), <em>Human Thermal Environments</em>; ISO 9920; WHO Air Quality Guidelines; Skin Cancer Foundation UPF guidelines',
-    effect: { situational: 'strong', longterm: 'weak' },
-    duration: ['hours','days','seasons'],
-    bounds: ['dim-texture','dim-form','dim-color','dim-silhouette'],
-    moderates: ['mod-body','mod-material'],
-    related: ['con-medical','con-occupational','mod-material']
-  },
-  'con-medical': {
-    eyebrow: 'Constraint 02 — external force',
-    title: 'Physiology & medical',
-    body: 'Allergies, eczema, MS, pregnancy, mobility/joint conditions, post-surgical recovery, adaptive needs, sensory conditions, medical devices (ostomy, insulin pump, CGM). <strong>Strong situational AND moderate long-term.</strong> Acute conditions force time-bounded wardrobe changes (pregnancy ≈ 9 months, post-surgical recovery ≈ 6–12 weeks); chronic conditions install durable preferences and avoidances that integrate into identity over years.',
-    dressApply: '<strong>In dress:</strong> forces material avoidance (allergens, irritants); forces structural adaptation (fastenings, fit, access ports, pressure zones); forces sensory-appropriate construction (tagless, flat-lock seams). Misread as identity choice when in fact the user has no other option.',
-    source: 'Kabel, Dimka & McBee-Black (2017), <em>Applied Ergonomics</em>; Lamb & Kallal (1992), <em>CTRJ</em>; Sohn & Bye (2012); National Eczema Association fabric guidelines',
-    effect: { situational: 'strong', longterm: 'moderate' },
-    duration: ['days','weeks','months','years','permanent'],
-    bounds: ['dim-texture','dim-form','dim-silhouette','dim-condition','dim-body-relation','dim-adornment'],
-    moderates: ['mod-body','mod-lifecourse'],
-    related: ['con-environment','mod-body','mod-lifecourse']
-  },
-  'con-legal': {
-    eyebrow: 'Constraint 03 — external force',
-    title: 'Legal & regulatory',
-    body: 'State laws, religious mandates, institutional rules with formal consequence. Iran compulsory hijab; France laïcité; Quebec Bill 21; school codes; prison uniforms; courtroom dress; military and academic sumptuary residuals. Distinct from cultural norms — <strong>violation here carries legal or institutional consequence,</strong> not just social cost.',
-    dressApply: '<strong>In dress:</strong> mandates or prohibits specific dress under state/institutional authority. Mandated dress can become reclamation territory when relaxed (post-Iran protests). Prohibited dress accumulates symbolic weight precisely from its prohibition.',
-    source: 'Scott (2007), <em>The Politics of the Veil</em>; Mahmood (2005); Wing & Smith (2006); sumptuary law historiography (Hunt, 1996)',
-    effect: { situational: 'strong', longterm: 'moderate' },
-    duration: ['hours','days','years','permanent'],
-    bounds: ['dim-silhouette','dim-form','dim-adornment','dim-body-relation','dim-color'],
-    moderates: ['mod-gender','mod-habitus'],
-    related: ['con-occupational','con-situational','mod-gender']
-  },
-  'con-occupational': {
-    eyebrow: 'Constraint 04 — external force',
-    title: 'Occupational & functional',
-    body: 'PPE, scrubs, food-service, clean-room, sport, performance, hi-vis. Distinct from legal: occupational dress is mandated by safety, hygiene, or functional necessity. <strong>Volume problem:</strong> 40 hrs/week of constrained dress means a substantial fraction of a person\'s lived dress experience is non-identity. Scrubs ≠ minimalist identity — occupation-constrained.',
-    dressApply: '<strong>In dress:</strong> forces uniform during work hours; can install recognizable post-shift "rebound" patterns (high-saturation off-duty wardrobe to compensate for muted on-duty constraint); reshapes off-duty silhouette via comfort calibration.',
-    source: 'OSHA PPE standards; Joseph & Alex (1972) on uniforms and identity; Pratt & Rafaeli (1997), <em>AMJ</em>',
-    effect: { situational: 'strong', longterm: 'moderate' },
-    duration: ['hours','days','years'],
-    bounds: ['dim-silhouette','dim-color','dim-form','dim-pattern','dim-texture'],
-    moderates: ['mod-habitus','mod-lifecourse'],
-    related: ['con-legal','con-situational','mod-habitus']
-  },
-  'con-access': {
-    eyebrow: 'Constraint 05 — external force',
-    title: 'Access & availability',
-    body: 'Supply, infrastructure, sanctions, size availability, retail geography, absolute economic floor. Distinct from habitus and material modulator — access is the question of whether a garment is <em>obtainable at all</em>, separate from whether the person could afford or want it. Rural retail gaps; e-commerce gaps; size 14+ availability; sanctioned countries.',
-    dressApply: '<strong>In dress:</strong> sets the outer boundary of what can enter the wardrobe at all. Misread frequently as values rejection ("she doesn\'t wear that brand") when the brand is simply not available to her.',
-    caveat: 'Overlap with mod-material is partial — material is about resource fit (could you afford it?); access is about supply (is it reachable?). A user can have the budget and habitus for a garment that her geography or supply chain blocks.',
-    source: 'Crewe (2017), <em>The Geographies of Fashion</em>; Hawley (2006) on size limits in apparel; sanctions-and-trade dress literature',
-    effect: { situational: 'moderate', longterm: 'strong' },
-    duration: ['months','years','permanent'],
-    bounds: ['dim-color','dim-pattern','dim-texture','dim-silhouette','dim-condition','dim-temporal'],
-    moderates: ['mod-material','mod-habitus','mod-informational'],
-    related: ['mod-material','con-environment']
-  },
-  'con-situational': {
-    eyebrow: 'Constraint 06 — external force',
-    title: 'Acute situational',
-    body: 'Time-bounded circumstance: weddings, funerals, religious site entry, court, travel, displacement, emergency. <strong>Highest situational effect, lowest long-term effect.</strong> The constraint binds for a window measured in hours to days, then releases entirely.',
-    dressApply: '<strong>In dress:</strong> overrides occasion modulation, color palette, adornment load, silhouette for the bounded period. Often the most visible "non-identity dress" a person wears in a year — and the most easily distinguishable from identity expression.',
-    source: 'Chrisman-Campbell (2024), <em>Skirts</em>; mortuary & wedding dress historiography',
-    effect: { situational: 'strong', longterm: 'weak' },
-    duration: ['hours','days'],
-    bounds: ['dim-occasion','dim-color','dim-silhouette','dim-adornment','dim-pattern'],
-    moderates: ['mod-lifecourse'],
-    related: ['con-legal','mod-lifecourse']
-  },
-  'con-safety': {
-    eyebrow: 'Constraint 07 — external force',
-    title: 'Safety & security',
-    body: 'Threat context: violence, crime, surveillance, conflict zones, stalking, protest, authoritarian regimes. The most under-discussed constraint domain. <strong>Strong situational + strong long-term in chronic-threat environments.</strong> Sustained exposure produces durable changes to what the wearer dares to express in public.',
-    dressApply: '<strong>In dress:</strong> downward-modulates signaling (legibility = visibility = risk); may force specific concealment, identification, or counter-surveillance choices. Misread frequently as "she dresses so plainly" when the wearer is making a continuous safety calculation.',
-    caveat: 'Empirical literature is uneven — much evidence is ethnographic or clinical (gender-based-violence dress research) rather than survey-quantitative.',
-    source: 'Cahill (2009) on rape culture and dress; Tarlo (2010), <em>Visibly Muslim</em>; surveillance studies (Browne, 2015)',
-    effect: { situational: 'strong', longterm: 'strong' },
-    duration: ['hours','days','years','permanent'],
-    bounds: ['dim-color','dim-pattern','dim-adornment','dim-signaling','dim-silhouette'],
-    moderates: ['mod-gender','mod-body'],
-    related: ['con-legal','mod-gender']
-  }
-});
+// Add boundary ring to SVG
+(function(){
+  const svg = document.getElementById('map');
+  if (!svg) return;
+  const ns = 'http://www.w3.org/2000/svg';
+  const g = document.createElementNS(ns,'g');
+  g.id = 'boundary-layer';
+  const circ = document.createElementNS(ns,'circle');
+  circ.setAttribute('cx','680'); circ.setAttribute('cy','450'); circ.setAttribute('r','445');
+  circ.classList.add('boundary-ring');
+  const txt = document.createElementNS(ns,'text');
+  txt.setAttribute('x','680'); txt.setAttribute('y','18');
+  txt.setAttribute('text-anchor','middle');
+  txt.classList.add('boundary-tag');
+  txt.textContent = 'Layer 04 \u2014 Non-identity constraints (perimeter)';
+  g.appendChild(circ); g.appendChild(txt);
+  svg.insertBefore(g, svg.firstChild);
+})();
 
-// Render the constraints strip into the page
-const DURATION_STOPS = [
-  {key:'hours',     label:'Hours',     pct: 6},
-  {key:'days',      label:'Days',      pct: 22},
-  {key:'weeks',     label:'Weeks',     pct: 38},
-  {key:'months',    label:'Months',    pct: 54},
-  {key:'seasons',   label:'Seasons',   pct: 66},
-  {key:'years',     label:'Years',     pct: 82},
-  {key:'permanent', label:'Permanent', pct: 96}
-];
+// Add engine core circle in SVG
+(function(){
+  const svg = document.getElementById('map');
+  if (!svg) return;
+  const ns = 'http://www.w3.org/2000/svg';
+  const coreG = document.createElementNS(ns,'g');
+  coreG.id = 'engine-core';
+  const bg = document.createElementNS(ns,'circle');
+  bg.setAttribute('cx','680'); bg.setAttribute('cy','450'); bg.setAttribute('r','65');
+  bg.setAttribute('fill','var(--paper-outer)'); bg.setAttribute('stroke','var(--line)');
+  bg.setAttribute('stroke-width','0.75'); bg.setAttribute('opacity','0.55');
+  bg.classList.add('engine-core-bg');
+  coreG.appendChild(bg);
+  const lbl = document.createElementNS(ns,'text');
+  lbl.setAttribute('x','680'); lbl.setAttribute('y','390');
+  lbl.setAttribute('text-anchor','middle');
+  lbl.setAttribute('class','ring-label-tag');
+  lbl.setAttribute('style','font-size:7px;letter-spacing:0.3em;');
+  lbl.textContent = 'ENGINES';
+  coreG.appendChild(lbl);
+  const positions = [{x:680,y:410},{x:655,y:433},{x:705,y:433},{x:658,y:462},{x:702,y:462}];
+  ENGINES.forEach((e,i) => {
+    const g2 = document.createElementNS(ns,'g');
+    g2.classList.add('engine-node'); g2.dataset.key = e.key;
+    g2.setAttribute('cursor','pointer');
+    const c = document.createElementNS(ns,'circle');
+    c.setAttribute('cx',positions[i].x); c.setAttribute('cy',positions[i].y);
+    c.setAttribute('r','6'); c.setAttribute('fill','var(--bg)');
+    c.setAttribute('stroke','var(--ink)'); c.setAttribute('stroke-width','0.75');
+    c.classList.add('dim-node-circle');
+    const t = document.createElementNS(ns,'text');
+    t.setAttribute('x',positions[i].x); t.setAttribute('y',positions[i].y + 3);
+    t.setAttribute('text-anchor','middle');
+    t.setAttribute('style',"font-family:'JetBrains Mono',monospace;font-size:6px;fill:var(--ink-mute);letter-spacing:0.1em;");
+    t.textContent = e.num;
+    g2.appendChild(c); g2.appendChild(t); coreG.appendChild(g2);
+  });
+  // Insert before the center dot
+  const cdot = svg.querySelector('.center-dot');
+  if (cdot) svg.insertBefore(coreG, cdot);
+  else svg.appendChild(coreG);
+})();
 
-function renderConstraintsStrip(){
-  const host = document.getElementById('constraints');
-  if (!host) return;
-  host.innerHTML = CONSTRAINTS.map(c => {
-    const d = DATA[c.key] || {};
-    const ePulse = (d.effect?.situational === 'strong' || d.effect?.longterm === 'strong')
-      ? 3 : (d.effect?.situational === 'moderate' || d.effect?.longterm === 'moderate' ? 2 : 1);
-    const dots = Array.from({length: ePulse}).map(() => '<span class="con-card-pulse-dot"></span>').join('');
-    return `<div class="con-card" data-key="${c.key}">
-      <div>
-        <div class="con-card-num">${c.num}</div>
-        <div class="con-card-title" style="margin-top:4px">${c.title}</div>
-      </div>
-      <div class="con-card-sub">${c.sub}</div>
-      <div class="con-card-pulse" aria-hidden="true">${dots}</div>
-    </div>`;
-  }).join('');
+// Render constraint cards
+(function(){
+  const grid = document.getElementById('constraints-grid');
+  if (!grid) return;
+  CONSTRAINTS.forEach(c => {
+    const d = document.createElement('div');
+    d.className = 'con-card'; d.dataset.key = c.key;
+    d.innerHTML = '<div><div class="con-card-num">'+c.num+'</div><div class="con-card-title" style="margin-top:4px">'+c.title+'</div></div><div class="con-card-sub">'+c.sub+'</div>';
+    grid.appendChild(d);
+  });
+})();
+
+// Wire constraint interactions
+function highlightConstraint(key){
+  const con = CONSTRAINTS.find(c=>c.key===key);
+  if(!con) return;
+  document.body.classList.add('constraint-mode');
+  document.querySelectorAll('.dim-node').forEach(n=>n.classList.remove('bound'));
+  con.bounds.forEach(dk=>{const n=document.querySelector('.dim-node[data-key="'+dk+'"]');if(n)n.classList.add('bound');});
 }
-
-// Hover/click highlighting — uses existing .dimmed-mode plumbing,
-// adds .constraint-mode for boundary-ring activation.
-function highlightConstraint(conKey){
-  if (typeof clearHighlights === 'function') clearHighlights();
-  const d = DATA[conKey];
-  if (!d) return;
-  document.body.classList.add('dimmed-mode','constraint-mode');
-  // mark the card itself
-  document.querySelectorAll('.con-card').forEach(el => {
-    el.classList.toggle('active', el.dataset.key === conKey);
-  });
-  // mark bound dimensions
-  (d.bounds || []).forEach(dim => {
-    const node = document.querySelector(`.dim-node[data-key="${dim}"]`);
-    if (node) node.classList.add('bound');
-    // also light its connectors
-    document.querySelectorAll(`.connector[data-source="${dim}"]`).forEach(c => c.classList.add('revealed'));
-  });
-  // mark moderated modulators with .active so they bloom in the SVG
-  (d.moderates || []).forEach(mod => {
-    document.querySelectorAll(`[data-key="${mod}"]`).forEach(el => el.classList.add('active'));
-  });
-}
-
 function clearConstraintMode(){
   document.body.classList.remove('constraint-mode');
-  document.querySelectorAll('.dim-node.bound').forEach(n => n.classList.remove('bound'));
-  document.querySelectorAll('.con-card.active').forEach(c => c.classList.remove('active'));
+  document.querySelectorAll('.dim-node.bound').forEach(n=>n.classList.remove('bound'));
 }
+document.querySelectorAll('.con-card').forEach(card=>{
+  card.addEventListener('mouseenter',()=>{if(!panel.classList.contains('visible'))highlightConstraint(card.dataset.key);});
+  card.addEventListener('mouseleave',()=>{if(!panel.classList.contains('visible'))clearConstraintMode();});
+  card.addEventListener('click',(e)=>{e.stopPropagation();highlightConstraint(card.dataset.key);openPanel(card.dataset.key);});
+});
 
-// Patch into existing clearHighlights if it exists
-if (typeof window.clearHighlights === 'function') {
-  const _orig = window.clearHighlights;
-  window.clearHighlights = function(){
-    clearConstraintMode();
-    return _orig.apply(this, arguments);
-  };
-}
+// Wire engine nodes
+document.querySelectorAll('.engine-node').forEach(node=>{
+  node.addEventListener('click',(e)=>{e.stopPropagation();clearHighlights();node.classList.add('active');document.body.classList.add('dimmed-mode');openPanel(node.dataset.key);});
+  node.addEventListener('mouseenter',()=>{if(!panel.classList.contains('visible'))node.classList.add('active');});
+  node.addEventListener('mouseleave',()=>{if(!panel.classList.contains('visible'))node.classList.remove('active');});
+});
 
-// Wire the strip
-function wireConstraintCards(){
-  document.querySelectorAll('.con-card').forEach(card => {
-    card.addEventListener('mouseenter', () => highlightConstraint(card.dataset.key));
-    card.addEventListener('mouseleave', () => {
-      if (typeof clearHighlights === 'function') clearHighlights();
+// Extend panel for constraint content
+const _origOP = openPanel;
+openPanel = function(key){
+  _origOP(key);
+  if(!key||!key.startsWith('con-'))return;
+  const d=DATA[key];if(!d)return;
+  const body=document.getElementById('panel-body');if(!body)return;
+  let html='';
+  if(d.effect){
+    html+='<div class="panel-effect">';
+    ['situational','longterm'].forEach(k=>{
+      const label=k==='longterm'?'Long-term':'Situational';
+      const val=d.effect[k]||'weak';
+      html+='<div class="panel-effect-row"><div class="panel-effect-key">'+label+'</div><div class="panel-effect-bar"><div class="panel-effect-fill '+val+'"></div></div><div class="panel-effect-val">'+val+'</div></div>';
     });
-    card.addEventListener('click', (e) => {
-      e.stopPropagation();
-      highlightConstraint(card.dataset.key);
-      openPanel(card.dataset.key);
-    });
-  });
-}
-
-// Extend openPanel for constraint keys.
-// We wrap the existing openPanel to add the effect-strength bar,
-// duration spectrum, and bounds list when the key is a con-*.
-const _origOpenPanel = window.openPanel;
-window.openPanel = function(key){
-  _origOpenPanel(key);
-  if (!key || !key.startsWith('con-')) return;
-  const d = DATA[key];
-  if (!d) return;
-  const body = document.getElementById('panel-body');
-  if (!body) return;
-
-  // Build constraint-specific block. Insert it before the source line.
-  let html = '';
-
-  // 1) profile block (Situational vs long-term effect, render via bars)
-  if (d.effect) {
-    html += '<div class="panel-effect">';
-    html += '<div class="panel-effect-row">';
-    html += '<div class="panel-effect-key">Situational</div>';
-    html += `<div class="panel-effect-bar"><div class="panel-effect-fill ${d.effect.situational || 'weak'}"></div></div>`;
-    html += `<div class="panel-effect-val">${d.effect.situational || 'weak'}</div>`;
-    html += '</div>';
-    html += '<div class="panel-effect-row">';
-    html += '<div class="panel-effect-key">Long-term</div>';
-    html += `<div class="panel-effect-bar"><div class="panel-effect-fill ${d.effect.longterm || 'weak'}"></div></div>`;
-    html += `<div class="panel-effect-val">${d.effect.longterm || 'weak'}</div>`;
-    html += '</div>';
-    html += '</div>';
+    html+='</div>';
   }
-
-  // 2) duration spectrum
-  if (d.duration && d.duration.length) {
-    const active = new Set(d.duration);
-    html += '<div class="panel-duration">';
-    html += '<div class="panel-duration-anchors"><span>Acute</span><span>Permanent</span></div>';
-    html += '<div class="panel-duration-track">';
-    DURATION_STOPS.forEach(stop => {
-      const is = active.has(stop.key);
-      html += `<div class="panel-duration-tick ${is ? 'active' : ''}" style="left:${stop.pct}%">`;
-      if (is) html += `<div class="panel-duration-tick-label">${stop.label}</div>`;
-      html += '</div>';
-    });
-    html += '</div></div>';
+  const con=CONSTRAINTS.find(c=>c.key===key);
+  if(con&&con.bounds.length){
+    html+='<div class="panel-bounds"><div class="panel-bounds-label">Bounds these dimensions</div><div class="panel-bounds-chips">';
+    con.bounds.forEach(dk=>{const dd=DATA[dk];html+='<span class="panel-bound-chip" data-key="'+dk+'">'+(dd?dd.title:dk)+'</span>';});
+    html+='</div></div>';
   }
-
-  // 3) bounds list
-  if (d.bounds && d.bounds.length) {
-    html += '<div class="panel-bounds-section">';
-    html += '<div class="panel-dims-label">Bounds — dimensions this constraint can override</div>';
-    html += '<div class="panel-bounds-list">';
-    d.bounds.forEach(dim => {
-      const dt = (DIM_MAP[dim] && DIM_MAP[dim].title) || dim;
-      html += `<span class="panel-profile-chip" data-key="${dim}" data-bound-strength="strong">${dt}</span>`;
-    });
-    html += '</div></div>';
-  }
-
-  // 4) moderated modulators
-  if (d.moderates && d.moderates.length) {
-    html += '<div class="panel-bounds-section">';
-    html += '<div class="panel-dims-label">Reshapes — modulators whose meaning shifts under this constraint</div>';
-    html += '<div class="panel-bounds-list">';
-    d.moderates.forEach(mod => {
-      const mt = DATA[mod]?.title || mod;
-      html += `<span class="panel-profile-chip" data-key="${mod}">${mt}</span>`;
-    });
-    html += '</div></div>';
-  }
-
-  // Splice this block into the panel body — insert right after the
-  // first .panel-text (the body paragraph), before .panel-dress-apply
-  // if present, otherwise append.
-  const wrap = document.createElement('div');
-  wrap.innerHTML = html;
-  const body0 = body.querySelector('.panel-text');
-  const apply = body.querySelector('.panel-dress-apply');
-  const target = apply || body.querySelector('.panel-source') || null;
-  if (body0 && body0.nextSibling) {
-    while (wrap.firstChild) {
-      body0.parentNode.insertBefore(wrap.firstChild, target || null);
-      // shift target back to keep insertion order
-    }
-  } else {
-    while (wrap.firstChild) body.appendChild(wrap.firstChild);
-  }
-
-  // Re-bind chip clicks (the original openPanel only binds existing chips)
-  body.querySelectorAll('[data-key]').forEach(link => {
-    if (link.dataset.bound) return;
-    link.dataset.bound = '1';
-    link.addEventListener('click', (e) => {
-      e.stopPropagation();
-      const k = link.dataset.key;
-      if (!k || !DATA[k]) return;
-      if (typeof applyHighlight === 'function') applyHighlight(k);
-      openPanel(k);
-    });
+  const sourceDiv=body.querySelector('.panel-source');
+  if(sourceDiv)sourceDiv.insertAdjacentHTML('beforebegin',html);
+  else body.insertAdjacentHTML('beforeend',html);
+  body.querySelectorAll('.panel-bound-chip[data-key]').forEach(chip=>{
+    chip.addEventListener('click',(e)=>{e.stopPropagation();clearConstraintMode();clearHighlights();applyHighlight(chip.dataset.key);openPanel(chip.dataset.key);});
   });
 };
 
-// Init on DOMContentLoaded — but only after the page's own init has run.
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', () => { renderConstraintsStrip(); wireConstraintCards(); });
-} else {
-  renderConstraintsStrip(); wireConstraintCards();
-}
+// Patch clearHighlights to also clear constraint mode
+const _origCH = clearHighlights;
+clearHighlights = function(){_origCH();clearConstraintMode();document.querySelectorAll('.con-card.active').forEach(c=>c.classList.remove('active'));};
+
 </script>
-</body></html>
+</body>
+</html>
