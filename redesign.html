@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aesthetic Identity — Redesign Preview</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #eeeae0;
+  --ink: #0d0d0d;
+  --ink-soft: #2b2b2b;
+  --ink-mute: #7a7670;
+  --ink-dim: rgba(13,13,13,0.35);
+  --line: #0d0d0d;
+  --line-soft: rgba(13,13,13,0.22);
+  --line-hair: rgba(13,13,13,0.11);
+  --paper: #f5f2ea;
+
+  /* Three strata band tints — keyed to image sketch but tuned to the
+     warm off-white palette so the rings still read as a single family. */
+  --band-act:     #f1c9a4;   /* outer  — how you act       (peach/orange) */
+  --band-act-glow:#f3d2b3;
+  --band-perceive:#e6b1ad;   /* middle — how you perceive  (rose/red)     */
+  --band-perceive-glow:#ecbfbc;
+  --band-who:     #c8cce8;   /* inner  — who u r           (lavender/blue)*/
+  --band-who-glow:#d6daee;
+
+  /* Constraints — the outer dashed ring + arrowheads. Treated as an
+     atmospheric pressure rather than a saturated colour. */
+  --constraints: rgba(13,13,13,0.32);
+  --constraints-soft: rgba(13,13,13,0.18);
+
+  /* Per-ring label colours pulled from the sketch. */
+  --label-act: #c97a3c;
+  --label-perceive: #b85952;
+  --label-who: #4a5cb8;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { background: var(--bg); color: var(--ink); font-family: 'Inter', sans-serif; font-weight: 300; min-height: 100vh; }
+body {
+  background-image: radial-gradient(circle, rgba(13,13,13,0.055) 0.6px, transparent 0.7px);
+  background-size: 22px 22px;
+  background-position: 0 0;
+}
+
+.stage { max-width: 1200px; margin: 0 auto; padding: 48px 40px 80px; }
+
+/* ======== Header ======== */
+.masthead { display: flex; align-items: flex-end; justify-content: space-between; gap: 40px; margin-bottom: 28px; flex-wrap: wrap; }
+.masthead-left { max-width: 760px; }
+.masthead-eyebrow { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.28em; text-transform: uppercase; color: var(--ink-mute); margin-bottom: 14px; }
+.masthead-eyebrow .dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--label-perceive); vertical-align: middle; margin: -2px 12px 0 0; }
+.masthead h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(32px, 4.2vw, 52px);
+  font-weight: 300;
+  line-height: 1.02;
+  letter-spacing: -0.012em;
+  color: var(--ink);
+}
+.masthead h1 em { font-style: italic; color: var(--label-perceive); }
+.masthead-right {
+  max-width: 320px;
+  font-size: 11px;
+  line-height: 1.7;
+  color: var(--ink-soft);
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: 0.01em;
+}
+.masthead-right .key { color: var(--ink-mute); text-transform: uppercase; letter-spacing: 0.14em; font-size: 9.5px; display: block; margin-bottom: 5px; }
+
+/* ======== Map ======== */
+.map-shell {
+  position: relative;
+  margin-top: 12px;
+}
+.map-svg { width: 100%; height: auto; display: block; overflow: visible; }
+
+/* SVG element classes */
+.band { stroke: none; }
+.band-edge { fill: none; stroke: var(--line-soft); stroke-width: 0.6; }
+
+.constraints-ring {
+  fill: none;
+  stroke: var(--constraints);
+  stroke-width: 1;
+  stroke-dasharray: 6 6;
+}
+.constraint-arrow {
+  fill: none;
+  stroke: var(--constraints);
+  stroke-width: 1;
+  stroke-linecap: round;
+}
+.constraint-head {
+  fill: var(--constraints);
+  stroke: none;
+}
+
+.ring-label-name {
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: 0.005em;
+  pointer-events: none;
+}
+.ring-label-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  fill: var(--ink-mute);
+  pointer-events: none;
+}
+.constraints-label {
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  fill: var(--ink);
+  letter-spacing: 0.01em;
+}
+
+/* The two core ovals */
+.core-oval {
+  fill: var(--paper);
+  stroke: var(--ink);
+  stroke-width: 0.9;
+}
+.core-oval-label {
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  font-size: 11px;
+  fill: var(--ink);
+  text-anchor: middle;
+  dominant-baseline: middle;
+  pointer-events: none;
+  letter-spacing: 0.01em;
+}
+.core-arrow {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 1.1;
+  stroke-linecap: round;
+}
+.core-arrow-head {
+  fill: var(--ink);
+  stroke: none;
+}
+
+/* Soft glow halo behind each band, similar to the sketch */
+.glow-act      { fill: var(--band-act-glow);      opacity: 0.55; }
+.glow-perceive { fill: var(--band-perceive-glow); opacity: 0.6; }
+.glow-who      { fill: var(--band-who-glow);      opacity: 0.7; }
+
+/* ======== Age timeline ======== */
+.timeline-wrap {
+  margin: 18px auto 0;
+  max-width: 720px;
+  padding: 0 12px;
+}
+.timeline-track {
+  position: relative;
+  height: 6px;
+  background: var(--ink);
+  border-radius: 3px;
+  margin: 28px 0 8px;
+}
+.timeline-handle {
+  position: absolute;
+  top: 50%;
+  width: 16px; height: 16px;
+  background: var(--paper);
+  border: 1.2px solid var(--ink);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  cursor: grab;
+  transition: background 0.12s, transform 0.12s;
+}
+.timeline-handle:hover { background: var(--label-perceive); border-color: var(--label-perceive); }
+.timeline-handle:active { cursor: grabbing; transform: translate(-50%, -50%) scale(1.08); }
+.timeline-poles {
+  display: flex; justify-content: space-between;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9.5px; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--ink-mute);
+}
+.timeline-note {
+  margin: 16px auto 0;
+  max-width: 520px;
+  text-align: center;
+  font-family: 'Inter', sans-serif;
+  font-size: 11.5px;
+  line-height: 1.65;
+  color: var(--ink-soft);
+  font-style: italic;
+}
+.timeline-note strong { font-style: normal; font-weight: 500; color: var(--ink); }
+
+/* ======== Footer ======== */
+.footer {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-top: 56px; padding-top: 22px;
+  border-top: 0.5px solid var(--line-soft);
+  font-family: 'JetBrains Mono', monospace; font-size: 9.5px;
+  letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-mute);
+}
+
+@media (max-width: 720px) {
+  .stage { padding: 32px 18px 60px; }
+  .masthead h1 { font-size: 32px; }
+  .masthead-right { max-width: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="stage">
+
+  <!-- ============ MASTHEAD ============ -->
+  <div class="masthead">
+    <div class="masthead-left">
+      <div class="masthead-eyebrow"><span class="dot"></span>Redesign preview &mdash; structure only</div>
+      <h1>The Science of<br><em>Aesthetic Identity in Dress</em></h1>
+    </div>
+    <div class="masthead-right">
+      <span class="key">Read this as</span>
+      Three strata of identity (who you are &rarr; how you perceive &rarr; how you act), pressed on by external constraints. The slider toggles how the balance of influence shifts across a lifetime.
+    </div>
+  </div>
+
+  <!-- ============ MAP ============ -->
+  <div class="map-shell">
+    <svg class="map-svg" id="map" viewBox="0 0 900 900" preserveAspectRatio="xMidYMid meet" aria-label="Aesthetic identity map (redesign)"></svg>
+  </div>
+
+  <!-- ============ AGE SLIDER ============ -->
+  <div class="timeline-wrap">
+    <div class="timeline-poles">
+      <span>newborn</span>
+      <span>elder</span>
+    </div>
+    <div class="timeline-track" id="timeline-track">
+      <div class="timeline-handle" id="timeline-handle" style="left: 18%;"></div>
+    </div>
+    <div class="timeline-note">
+      Over time, influence changes &mdash; <strong>strat I</strong> tends to drive modulators when younger; modulators tend to reshape strat I when older. This toggle previews the shift across age.
+    </div>
+  </div>
+
+  <!-- ============ FOOTER ============ -->
+  <div class="footer">
+    <div>&mdash; ARI Framework / Identity Map &mdash; redesign v3</div>
+    <div>Structure preview</div>
+  </div>
+
+</div><!-- /stage -->
+
+<script>
+const SVG_NS = 'http://www.w3.org/2000/svg';
+const svg = document.getElementById('map');
+
+// Geometry — a tall-ish square works well for the constraint ring + arrows.
+const VB = { w: 900, h: 900 };
+const CX = VB.w / 2;
+const CY = VB.h / 2;
+
+// Radii — band thicknesses matched to the sketch (outer thinner, inner deeper).
+const R_WHO_OUT      = 165;   // inner ring (who u r) — outer edge
+const R_PERCEIVE_OUT = 250;   // middle ring (how you perceive)
+const R_ACT_OUT      = 335;   // outer ring (how you act)
+const R_CONSTRAINTS  = 405;   // dashed outer atmosphere
+const R_ARROW_OUT    = 395;   // arrowtail start
+const R_ARROW_IN     = 350;   // arrowhead end (just past outer band)
+
+function el(tag, attrs = {}, parent = svg, text = null) {
+  const e = document.createElementNS(SVG_NS, tag);
+  for (const [k, v] of Object.entries(attrs)) {
+    if (v !== undefined && v !== null) e.setAttribute(k, v);
+  }
+  if (text !== null) e.textContent = text;
+  if (parent) parent.appendChild(e);
+  return e;
+}
+
+// ---- Layered halos (soft glow behind each band) ----
+el('circle', { cx: CX, cy: CY, r: R_ACT_OUT + 10,      class: 'glow-act' });
+el('circle', { cx: CX, cy: CY, r: R_PERCEIVE_OUT + 10, class: 'glow-perceive' });
+el('circle', { cx: CX, cy: CY, r: R_WHO_OUT + 8,       class: 'glow-who' });
+
+// ---- Solid band fills (outer-in so each layer covers the next) ----
+el('circle', { cx: CX, cy: CY, r: R_ACT_OUT,      fill: 'var(--band-act)',      class: 'band' });
+el('circle', { cx: CX, cy: CY, r: R_PERCEIVE_OUT, fill: 'var(--band-perceive)', class: 'band' });
+el('circle', { cx: CX, cy: CY, r: R_WHO_OUT,      fill: 'var(--band-who)',      class: 'band' });
+
+// Hairline edges to read each ring crisply
+el('circle', { cx: CX, cy: CY, r: R_ACT_OUT,      class: 'band-edge' });
+el('circle', { cx: CX, cy: CY, r: R_PERCEIVE_OUT, class: 'band-edge' });
+el('circle', { cx: CX, cy: CY, r: R_WHO_OUT,      class: 'band-edge' });
+
+// ---- Constraints: dashed outer ring + 12 inward arrows ----
+el('circle', { cx: CX, cy: CY, r: R_CONSTRAINTS, class: 'constraints-ring' });
+
+const ARROW_COUNT = 12;
+for (let i = 0; i < ARROW_COUNT; i++) {
+  const theta = (i / ARROW_COUNT) * Math.PI * 2 - Math.PI / 2;
+  // Tail and head along the radial line
+  const x1 = CX + R_ARROW_OUT * Math.cos(theta);
+  const y1 = CY + R_ARROW_OUT * Math.sin(theta);
+  const x2 = CX + R_ARROW_IN  * Math.cos(theta);
+  const y2 = CY + R_ARROW_IN  * Math.sin(theta);
+  el('line', { x1, y1, x2, y2, class: 'constraint-arrow' });
+  // Arrowhead = small triangle at (x2, y2) pointing toward center
+  const headSize = 5;
+  const ah = theta; // direction from tail to head is +theta toward center
+  const baseX = x2 + headSize * Math.cos(ah);
+  const baseY = y2 + headSize * Math.sin(ah);
+  const perpX = Math.cos(ah + Math.PI / 2);
+  const perpY = Math.sin(ah + Math.PI / 2);
+  const p1x = baseX + headSize * 0.5 * perpX;
+  const p1y = baseY + headSize * 0.5 * perpY;
+  const p2x = baseX - headSize * 0.5 * perpX;
+  const p2y = baseY - headSize * 0.5 * perpY;
+  el('polygon', {
+    points: `${x2.toFixed(1)},${y2.toFixed(1)} ${p1x.toFixed(1)},${p1y.toFixed(1)} ${p2x.toFixed(1)},${p2y.toFixed(1)}`,
+    class: 'constraint-head'
+  });
+}
+
+// ---- Constraints label, top center ----
+el('text', { x: CX, y: CY - R_CONSTRAINTS - 16, class: 'constraints-label', 'text-anchor': 'middle' }, svg, 'constraints');
+
+// ---- Ring labels (top-of-band placement, mirroring the sketch) ----
+function ringLabel(y, tag, name, fill) {
+  el('text', { x: CX, y, class: 'ring-label-name', 'text-anchor': 'middle', fill }, svg, name);
+  el('text', { x: CX, y: y + 14, class: 'ring-label-tag', 'text-anchor': 'middle' }, svg, tag);
+}
+// "how you act" — sits inside the outer (orange) band, near top
+ringLabel(CY - R_ACT_OUT + 28, 'stratum iii', 'how you act', 'var(--label-act)');
+// "how you perceive" — inside the middle (rose) band, near top
+ringLabel(CY - R_PERCEIVE_OUT + 28, 'stratum ii', 'how you perceive', 'var(--label-perceive)');
+// "who u r" — inside the inner (blue) band, just above the ovals
+ringLabel(CY - R_WHO_OUT + 26, 'stratum i', 'who u r', 'var(--label-who)');
+
+// ---- Two core ovals + bidirectional arrow ----
+const OVAL_W = 165;
+const OVAL_H = 56;
+const OVAL_GAP = 18;
+const ovalTopCY    = CY - (OVAL_H / 2 + OVAL_GAP / 2);
+const ovalBottomCY = CY + (OVAL_H / 2 + OVAL_GAP / 2);
+
+// Top oval — strat I core drivers
+el('ellipse', { cx: CX, cy: ovalTopCY, rx: OVAL_W / 2, ry: OVAL_H / 2, class: 'core-oval' });
+const topLabel = el('text', { x: CX, y: ovalTopCY, class: 'core-oval-label' });
+topLabel.appendChild(Object.assign(document.createElementNS(SVG_NS, 'tspan'), { textContent: 'strat I' }));
+const topLine2 = document.createElementNS(SVG_NS, 'tspan');
+topLine2.setAttribute('x', CX);
+topLine2.setAttribute('dy', '1.2em');
+topLine2.textContent = 'core drivers';
+topLabel.appendChild(topLine2);
+// Restart text from top: setting attributes for proper baseline
+topLabel.firstChild.setAttribute('x', CX);
+topLabel.firstChild.setAttribute('dy', '-0.55em');
+
+// Bottom oval — modulators / world influence
+el('ellipse', { cx: CX, cy: ovalBottomCY, rx: OVAL_W / 2, ry: OVAL_H / 2, class: 'core-oval' });
+const botLabel = el('text', { x: CX, y: ovalBottomCY, class: 'core-oval-label' });
+const botLine1 = document.createElementNS(SVG_NS, 'tspan');
+botLine1.setAttribute('x', CX);
+botLine1.setAttribute('dy', '-0.55em');
+botLine1.textContent = 'modulators';
+botLabel.appendChild(botLine1);
+const botLine2 = document.createElementNS(SVG_NS, 'tspan');
+botLine2.setAttribute('x', CX);
+botLine2.setAttribute('dy', '1.2em');
+botLine2.textContent = 'world influence';
+botLabel.appendChild(botLine2);
+
+// Bidirectional arrows between the two ovals (one on each side)
+function drawCoreArrow(side) {
+  // side = -1 (left) or +1 (right), small horizontal offset from center
+  const xOff = side * 18;
+  const x = CX + xOff;
+  const y1 = ovalTopCY + OVAL_H / 2 + 2;     // just below top oval
+  const y2 = ovalBottomCY - OVAL_H / 2 - 2;  // just above bottom oval
+  // Two heads — one pointing down, one pointing up — to suggest mutual influence
+  // Line spans the gap; arrowheads added at each end
+  el('line', { x1: x, y1, x2: x, y2, class: 'core-arrow' });
+  // Down-pointing head at y2
+  el('polygon', {
+    points: `${x.toFixed(1)},${y2.toFixed(1)} ${(x - 4).toFixed(1)},${(y2 - 6).toFixed(1)} ${(x + 4).toFixed(1)},${(y2 - 6).toFixed(1)}`,
+    class: 'core-arrow-head'
+  });
+  // Up-pointing head at y1
+  el('polygon', {
+    points: `${x.toFixed(1)},${y1.toFixed(1)} ${(x - 4).toFixed(1)},${(y1 + 6).toFixed(1)} ${(x + 4).toFixed(1)},${(y1 + 6).toFixed(1)}`,
+    class: 'core-arrow-head'
+  });
+}
+drawCoreArrow(-1);
+drawCoreArrow(+1);
+
+// ============ AGE SLIDER INTERACTION ============
+// Stub interaction: drag the handle along the track. As age increases,
+// modulators visually gain weight (top arrow widens, bottom narrows when young; reverses when old).
+const track = document.getElementById('timeline-track');
+const handle = document.getElementById('timeline-handle');
+let dragging = false;
+
+function setAge(pct) {
+  pct = Math.max(0, Math.min(1, pct));
+  handle.style.left = (pct * 100) + '%';
+  // Visual hint: shift core arrow stroke widths to suggest who's driving whom.
+  // young (pct < 0.5): top→bottom dominant (strat I drives modulators)
+  // old (pct > 0.5):   bottom→top dominant (modulators reshape strat I)
+  const arrows = document.querySelectorAll('.core-arrow');
+  const heads  = document.querySelectorAll('.core-arrow-head');
+  // We don't differentiate per-direction in this stub — just scale the
+  // overall emphasis so the handle does something visible.
+  const emphasis = 0.7 + Math.abs(pct - 0.5) * 1.2;
+  arrows.forEach(a => a.setAttribute('stroke-width', (1.1 * emphasis).toFixed(2)));
+  heads.forEach(h => h.setAttribute('opacity', (0.6 + Math.abs(pct - 0.5) * 0.8).toFixed(2)));
+}
+
+function pctFromEvent(e) {
+  const rect = track.getBoundingClientRect();
+  const x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
+  return x / rect.width;
+}
+
+handle.addEventListener('mousedown', (e) => { dragging = true; e.preventDefault(); });
+window.addEventListener('mousemove', (e) => { if (dragging) setAge(pctFromEvent(e)); });
+window.addEventListener('mouseup',   () => { dragging = false; });
+track.addEventListener('click', (e) => { setAge(pctFromEvent(e)); });
+// Touch
+handle.addEventListener('touchstart', (e) => { dragging = true; });
+window.addEventListener('touchmove',  (e) => { if (dragging) setAge(pctFromEvent(e)); });
+window.addEventListener('touchend',   () => { dragging = false; });
+
+// initialise
+setAge(0.18);
+</script>
+</body>
+</html>
