@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Aesthetic Identity — Redesign Preview</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400;500&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root {
   --bg: #eeeae0;
@@ -16,27 +16,39 @@
   --line-soft: rgba(13,13,13,0.22);
   --line-hair: rgba(13,13,13,0.11);
   --paper: #f5f2ea;
+  --accent: #c53d1d;
 
-  /* Three strata band tints — keyed to image sketch but tuned to the
-     warm off-white palette so the rings still read as a single family. */
-  --band-act:     #f1c9a4;   /* outer  — how you act       (peach/orange) */
-  --band-act-glow:#f3d2b3;
-  --band-perceive:#e6b1ad;   /* middle — how you perceive  (rose/red)     */
-  --band-perceive-glow:#ecbfbc;
-  --band-who:     #c8cce8;   /* inner  — who u r           (lavender/blue)*/
-  --band-who-glow:#d6daee;
+  /* Three ring colour families — all warm-earth, harmonious with the doc.
+     Each ring has light / mid / deep shades for tonal layering. */
 
-  /* Constraints — the outer dashed ring + arrowheads. Treated as an
-     atmospheric pressure rather than a saturated colour. */
-  --constraints: rgba(13,13,13,0.32);
-  --constraints-soft: rgba(13,13,13,0.18);
+  /* "how you act" — outer ring — peach/amber */
+  --act-light: #f0d4b6;
+  --act-mid:   #d8a378;
+  --act-deep:  #b97e51;
 
-  /* Per-ring label colours pulled from the sketch. */
-  --label-act: #c97a3c;
-  --label-perceive: #b85952;
-  --label-who: #4a5cb8;
+  /* "how you perceive" — middle ring — dusty rose / clay */
+  --perceive-light: #e6beb6;
+  --perceive-mid:   #c79189;
+  --perceive-deep:  #9d645c;
+
+  /* Layer 1 — spine + outer rings.
+     Spine (sequential, upstream→downstream): genetics, disposition,
+     self-schema — three deep plums, deepest at the centre.
+     Outer rings (context, bidirectional with spine): physical,
+     interpersonal, environmental — three lighter mauves stepping
+     outward from the spine. */
+  --spine-genetics:    #1c141a;
+  --spine-disposition: #2c2229;
+  --spine-selfschema:  #3e2f3c;
+  --who-phys:   #5a4658;
+  --who-inter:  #76607a;
+  --who-env:    #927a93;
+  --who-deep:   #2c2229;
+
+  --constraints: rgba(13,13,13,0.18);
+  --constraints-arrow: rgba(13,13,13,0.45);
+  --inner-arrow: rgba(58,46,54,0.6);
 }
-
 * { margin: 0; padding: 0; box-sizing: border-box; }
 html, body { background: var(--bg); color: var(--ink); font-family: 'Inter', sans-serif; font-weight: 300; min-height: 100vh; }
 body {
@@ -44,169 +56,338 @@ body {
   background-size: 22px 22px;
   background-position: 0 0;
 }
-
 .stage { max-width: 1200px; margin: 0 auto; padding: 48px 40px 80px; }
 
-/* ======== Header ======== */
 .masthead { display: flex; align-items: flex-end; justify-content: space-between; gap: 40px; margin-bottom: 28px; flex-wrap: wrap; }
 .masthead-left { max-width: 760px; }
 .masthead-eyebrow { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.28em; text-transform: uppercase; color: var(--ink-mute); margin-bottom: 14px; }
-.masthead-eyebrow .dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--label-perceive); vertical-align: middle; margin: -2px 12px 0 0; }
-.masthead h1 {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(32px, 4.2vw, 52px);
-  font-weight: 300;
-  line-height: 1.02;
-  letter-spacing: -0.012em;
-  color: var(--ink);
-}
-.masthead h1 em { font-style: italic; color: var(--label-perceive); }
-.masthead-right {
-  max-width: 320px;
-  font-size: 11px;
-  line-height: 1.7;
-  color: var(--ink-soft);
-  font-family: 'JetBrains Mono', monospace;
-  letter-spacing: 0.01em;
-}
+.masthead-eyebrow .dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); vertical-align: middle; margin: -2px 12px 0 0; }
+.masthead h1 { font-family: 'Cormorant Garamond', serif; font-size: clamp(32px, 4.2vw, 52px); font-weight: 300; line-height: 1.02; letter-spacing: -0.012em; color: var(--ink); }
+.masthead h1 em { font-style: italic; color: var(--accent); }
+.masthead-right { max-width: 320px; font-size: 11px; line-height: 1.7; color: var(--ink-soft); font-family: 'JetBrains Mono', monospace; letter-spacing: 0.01em; }
 .masthead-right .key { color: var(--ink-mute); text-transform: uppercase; letter-spacing: 0.14em; font-size: 9.5px; display: block; margin-bottom: 5px; }
 
-/* ======== Map ======== */
-.map-shell {
-  position: relative;
-  margin-top: 12px;
-}
+.map-shell { position: relative; margin-top: 12px; }
 .map-svg { width: 100%; height: auto; display: block; overflow: visible; }
 
-/* SVG element classes */
-.band { stroke: none; }
-.band-edge { fill: none; stroke: var(--line-soft); stroke-width: 0.6; }
+/* Constraints — dashed outer ring */
+.constraints-ring { fill: none; stroke: var(--constraints); stroke-width: 1; stroke-dasharray: 5 7; }
+.constraints-label { font-family: 'JetBrains Mono', monospace; font-weight: 400; font-size: 12px; fill: var(--ink); letter-spacing: 0.2em; text-transform: uppercase; pointer-events: none; }
 
-.constraints-ring {
-  fill: none;
-  stroke: var(--constraints);
-  stroke-width: 1;
-  stroke-dasharray: 6 6;
-}
-.constraint-arrow {
-  fill: none;
-  stroke: var(--constraints);
-  stroke-width: 1;
-  stroke-linecap: round;
-}
-.constraint-head {
-  fill: var(--constraints);
-  stroke: none;
-}
+.constraint-group { cursor: pointer; }
+.constraint-arrow { fill: none; stroke: var(--constraints-arrow); stroke-width: 1.1; stroke-linecap: round; transition: stroke 0.15s, stroke-width 0.15s; }
+.constraint-head { fill: var(--constraints-arrow); stroke: none; transition: fill 0.15s; }
+.constraint-group:hover .constraint-arrow,
+.constraint-group.active .constraint-arrow { stroke: var(--accent); stroke-width: 1.6; }
+.constraint-group:hover .constraint-head,
+.constraint-group.active .constraint-head { fill: var(--accent); }
 
-.ring-label-name {
-  font-family: 'Inter', sans-serif;
-  font-weight: 600;
-  font-size: 14px;
-  letter-spacing: 0.005em;
-  pointer-events: none;
+/* "How you act" — outer ring with FUZZY/SOFT edges (Gaussian blur halo) */
+.act-band { fill: none; stroke: var(--act-mid); }
+.act-band-glow { fill: none; stroke: var(--act-light); }
+
+/* "How you perceive" — middle ring with HARD edges and tonal banding */
+.perceive-band { fill: none; }
+.perceive-edge { fill: none; stroke: var(--ink); stroke-width: 0.7; transition: stroke 0.18s, stroke-width 0.18s; }
+
+/* Inner concentric structure — spine (3 deep layers) + 3 outer rings,
+   hard edges, each ring progressively lighter outward. Each layer is
+   wrapped in a group that scales on hover. */
+.who-env         { fill: var(--who-env);             }
+.who-inter       { fill: var(--who-inter);           }
+.who-phys        { fill: var(--who-phys);            }
+.spine-self      { fill: var(--spine-selfschema);    }
+.spine-disp      { fill: var(--spine-disposition);   }
+.spine-gen       { fill: var(--spine-genetics);      }
+.who-edge   { fill: none; stroke: var(--ink); stroke-width: 0.6; transition: stroke 0.18s, stroke-width 0.18s; pointer-events: none; }
+.who-edge.thick { stroke-width: 0.85; }
+
+/* Hover grow on inner-section layers. transform-box: view-box anchors the
+   transform-origin to the SVG viewBox centre so the scale stays concentric. */
+.who-group {
+  cursor: pointer;
+  transform-box: view-box;
+  transform-origin: 50% 50%;
+  transition: transform 0.22s cubic-bezier(0.4, 0, 0.2, 1);
 }
-.ring-label-tag {
+.who-env-group:hover    { transform: scale(1.04); }
+.who-inter-group:hover  { transform: scale(1.07); }
+.who-phys-group:hover   { transform: scale(1.10); }
+.spine-self-group:hover { transform: scale(1.13); }
+.spine-disp-group:hover { transform: scale(1.18); }
+.spine-gen-group:hover  { transform: scale(1.25); }
+
+/* Perceive sub-rings — same hover-grow trick as who-you-are. Engines
+   (inner) is drawn on top of cognitive (outer), so its outward growth
+   visibly eats into the cognitive band on hover. */
+.perceive-ring-group {
+  cursor: pointer;
+  transform-box: view-box;
+  transform-origin: 50% 50%;
+  transition: transform 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.perceive-cog-group:hover { transform: scale(1.04); }
+.perceive-eng-group:hover { transform: scale(1.07); }
+
+/* Hover/active highlights */
+.band-group { cursor: pointer; }
+.band-group:hover .perceive-edge,
+.band-group.active .perceive-edge,
+.band-group:hover .who-edge,
+.band-group.active .who-edge { stroke: var(--accent); stroke-width: 1.4; }
+.band-group:hover .ring-bigname,
+.band-group.active .ring-bigname { fill: var(--accent) !important; }
+
+/* Ring labels — big "how you perceive" / "how you act" share the same
+   triple-stacked halo treatment as "who you are" so the three strata
+   read with identical visual weight. */
+.ring-bigname,
+.ring-bigname-halo,
+.ring-bigname-halo-outer {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 9px;
-  letter-spacing: 0.22em;
+  font-weight: 400;
+  font-size: 19px;
+  text-anchor: middle;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
-  fill: var(--ink-mute);
   pointer-events: none;
+  transition: fill 0.15s;
 }
-.constraints-label {
-  font-family: 'Inter', sans-serif;
-  font-weight: 600;
-  font-size: 13px;
-  fill: var(--ink);
-  letter-spacing: 0.01em;
-}
-
-/* The two core ovals */
-.core-oval {
+.ring-bigname-halo-outer {
   fill: var(--paper);
-  stroke: var(--ink);
-  stroke-width: 0.9;
+  fill-opacity: 1;
+  stroke: var(--paper);
+  stroke-width: 4;
+  paint-order: stroke fill;
 }
-.core-oval-label {
-  font-family: 'Inter', sans-serif;
-  font-weight: 500;
+.ring-bigname-halo {
+  fill: var(--paper);
+  fill-opacity: 1;
+  stroke: var(--paper);
+  stroke-width: 3;
+  paint-order: stroke fill;
+}
+.ring-bigname {
+  fill: var(--who-deep);
+}
+.ring-tag,
+.ring-sub {
+  font-family: 'JetBrains Mono', monospace;
   font-size: 11px;
   fill: var(--ink);
-  text-anchor: middle;
-  dominant-baseline: middle;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
   pointer-events: none;
-  letter-spacing: 0.01em;
-}
-.core-arrow {
-  fill: none;
-  stroke: var(--ink);
-  stroke-width: 1.1;
-  stroke-linecap: round;
-}
-.core-arrow-head {
-  fill: var(--ink);
-  stroke: none;
+  stroke: var(--paper);
+  stroke-width: 2.5;
+  paint-order: stroke fill;
 }
 
-/* Soft glow halo behind each band, similar to the sketch */
-.glow-act      { fill: var(--band-act-glow);      opacity: 0.55; }
-.glow-perceive { fill: var(--band-perceive-glow); opacity: 0.6; }
-.glow-who      { fill: var(--band-who-glow);      opacity: 0.7; }
-
-/* ======== Age timeline ======== */
-.timeline-wrap {
-  margin: 18px auto 0;
-  max-width: 720px;
-  padding: 0 12px;
-}
-.timeline-track {
-  position: relative;
-  height: 6px;
-  background: var(--ink);
-  border-radius: 3px;
-  margin: 28px 0 8px;
-}
-.timeline-handle {
-  position: absolute;
-  top: 50%;
-  width: 16px; height: 16px;
-  background: var(--paper);
-  border: 1.2px solid var(--ink);
-  border-radius: 50%;
-  transform: translate(-50%, -50%);
-  cursor: grab;
-  transition: background 0.12s, transform 0.12s;
-}
-.timeline-handle:hover { background: var(--label-perceive); border-color: var(--label-perceive); }
-.timeline-handle:active { cursor: grabbing; transform: translate(-50%, -50%) scale(1.08); }
-.timeline-poles {
-  display: flex; justify-content: space-between;
+/* "who u r" — JetBrains Mono in the same family as the engines/stratum
+   labels. Uppercase + wide-tracked for the unified treatment, sized big
+   to hold the centerpiece role. Three stacked layers (peach outer halo,
+   cream inner halo, crisp deep-plum) for legibility on the multi-ring bg. */
+.who-bigname,
+.who-bigname-halo,
+.who-bigname-halo-outer {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 9.5px; letter-spacing: 0.22em; text-transform: uppercase;
-  color: var(--ink-mute);
+  font-weight: 400;
+  font-size: 19px;
+  text-anchor: middle;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  pointer-events: none;
 }
-.timeline-note {
-  margin: 16px auto 0;
-  max-width: 520px;
-  text-align: center;
-  font-family: 'Inter', sans-serif;
-  font-size: 11.5px;
-  line-height: 1.65;
-  color: var(--ink-soft);
+.who-bigname-halo-outer {
+  fill: var(--paper);
+  fill-opacity: 1;
+  stroke: var(--paper);
+  stroke-width: 4;
+  paint-order: stroke fill;
+}
+.who-bigname-halo {
+  fill: var(--paper);
+  fill-opacity: 1;
+  stroke: var(--paper);
+  stroke-width: 3;
+  paint-order: stroke fill;
+}
+.who-bigname {
+  fill: var(--who-deep);
+}
+
+/* Inner ring labels + core text — JetBrains Mono in the same uppercase,
+   wide-tracked treatment as the "engines" and "stratum ii" labels. */
+.inner-ring-label,
+.core-text {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 400;
+  font-size: 9px;
+  fill: var(--paper);
+  fill-opacity: 0.92;
+  text-anchor: middle;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+
+/* Inner section arrows — small directional marks scattered inside */
+.inner-arrow { fill: none; stroke: var(--inner-arrow); stroke-width: 0.9; stroke-linecap: round; }
+.inner-arrow-head { fill: var(--inner-arrow); stroke: none; }
+
+/* Self-schema facet tick numbers (01–08), tucked just inside the
+   self-schema band so the spine reads as 8-faceted. */
+.facet-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 7.5px;
+  fill: var(--paper);
+  fill-opacity: 0.7;
+  text-anchor: middle;
+  letter-spacing: 0.1em;
+  pointer-events: none;
+}
+
+/* Item labels around the engines / cognitive sub-rings */
+.item-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 8px;
+  fill: var(--ink);
+  text-anchor: middle;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  pointer-events: none;
+  stroke: var(--paper);
+  stroke-width: 2.4;
+  paint-order: stroke fill;
+}
+
+/* Constraint category mini-labels around the dashed outer ring */
+.constraint-cat {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 8.5px;
+  fill: var(--ink-mute);
+  text-anchor: middle;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+
+/* Layer 3 — deferred. Faded glow + dashed outer hairline. */
+.act-deferred-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  fill: var(--ink-mute);
+  text-anchor: middle;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  pointer-events: none;
   font-style: italic;
 }
+
+/* ======== Side panel ======== */
+.panel {
+  position: fixed;
+  top: 50%; left: 50%;
+  width: 460px;
+  max-width: calc(100vw - 32px);
+  max-height: calc(100vh - 32px);
+  background: var(--paper);
+  border: 0.75px solid var(--line);
+  z-index: 50;
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  transition: opacity 0.18s ease;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 28px 80px rgba(0,0,0,0.28);
+  overflow: hidden;
+}
+.panel.visible { opacity: 1; pointer-events: auto; }
+.panel-head { padding: 22px 26px 16px; border-bottom: 0.5px solid var(--line-soft); display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; }
+.panel-head-meta { min-width: 0; flex: 1; }
+.panel-eyebrow { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent); margin-bottom: 8px; }
+.panel-title { font-family: 'Cormorant Garamond', serif; font-size: 26px; font-weight: 400; line-height: 1.12; letter-spacing: -0.01em; color: var(--ink); }
+.panel-close { width: 28px; height: 28px; border: 0.5px solid var(--line); background: transparent; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 300; color: var(--ink); flex-shrink: 0; transition: background 0.15s, color 0.15s; }
+.panel-close:hover { background: var(--ink); color: var(--paper); }
+.panel-body { padding: 18px 26px 30px; overflow-y: auto; }
+.panel-body p { font-size: 13px; color: var(--ink-soft); line-height: 1.7; margin-bottom: 12px; }
+.panel-body p strong { color: var(--ink); font-weight: 500; }
+.panel-stub { font-family: 'JetBrains Mono', monospace; font-size: 9.5px; color: var(--ink-mute); letter-spacing: 0.18em; text-transform: uppercase; margin-top: 12px; padding-top: 12px; border-top: 0.5px solid var(--line-soft); }
+
+/* ======== Age timeline ======== */
+.timeline-wrap { margin: 18px auto 0; max-width: 720px; padding: 0 12px; }
+.timeline-poles { display: flex; justify-content: space-between; font-family: 'JetBrains Mono', monospace; font-size: 9.5px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--ink-mute); }
+.timeline-track { position: relative; height: 4px; background: var(--ink); margin: 24px 0 8px; }
+.timeline-handle { position: absolute; top: 50%; width: 14px; height: 14px; background: var(--paper); border: 1px solid var(--ink); border-radius: 50%; transform: translate(-50%, -50%); cursor: grab; transition: background 0.12s, border-color 0.12s, transform 0.12s; }
+.timeline-handle:hover { background: var(--accent); border-color: var(--accent); }
+.timeline-handle:active { cursor: grabbing; transform: translate(-50%, -50%) scale(1.1); }
+.timeline-readout { display: flex; justify-content: space-between; align-items: baseline; gap: 14px; font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--ink-mute); letter-spacing: 0.14em; text-transform: uppercase; margin-top: 14px; }
+.timeline-readout-state { color: var(--ink); font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 14px; text-transform: none; letter-spacing: 0; }
+.timeline-note { margin: 14px auto 0; max-width: 560px; text-align: center; font-family: 'Inter', sans-serif; font-size: 11.5px; line-height: 1.65; color: var(--ink-soft); font-style: italic; }
 .timeline-note strong { font-style: normal; font-weight: 500; color: var(--ink); }
 
-/* ======== Footer ======== */
+/* ======== Sitemap (full framework tree) ======== */
+.sitemap {
+  margin: 64px auto 0;
+  max-width: 720px;
+  padding: 28px 32px 30px;
+  border: 0.5px solid var(--line-soft);
+  background: var(--paper);
+}
+.sitemap-eyebrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 18px;
+}
+.tree, .tree ul {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+.tree ul {
+  padding-left: 18px;
+  margin: 6px 0 8px;
+  border-left: 0.5px solid var(--line-hair);
+}
+.tree li {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  line-height: 1.85;
+  color: var(--ink-soft);
+  position: relative;
+  padding-left: 14px;
+}
+.tree li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.95em;
+  width: 10px;
+  height: 0.5px;
+  background: var(--line-hair);
+}
+.tree > li::before { display: none; }
+.tree > li { padding-left: 0; }
+.tree em { color: var(--ink-mute); font-style: italic; }
+.tree-key {
+  color: var(--ink);
+  cursor: pointer;
+  border-bottom: 0.5px dashed transparent;
+  transition: color 0.12s, border-color 0.12s;
+}
+.tree-key:hover { color: var(--accent); border-bottom-color: var(--accent); }
+
 .footer {
   display: flex; justify-content: space-between; align-items: center;
-  margin-top: 56px; padding-top: 22px;
+  margin-top: 32px; padding-top: 22px;
   border-top: 0.5px solid var(--line-soft);
   font-family: 'JetBrains Mono', monospace; font-size: 9.5px;
   letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-mute);
 }
-
 @media (max-width: 720px) {
   .stage { padding: 32px 18px 60px; }
   .masthead h1 { font-size: 32px; }
@@ -218,24 +399,60 @@ body {
 
 <div class="stage">
 
-  <!-- ============ MASTHEAD ============ -->
   <div class="masthead">
     <div class="masthead-left">
-      <div class="masthead-eyebrow"><span class="dot"></span>Redesign preview &mdash; structure only</div>
+      <div class="masthead-eyebrow"><span class="dot"></span>Redesign &mdash; interactive demo</div>
       <h1>The Science of<br><em>Aesthetic Identity in Dress</em></h1>
     </div>
     <div class="masthead-right">
       <span class="key">Read this as</span>
-      Three strata of identity (who you are &rarr; how you perceive &rarr; how you act), pressed on by external constraints. The slider toggles how the balance of influence shifts across a lifetime.
+      Layer 1 is the identity core (a sequential <em>spine</em> &mdash; genetics → disposition → self-schema &mdash; wrapped by three context rings). Layer 2 is perception. Layer 3 is action. Layer 4 is constraints.
     </div>
   </div>
 
-  <!-- ============ MAP ============ -->
   <div class="map-shell">
-    <svg class="map-svg" id="map" viewBox="0 0 900 900" preserveAspectRatio="xMidYMid meet" aria-label="Aesthetic identity map (redesign)"></svg>
+    <svg class="map-svg" id="map" viewBox="0 0 900 900" preserveAspectRatio="xMidYMid meet" aria-label="Aesthetic identity map (redesign)">
+      <defs>
+        <!-- Layered halo behind the "who u r" label.
+             Outer: very wide warm-peach glow (atmosphere).
+             Inner: tighter cream halo (legibility).
+             The crisp deep-plum glyphs sit on top. -->
+        <filter id="whoGlowOuter" x="-150%" y="-300%" width="400%" height="700%">
+          <feGaussianBlur stdDeviation="9" />
+        </filter>
+        <filter id="whoGlow" x="-80%" y="-160%" width="260%" height="420%">
+          <feGaussianBlur stdDeviation="4" />
+        </filter>
+        <!-- Soft atmospheric glow for "how you act" — radial gradient that
+             peaks in the middle of the ring's width and feathers
+             symmetrically into transparency on both inner and outer sides.
+             userSpaceOnUse so offsets map directly to viewBox radii. -->
+        <!-- Layer 3 is deferred: keep the warm halo but knock its peak
+             opacity down so it reads as ghosted/placeholder, not solid. -->
+        <radialGradient id="actGradient" gradientUnits="userSpaceOnUse" cx="450" cy="450" r="400">
+          <stop offset="55%" stop-color="#d8a378" stop-opacity="0" />
+          <stop offset="68%" stop-color="#f0d4b6" stop-opacity="0" />
+          <stop offset="73%" stop-color="#d8a378" stop-opacity="0.10" />
+          <stop offset="78%" stop-color="#d8a378" stop-opacity="0.28" />
+          <stop offset="83%" stop-color="#b97e51" stop-opacity="0.38" />
+          <stop offset="88%" stop-color="#d8a378" stop-opacity="0.28" />
+          <stop offset="92%" stop-color="#d8a378" stop-opacity="0.10" />
+          <stop offset="97%" stop-color="#f0d4b6" stop-opacity="0" />
+          <stop offset="100%" stop-color="#f0d4b6" stop-opacity="0" />
+        </radialGradient>
+        <!-- Soft glow for the "genetics" node sitting inside core drives.
+             Hazy warm bloom, no hard edge — feathers smoothly into the
+             dark core fill so it reads as an inner aura, not a ring. -->
+        <radialGradient id="geneticsGlow" gradientUnits="userSpaceOnUse" cx="450" cy="450" r="32">
+          <stop offset="0%"   stop-color="#f0d4b6" stop-opacity="0.80" />
+          <stop offset="40%"  stop-color="#e6beb6" stop-opacity="0.45" />
+          <stop offset="75%"  stop-color="#c79189" stop-opacity="0.15" />
+          <stop offset="100%" stop-color="#9d645c" stop-opacity="0" />
+        </radialGradient>
+      </defs>
+    </svg>
   </div>
 
-  <!-- ============ AGE SLIDER ============ -->
   <div class="timeline-wrap">
     <div class="timeline-poles">
       <span>newborn</span>
@@ -244,35 +461,123 @@ body {
     <div class="timeline-track" id="timeline-track">
       <div class="timeline-handle" id="timeline-handle" style="left: 18%;"></div>
     </div>
+    <div class="timeline-readout">
+      <span>age</span>
+      <span class="timeline-readout-state" id="timeline-state">young &mdash; self-schema forming</span>
+    </div>
     <div class="timeline-note">
-      Over time, influence changes &mdash; <strong>strat I</strong> tends to drive modulators when younger; modulators tend to reshape strat I when older. This toggle previews the shift across age.
+      Across a lifetime, the spine fills in: <strong>genetics</strong> is fixed, <strong>disposition</strong> stabilises, <strong>self-schema</strong> thickens with experience. Drag to interpolate.
     </div>
   </div>
 
-  <!-- ============ FOOTER ============ -->
+  <section class="sitemap">
+    <div class="sitemap-eyebrow">ARI Framework &mdash; full tree</div>
+    <ul class="tree">
+      <li><span class="tree-key" data-key="who">Layer 1 &mdash; Identity core</span>
+        <ul>
+          <li>Core spine
+            <ul>
+              <li>1. <span class="tree-key" data-key="genetics">Genetics</span> &mdash; <em>deep dive</em></li>
+              <li>2. <span class="tree-key" data-key="disposition">Disposition</span> &mdash; <em>deep dive</em></li>
+              <li>3. <span class="tree-key" data-key="selfschema">Self-schema</span> &mdash; <em>deep dive</em></li>
+            </ul>
+          </li>
+          <li>Outer rings
+            <ul>
+              <li><span class="tree-key" data-key="physical">Physical Self ring</span> &mdash; <em>deep dive</em></li>
+              <li><span class="tree-key" data-key="interpersonal">Interpersonal ring</span> &mdash; <em>deep dive</em></li>
+              <li><span class="tree-key" data-key="environmental">Environmental ring</span> &mdash; <em>deep dive</em></li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li><span class="tree-key" data-key="perceive">Layer 2 &mdash; Perception</span>
+        <ul>
+          <li><span class="tree-key" data-key="selfrelevance">Self-relevance</span> &mdash; <em>deep dive</em></li>
+          <li><span class="tree-key" data-key="expertise">Expertise</span> &mdash; <em>deep dive</em></li>
+        </ul>
+      </li>
+      <li><span class="tree-key" data-key="act">Layer 3 &mdash; Action</span></li>
+      <li><span class="tree-key" data-key="constraints">Layer 4 &mdash; Constraints</span></li>
+    </ul>
+  </section>
+
   <div class="footer">
-    <div>&mdash; ARI Framework / Identity Map &mdash; redesign v3</div>
-    <div>Structure preview</div>
+    <div>&mdash; ARI Framework / Identity Map &mdash; redesign v4</div>
+    <div>Click any element</div>
   </div>
 
-</div><!-- /stage -->
+</div>
+
+<div class="panel" id="panel">
+  <div class="panel-head">
+    <div class="panel-head-meta">
+      <div class="panel-eyebrow" id="panel-eyebrow"></div>
+      <div class="panel-title" id="panel-title"></div>
+    </div>
+    <button class="panel-close" id="panel-close" aria-label="Close">&times;</button>
+  </div>
+  <div class="panel-body" id="panel-body"></div>
+</div>
 
 <script>
+// ============== DATA (stub) ==============
+const DATA = {
+  // Layer 1 — Who You Are
+  who:           { eyebrow: 'Layer 1', title: 'Who you are', body: '<p>A sequential <strong>core spine</strong> (genetics → disposition → self-schema) wrapped by three <em>outer rings</em> of context (physical, interpersonal, environmental) that exchange influence with the spine.</p>' },
+  genetics:      { eyebrow: 'Layer 1 &mdash; spine, upstream', title: 'Genetics', body: '<p>Heritable substrate. Unobservable directly &mdash; visible only through downstream effects on disposition and self-schema.</p>' },
+  disposition:   { eyebrow: 'Layer 1 &mdash; spine, mid', title: 'Disposition', body: '<p>Trait-level processing style.</p><ul><li>Big Five / Openness</li><li>Self-monitoring</li><li>Need for uniqueness</li><li>Sensory processing sensitivity</li><li>Regulatory focus</li></ul>' },
+  selfschema:    { eyebrow: 'Layer 1 &mdash; spine, downstream', title: 'Self-schema', body: '<p>Structured self-knowledge. Eight facets:</p><ol><li>Self-concept content</li><li>Self-concept clarity</li><li>Self-concept complexity</li><li>Self-discrepancies</li><li>Possible selves</li><li>Self-relevant memories</li><li>Values hierarchy</li><li>Gender</li></ol>' },
+  physical:      { eyebrow: 'Layer 1 &mdash; outer ring', title: 'Physical self', body: '<p>Biological sex, body type, life stage. Bidirectional with the spine.</p>' },
+  interpersonal: { eyebrow: 'Layer 1 &mdash; outer ring', title: 'Interpersonal', body: '<p>Social mirrors, family, peer dynamics. Bidirectional with the spine.</p>' },
+  environmental: { eyebrow: 'Layer 1 &mdash; outer ring', title: 'Environmental', body: '<p>Cultural, ethno-racial, religious, mediated information. Bidirectional with the spine.</p>' },
+
+  // Layer 2 — How You Perceive
+  perceive:      { eyebrow: 'Layer 2', title: 'How you perceive', body: '<p>Innate engines below; live cognitive machinery above. Both operate on the Layer 1 self-schema.</p>' },
+  engines:       { eyebrow: 'Layer 2 &mdash; engines', title: 'Engines', body: '<p>Innate evolutionary substrate of perception:</p><ul><li>Signaling</li><li>Self-extension</li><li>Social identity</li></ul>' },
+  cognitive:     { eyebrow: 'Layer 2 &mdash; live machinery', title: 'Live cognitive machinery', body: '<p>The two load-bearing functions get their own deep dives:</p><ul><li><strong>Self-relevance</strong> &mdash; evaluation function (operates on Layer 1 schema)</li><li><strong>Expertise</strong> &mdash; perceptual restructuring</li></ul><p>Plus secondary: cognitive capacity, attention style, &hellip;</p>' },
+  selfrelevance: { eyebrow: 'Layer 2 &mdash; live machinery', title: 'Self-relevance', body: '<p>The evaluation function. Given a stimulus, the schema returns a relevance signal &mdash; &ldquo;is this me?&rdquo; &mdash; that drives attention, encoding, and downstream choice.</p>' },
+  expertise:     { eyebrow: 'Layer 2 &mdash; live machinery', title: 'Expertise', body: '<p>Perceptual restructuring through repeated exposure. Experts in a domain literally see different features than novices &mdash; finer categorical distinctions, faster pattern recognition, different salience hierarchies.</p>' },
+
+  // Layer 3 — How You Act
+  act:           { eyebrow: 'Layer 3 &mdash; action', title: 'How you act', body: '<p><em>Deferred &mdash; to be built.</em></p>' },
+
+  // Layer 4 — Constraints
+  constraints:   { eyebrow: 'Layer 4 &mdash; constraints', title: 'Constraints', body: '<p>External boundaries that bound every layer beneath: <strong>legal</strong> &middot; <strong>access</strong> &middot; <strong>situational</strong> &middot; <strong>occupational</strong> &middot; <strong>financial</strong> &middot; &hellip;</p>' }
+};
+
+// ============== GEOMETRY ==============
 const SVG_NS = 'http://www.w3.org/2000/svg';
 const svg = document.getElementById('map');
-
-// Geometry — a tall-ish square works well for the constraint ring + arrows.
 const VB = { w: 900, h: 900 };
 const CX = VB.w / 2;
 const CY = VB.h / 2;
 
-// Radii — band thicknesses matched to the sketch (outer thinner, inner deeper).
-const R_WHO_OUT      = 165;   // inner ring (who u r) — outer edge
-const R_PERCEIVE_OUT = 250;   // middle ring (how you perceive)
-const R_ACT_OUT      = 335;   // outer ring (how you act)
-const R_CONSTRAINTS  = 405;   // dashed outer atmosphere
-const R_ARROW_OUT    = 395;   // arrowtail start
-const R_ARROW_IN     = 350;   // arrowhead end (just past outer band)
+// Inner section — Layer 1.
+// Spine (sequential, upstream → downstream): genetics → disposition →
+// self-schema. Then three outer context rings: physical, interpersonal,
+// environmental.
+const R_GENETICS    = 30;    // spine — heritable substrate
+const R_DISPOSITION = 60;    // spine — trait-level processing
+const R_SELFSCHEMA  = 100;   // spine — structured self-knowledge (8 facets)
+const R_PHYS        = 124;   // outer ring — physical self
+const R_INTER       = 148;   // outer ring — interpersonal
+const R_ENV         = 172;   // outer ring — environmental
+
+// Visible gap between Layer 1 and "how you perceive".
+const R_GAP_END    = 200;
+
+// Middle ring — "how you perceive" split into engines (22 wide) and a
+// cognitive band ~3× as wide (62), so cognitive dominates the ring.
+const R_PERCEIVE_IN  = R_GAP_END;       // 200
+const R_PERCEIVE_OUT = 284;             // 222 (divider) + 62 (cognitive width)
+
+// Gap 2 — uniform arrows from perceive → act (deferred Layer 3)
+const R_ACT_IN     = 320;
+const R_ACT_OUT    = 354;
+
+// Gap 3 — uniform arrows from act → constraints
+const R_CONSTRAINTS  = 422;
 
 function el(tag, attrs = {}, parent = svg, text = null) {
   const e = document.createElementNS(SVG_NS, tag);
@@ -284,161 +589,429 @@ function el(tag, attrs = {}, parent = svg, text = null) {
   return e;
 }
 
-// ---- Layered halos (soft glow behind each band) ----
-el('circle', { cx: CX, cy: CY, r: R_ACT_OUT + 10,      class: 'glow-act' });
-el('circle', { cx: CX, cy: CY, r: R_PERCEIVE_OUT + 10, class: 'glow-perceive' });
-el('circle', { cx: CX, cy: CY, r: R_WHO_OUT + 8,       class: 'glow-who' });
+// ===================================================================
+// Layer 1 — "how you act" outer ring (radial-gradient glow, no blur).
+// One disc, filled with the actGradient, gives a clean atmospheric glow
+// that peaks at the ring's mid-radius and fades out on both sides.
+// ===================================================================
+const actBandGroup = el('g', { class: 'band-group', 'data-key': 'act' });
+el('circle', {
+  cx: CX, cy: CY, r: 400,
+  fill: 'url(#actGradient)',
+  'pointer-events': 'none'
+}, actBandGroup);
+// Dashed hairline marking the deferred Layer 3 outer edge.
+el('circle', {
+  cx: CX, cy: CY, r: R_ACT_OUT,
+  fill: 'none',
+  stroke: 'var(--ink-mute)',
+  'stroke-width': 0.5,
+  'stroke-dasharray': '2 5',
+  'pointer-events': 'none',
+  opacity: 0.55
+}, actBandGroup);
+// Crisp invisible hit zone so the band still receives clicks.
+el('circle', {
+  cx: CX, cy: CY,
+  r: (R_ACT_IN + R_ACT_OUT) / 2,
+  fill: 'none', stroke: 'transparent',
+  'stroke-width': R_ACT_OUT - R_ACT_IN + 6,
+  'pointer-events': 'stroke',
+  cursor: 'pointer'
+}, actBandGroup);
 
-// ---- Solid band fills (outer-in so each layer covers the next) ----
-el('circle', { cx: CX, cy: CY, r: R_ACT_OUT,      fill: 'var(--band-act)',      class: 'band' });
-el('circle', { cx: CX, cy: CY, r: R_PERCEIVE_OUT, fill: 'var(--band-perceive)', class: 'band' });
-el('circle', { cx: CX, cy: CY, r: R_WHO_OUT,      fill: 'var(--band-who)',      class: 'band' });
+// ===================================================================
+// Layer 2 — "perceive" middle ring split into two concentric sub-rings:
+// engines (inner, fundamental human drivers) and cognitive process
+// (outer). Each sub-ring is its own group so it scales on hover, like
+// the who-you-are rings. Cognitive drawn first; engines drawn on top so
+// its outward hover-growth visibly invades the cognitive band.
+// ===================================================================
+// Engines keeps a 22-unit width; cognitive takes the rest of the ring.
+const R_PERCEIVE_DIVIDER = R_PERCEIVE_IN + 22;
 
-// Hairline edges to read each ring crisply
-el('circle', { cx: CX, cy: CY, r: R_ACT_OUT,      class: 'band-edge' });
-el('circle', { cx: CX, cy: CY, r: R_PERCEIVE_OUT, class: 'band-edge' });
-el('circle', { cx: CX, cy: CY, r: R_WHO_OUT,      class: 'band-edge' });
+// Cognitive process — outer sub-ring
+const cogGroup = el('g', { class: 'perceive-ring-group perceive-cog-group band-group', 'data-key': 'cognitive' });
+el('circle', {
+  cx: CX, cy: CY,
+  r: (R_PERCEIVE_DIVIDER + R_PERCEIVE_OUT) / 2,
+  fill: 'none',
+  stroke: 'var(--perceive-light)',
+  'stroke-width': R_PERCEIVE_OUT - R_PERCEIVE_DIVIDER
+}, cogGroup);
 
-// ---- Constraints: dashed outer ring + 12 inward arrows ----
+// Engines / fundamental human drivers — inner sub-ring (drawn on top)
+const engGroup = el('g', { class: 'perceive-ring-group perceive-eng-group band-group', 'data-key': 'engines' });
+el('circle', {
+  cx: CX, cy: CY,
+  r: (R_PERCEIVE_IN + R_PERCEIVE_DIVIDER) / 2,
+  fill: 'none',
+  stroke: 'var(--perceive-mid)',
+  'stroke-width': R_PERCEIVE_DIVIDER - R_PERCEIVE_IN
+}, engGroup);
+
+// Hard hairline edges — static (outside the hover groups so they don't move)
+el('circle', { cx: CX, cy: CY, r: R_PERCEIVE_OUT,     class: 'perceive-edge' });
+el('circle', { cx: CX, cy: CY, r: R_PERCEIVE_DIVIDER, class: 'perceive-edge' });
+el('circle', { cx: CX, cy: CY, r: R_PERCEIVE_IN,      class: 'perceive-edge' });
+
+// ===================================================================
+// Layer 1 — Inner section.
+// SPINE (sequential, upstream → downstream): genetics → disposition →
+// self-schema. Then OUTER RINGS (context, bidirectional with spine):
+// physical, interpersonal, environmental.
+// Drawn outermost-first so each smaller disc covers the larger one and
+// the visible bands read as concentric rings.
+// ===================================================================
+
+// Outer ring — environmental
+const envGroup   = el('g', { class: 'who-group who-env-group',   'data-key': 'environmental' });
+el('circle', { cx: CX, cy: CY, r: R_ENV,   class: 'who-env' },        envGroup);
+el('circle', { cx: CX, cy: CY, r: R_ENV,   class: 'who-edge thick' }, envGroup);
+el('text', {
+  x: CX, y: CY - R_INTER - (R_ENV - R_INTER) / 2 + 4,
+  class: 'inner-ring-label'
+}, envGroup, 'environmental');
+
+// Outer ring — interpersonal
+const interGroup = el('g', { class: 'who-group who-inter-group', 'data-key': 'interpersonal' });
+el('circle', { cx: CX, cy: CY, r: R_INTER, class: 'who-inter' },      interGroup);
+el('circle', { cx: CX, cy: CY, r: R_INTER, class: 'who-edge thick' }, interGroup);
+el('text', {
+  x: CX, y: CY - R_PHYS - (R_INTER - R_PHYS) / 2 + 4,
+  class: 'inner-ring-label'
+}, interGroup, 'interpersonal');
+
+// Outer ring — physical self
+const physGroup  = el('g', { class: 'who-group who-phys-group',  'data-key': 'physical' });
+el('circle', { cx: CX, cy: CY, r: R_PHYS,  class: 'who-phys' },       physGroup);
+el('circle', { cx: CX, cy: CY, r: R_PHYS,  class: 'who-edge thick' }, physGroup);
+el('text', {
+  x: CX, y: CY - R_SELFSCHEMA - (R_PHYS - R_SELFSCHEMA) / 2 + 4,
+  class: 'inner-ring-label'
+}, physGroup, 'physical self');
+
+// Spine — self-schema (downstream)
+const selfGroup  = el('g', { class: 'who-group spine-self-group', 'data-key': 'selfschema' });
+el('circle', { cx: CX, cy: CY, r: R_SELFSCHEMA, class: 'spine-self' },       selfGroup);
+el('circle', { cx: CX, cy: CY, r: R_SELFSCHEMA, class: 'who-edge thick' },   selfGroup);
+el('text', {
+  x: CX, y: CY - R_DISPOSITION - (R_SELFSCHEMA - R_DISPOSITION) / 2 + 4,
+  class: 'inner-ring-label'
+}, selfGroup, 'self-schema');
+
+// 8 facet tick numbers around the self-schema band's outer edge.
+const FACETS = ['01','02','03','04','05','06','07','08'];
+const facetR = R_SELFSCHEMA - 7;
+for (let i = 0; i < FACETS.length; i++) {
+  const theta = (i / FACETS.length) * Math.PI * 2 - Math.PI / 2 + Math.PI / FACETS.length;
+  const fx = CX + facetR * Math.cos(theta);
+  const fy = CY + facetR * Math.sin(theta) + 2.5;
+  el('text', { x: fx.toFixed(1), y: fy.toFixed(1), class: 'facet-num' }, selfGroup, FACETS[i]);
+}
+
+// Spine — disposition (mid)
+const dispGroup  = el('g', { class: 'who-group spine-disp-group', 'data-key': 'disposition' });
+el('circle', { cx: CX, cy: CY, r: R_DISPOSITION, class: 'spine-disp' },     dispGroup);
+el('circle', { cx: CX, cy: CY, r: R_DISPOSITION, class: 'who-edge thick' }, dispGroup);
+el('text', {
+  x: CX, y: CY - R_GENETICS - (R_DISPOSITION - R_GENETICS) / 2 + 3,
+  class: 'inner-ring-label'
+}, dispGroup, 'disposition');
+
+// Spine — genetics (upstream, innermost)
+const geneticsGroup = el('g', { class: 'who-group spine-gen-group', 'data-key': 'genetics' });
+el('circle', { cx: CX, cy: CY, r: R_GENETICS, class: 'spine-gen' },       geneticsGroup);
+el('circle', { cx: CX, cy: CY, r: R_GENETICS, class: 'who-edge thick' }, geneticsGroup);
+el('text', {
+  x: CX, y: CY + 3,
+  class: 'inner-ring-label'
+}, geneticsGroup, 'genetics');
+
+// ===================================================================
+// Uniform radial arrows in every blank-space gap (inner→perceive,
+// perceive→act, act→constraints). One reusable function so all three
+// zones use the same arrow effect — same length, evenly spaced,
+// pointing radially outward.
+// ===================================================================
+function drawGapArrow(theta, tailR, headR) {
+  const x1 = CX + tailR * Math.cos(theta);
+  const y1 = CY + tailR * Math.sin(theta);
+  const x2 = CX + headR * Math.cos(theta);
+  const y2 = CY + headR * Math.sin(theta);
+  el('line', { x1: x1.toFixed(1), y1: y1.toFixed(1), x2: x2.toFixed(1), y2: y2.toFixed(1), class: 'inner-arrow' });
+  const hs = 4.5;
+  const baseX = x2 - hs * Math.cos(theta);
+  const baseY = y2 - hs * Math.sin(theta);
+  const perpX = Math.cos(theta + Math.PI / 2);
+  const perpY = Math.sin(theta + Math.PI / 2);
+  el('polygon', {
+    points: `${x2.toFixed(1)},${y2.toFixed(1)} ${(baseX + hs * 0.5 * perpX).toFixed(1)},${(baseY + hs * 0.5 * perpY).toFixed(1)} ${(baseX - hs * 0.5 * perpX).toFixed(1)},${(baseY - hs * 0.5 * perpY).toFixed(1)}`,
+    class: 'inner-arrow-head'
+  });
+}
+
+// Render N evenly-spaced arrows centered in the gap (rIn..rOut) with a
+// fixed arrow length so the visual reads identically across all three zones.
+function renderGapZone(rIn, rOut, count, arrowLength = 11) {
+  const center = (rIn + rOut) / 2;
+  const tailR  = center - arrowLength / 2;
+  const headR  = center + arrowLength / 2;
+  for (let i = 0; i < count; i++) {
+    if (i % 2 !== 0) continue; // halve density — every other arrow
+    const theta = (i / count) * Math.PI * 2 - Math.PI / 2;
+    drawGapArrow(theta, tailR, headR);
+  }
+}
+
+// Inward variant — apex points toward centre. Used for the ring of arrows
+// outside the constraints line, pressing in.
+function drawGapArrowInward(theta, outerR, innerR) {
+  const x1 = CX + outerR * Math.cos(theta);
+  const y1 = CY + outerR * Math.sin(theta);
+  const x2 = CX + innerR * Math.cos(theta);
+  const y2 = CY + innerR * Math.sin(theta);
+  el('line', { x1: x1.toFixed(1), y1: y1.toFixed(1), x2: x2.toFixed(1), y2: y2.toFixed(1), class: 'inner-arrow' });
+  const hs = 4.5;
+  const baseX = x2 + hs * Math.cos(theta);
+  const baseY = y2 + hs * Math.sin(theta);
+  const perpX = Math.cos(theta + Math.PI / 2);
+  const perpY = Math.sin(theta + Math.PI / 2);
+  el('polygon', {
+    points: `${x2.toFixed(1)},${y2.toFixed(1)} ${(baseX + hs * 0.5 * perpX).toFixed(1)},${(baseY + hs * 0.5 * perpY).toFixed(1)} ${(baseX - hs * 0.5 * perpX).toFixed(1)},${(baseY - hs * 0.5 * perpY).toFixed(1)}`,
+    class: 'inner-arrow-head'
+  });
+}
+function renderInwardZone(rOuter, rInner, count) {
+  for (let i = 0; i < count; i++) {
+    // Skip the slot nearest the top of the ring — that's where the
+    // "constraints" label sits.
+    if (i === 0) continue;
+    if (i % 2 !== 0) continue; // halve density — every other arrow
+    const theta = (i / count) * Math.PI * 2 - Math.PI / 2;
+    drawGapArrowInward(theta, rOuter, rInner);
+  }
+}
+
+// Three gap zones — count scales with circumference so density reads
+// roughly even at each radius.
+renderGapZone(R_ENV,           R_GAP_END,      18);   // layer 1 → perceive
+renderGapZone(R_PERCEIVE_OUT,  R_ACT_IN,       22);   // perceive → act
+renderGapZone(R_ACT_OUT,       R_CONSTRAINTS,  30);   // act → constraints
+renderInwardZone(456, 434, 36);                       // outside constraints → inward
+
+// (Sequential spine direction is implied by the concentric layering —
+// innermost = upstream, outermost = downstream — so no internal arrows.
+// The spine ↔ outer-rings bidirectional relationship is conveyed in the
+// panel copy + arrow ring radiating outward into Layer 2 below.)
+
+// ===================================================================
+// Layer 4 — Constraints dashed ring (uniform act→constraints arrows
+// already rendered above by renderGapZone). Clickable hit zone on the
+// dashed ring so the constraints panel still opens.
+// ===================================================================
 el('circle', { cx: CX, cy: CY, r: R_CONSTRAINTS, class: 'constraints-ring' });
+el('circle', {
+  cx: CX, cy: CY, r: R_CONSTRAINTS,
+  fill: 'none', stroke: 'transparent', 'stroke-width': 14,
+  'pointer-events': 'stroke', cursor: 'pointer',
+  'data-key': 'constraints'
+});
+el('text', { x: CX, y: CY - R_CONSTRAINTS - 22, class: 'constraints-label', 'text-anchor': 'middle' }, svg, 'constraints');
 
-const ARROW_COUNT = 12;
-for (let i = 0; i < ARROW_COUNT; i++) {
-  const theta = (i / ARROW_COUNT) * Math.PI * 2 - Math.PI / 2;
-  // Tail and head along the radial line
-  const x1 = CX + R_ARROW_OUT * Math.cos(theta);
-  const y1 = CY + R_ARROW_OUT * Math.sin(theta);
-  const x2 = CX + R_ARROW_IN  * Math.cos(theta);
-  const y2 = CY + R_ARROW_IN  * Math.sin(theta);
-  el('line', { x1, y1, x2, y2, class: 'constraint-arrow' });
-  // Arrowhead = small triangle at (x2, y2) pointing toward center
-  const headSize = 5;
-  const ah = theta; // direction from tail to head is +theta toward center
-  const baseX = x2 + headSize * Math.cos(ah);
-  const baseY = y2 + headSize * Math.sin(ah);
-  const perpX = Math.cos(ah + Math.PI / 2);
-  const perpY = Math.sin(ah + Math.PI / 2);
-  const p1x = baseX + headSize * 0.5 * perpX;
-  const p1y = baseY + headSize * 0.5 * perpY;
-  const p2x = baseX - headSize * 0.5 * perpX;
-  const p2y = baseY - headSize * 0.5 * perpY;
-  el('polygon', {
-    points: `${x2.toFixed(1)},${y2.toFixed(1)} ${p1x.toFixed(1)},${p1y.toFixed(1)} ${p2x.toFixed(1)},${p2y.toFixed(1)}`,
-    class: 'constraint-head'
-  });
+// Constraint categories — five mini-labels distributed around the dashed
+// ring. Top slot is reserved for the "constraints" word itself.
+const constR = R_CONSTRAINTS + 16;
+[
+  { label: 'legal',        angleDeg: 320 },
+  { label: 'access',       angleDeg:  40 },
+  { label: 'situational',  angleDeg:  90 },
+  { label: 'occupational', angleDeg: 140 },
+  { label: 'financial',    angleDeg: 220 }
+].forEach(({ label, angleDeg }) => {
+  const t = (angleDeg - 90) * Math.PI / 180;
+  const x = CX + constR * Math.cos(t);
+  const y = CY + constR * Math.sin(t) + 3;
+  el('text', { x: x.toFixed(1), y: y.toFixed(1), class: 'constraint-cat' }, svg, label);
+});
+
+// ===================================================================
+// Labels
+// ===================================================================
+// "how you act" — bottom of orange ring (big halo treatment, same as "who you are")
+const actBigY = CY + (R_ACT_IN + R_ACT_OUT) / 2 + 10;
+el('text', { x: CX, y: actBigY, class: 'ring-bigname-halo-outer', filter: 'url(#whoGlowOuter)' }, svg, 'how you act');
+el('text', { x: CX, y: actBigY, class: 'ring-bigname-halo', filter: 'url(#whoGlow)' }, svg, 'how you act');
+el('text', { x: CX, y: actBigY, class: 'ring-bigname' }, svg, 'how you act');
+el('text', { x: CX, y: actBigY + 16, class: 'ring-tag', 'text-anchor': 'middle', 'font-size': '9' }, svg, 'layer 3');
+// "deferred" — top of the act ring, signalling Layer 3 is not yet built
+el('text', {
+  x: CX, y: CY - R_ACT_OUT + 14,
+  class: 'act-deferred-tag'
+}, svg, 'deferred — to be built');
+
+// "how you perceive" — bottom of pink ring (big halo treatment, same as "who you are")
+const perceiveBigY = CY + (R_PERCEIVE_IN + R_PERCEIVE_OUT) / 2 + 10;
+el('text', { x: CX, y: perceiveBigY, class: 'ring-bigname-halo-outer', filter: 'url(#whoGlowOuter)' }, svg, 'how you perceive');
+el('text', { x: CX, y: perceiveBigY, class: 'ring-bigname-halo', filter: 'url(#whoGlow)' }, svg, 'how you perceive');
+el('text', { x: CX, y: perceiveBigY, class: 'ring-bigname' }, svg, 'how you perceive');
+el('text', { x: CX, y: perceiveBigY + 16, class: 'ring-tag', 'text-anchor': 'middle', 'font-size': '9' }, svg, 'layer 2');
+// "engines" — centered at the top of the engines (inner) sub-ring
+el('text', {
+  x: CX, y: CY - (R_PERCEIVE_IN + R_PERCEIVE_DIVIDER) / 2 + 4,
+  class: 'ring-sub',
+  'text-anchor': 'middle',
+  fill: 'var(--ink)'
+}, svg, 'engines');
+// "live cognitive machinery" — centered at the top of the cognitive (outer) sub-ring
+el('text', {
+  x: CX, y: CY - (R_PERCEIVE_DIVIDER + R_PERCEIVE_OUT) / 2 + 4,
+  class: 'ring-tag',
+  'text-anchor': 'middle'
+}, svg, 'live cognitive machinery');
+
+// Three engine items distributed around the lower 2/3 of the engines
+// sub-ring (the top is reserved for the big "engines" label).
+const engR = (R_PERCEIVE_IN + R_PERCEIVE_DIVIDER) / 2;
+[
+  { label: 'signaling',       angleDeg: 210 },
+  { label: 'self-extension',  angleDeg: 270 },
+  { label: 'social identity', angleDeg: 330 }
+].forEach(({ label, angleDeg }) => {
+  const t = (angleDeg - 90) * Math.PI / 180;
+  const x = CX + engR * Math.cos(t);
+  const y = CY + engR * Math.sin(t) + 3;
+  el('text', { x: x.toFixed(1), y: y.toFixed(1), class: 'item-label' }, svg, label);
+});
+
+// Cognitive machinery items, distributed around the cognitive sub-ring.
+const cogR = (R_PERCEIVE_DIVIDER + R_PERCEIVE_OUT) / 2;
+[
+  { label: 'self-relevance',     angleDeg: 200 },
+  { label: 'expertise',          angleDeg: 250 },
+  { label: 'cognitive capacity', angleDeg: 290 },
+  { label: 'attention style',    angleDeg: 340 }
+].forEach(({ label, angleDeg }) => {
+  const t = (angleDeg - 90) * Math.PI / 180;
+  const x = CX + cogR * Math.cos(t);
+  const y = CY + cogR * Math.sin(t) + 3;
+  el('text', { x: x.toFixed(1), y: y.toFixed(1), class: 'item-label' }, svg, label);
+});
+
+// (Inner ring + core labels are rendered inside their respective groups
+// above so the hover-grow scales them with their disc.)
+
+// "who u r" — three stacked layers for a richer halo: wide warm outer glow,
+// tighter cream halo, crisp deep-plum text on top.
+const whoY = CY + R_ENV - 28;
+el('text', {
+  x: CX, y: whoY,
+  class: 'who-bigname-halo-outer',
+  filter: 'url(#whoGlowOuter)'
+}, svg, 'who you are');
+el('text', {
+  x: CX, y: whoY,
+  class: 'who-bigname-halo',
+  filter: 'url(#whoGlow)'
+}, svg, 'who you are');
+el('text', {
+  x: CX, y: whoY,
+  class: 'who-bigname'
+}, svg, 'who you are');
+el('text', { x: CX, y: whoY + 16, class: 'ring-tag', 'text-anchor': 'middle', 'font-size': '9' }, svg, 'layer 1');
+
+// ===================================================================
+// INTERACTION — click to open panel; slider drives core ↔ modulator scale
+// ===================================================================
+const panel = document.getElementById('panel');
+const panelEyebrow = document.getElementById('panel-eyebrow');
+const panelTitle = document.getElementById('panel-title');
+const panelBody = document.getElementById('panel-body');
+const panelClose = document.getElementById('panel-close');
+
+function clearActive() { document.querySelectorAll('.active').forEach(n => n.classList.remove('active')); }
+function markActive(key) { document.querySelectorAll(`[data-key="${key}"]`).forEach(n => n.classList.add('active')); }
+
+function openPanel(key) {
+  const d = DATA[key];
+  if (!d) return;
+  panel.classList.add('visible');
+  panelEyebrow.innerHTML = d.eyebrow || '';
+  panelTitle.textContent = d.title || '';
+  panelBody.innerHTML = (d.body || '') + '<div class="panel-stub">Stub copy &mdash; full content lands once design is approved</div>';
 }
+function closePanel() { panel.classList.remove('visible'); clearActive(); }
+panelClose.addEventListener('click', closePanel);
 
-// ---- Constraints label, top center ----
-el('text', { x: CX, y: CY - R_CONSTRAINTS - 16, class: 'constraints-label', 'text-anchor': 'middle' }, svg, 'constraints');
-
-// ---- Ring labels (top-of-band placement, mirroring the sketch) ----
-function ringLabel(y, tag, name, fill) {
-  el('text', { x: CX, y, class: 'ring-label-name', 'text-anchor': 'middle', fill }, svg, name);
-  el('text', { x: CX, y: y + 14, class: 'ring-label-tag', 'text-anchor': 'middle' }, svg, tag);
-}
-// "how you act" — sits inside the outer (orange) band, near top
-ringLabel(CY - R_ACT_OUT + 28, 'stratum iii', 'how you act', 'var(--label-act)');
-// "how you perceive" — inside the middle (rose) band, near top
-ringLabel(CY - R_PERCEIVE_OUT + 28, 'stratum ii', 'how you perceive', 'var(--label-perceive)');
-// "who u r" — inside the inner (blue) band, just above the ovals
-ringLabel(CY - R_WHO_OUT + 26, 'stratum i', 'who u r', 'var(--label-who)');
-
-// ---- Two core ovals + bidirectional arrow ----
-const OVAL_W = 165;
-const OVAL_H = 56;
-const OVAL_GAP = 18;
-const ovalTopCY    = CY - (OVAL_H / 2 + OVAL_GAP / 2);
-const ovalBottomCY = CY + (OVAL_H / 2 + OVAL_GAP / 2);
-
-// Top oval — strat I core drivers
-el('ellipse', { cx: CX, cy: ovalTopCY, rx: OVAL_W / 2, ry: OVAL_H / 2, class: 'core-oval' });
-const topLabel = el('text', { x: CX, y: ovalTopCY, class: 'core-oval-label' });
-topLabel.appendChild(Object.assign(document.createElementNS(SVG_NS, 'tspan'), { textContent: 'strat I' }));
-const topLine2 = document.createElementNS(SVG_NS, 'tspan');
-topLine2.setAttribute('x', CX);
-topLine2.setAttribute('dy', '1.2em');
-topLine2.textContent = 'core drivers';
-topLabel.appendChild(topLine2);
-// Restart text from top: setting attributes for proper baseline
-topLabel.firstChild.setAttribute('x', CX);
-topLabel.firstChild.setAttribute('dy', '-0.55em');
-
-// Bottom oval — modulators / world influence
-el('ellipse', { cx: CX, cy: ovalBottomCY, rx: OVAL_W / 2, ry: OVAL_H / 2, class: 'core-oval' });
-const botLabel = el('text', { x: CX, y: ovalBottomCY, class: 'core-oval-label' });
-const botLine1 = document.createElementNS(SVG_NS, 'tspan');
-botLine1.setAttribute('x', CX);
-botLine1.setAttribute('dy', '-0.55em');
-botLine1.textContent = 'modulators';
-botLabel.appendChild(botLine1);
-const botLine2 = document.createElementNS(SVG_NS, 'tspan');
-botLine2.setAttribute('x', CX);
-botLine2.setAttribute('dy', '1.2em');
-botLine2.textContent = 'world influence';
-botLabel.appendChild(botLine2);
-
-// Bidirectional arrows between the two ovals (one on each side)
-function drawCoreArrow(side) {
-  // side = -1 (left) or +1 (right), small horizontal offset from center
-  const xOff = side * 18;
-  const x = CX + xOff;
-  const y1 = ovalTopCY + OVAL_H / 2 + 2;     // just below top oval
-  const y2 = ovalBottomCY - OVAL_H / 2 - 2;  // just above bottom oval
-  // Two heads — one pointing down, one pointing up — to suggest mutual influence
-  // Line spans the gap; arrowheads added at each end
-  el('line', { x1: x, y1, x2: x, y2, class: 'core-arrow' });
-  // Down-pointing head at y2
-  el('polygon', {
-    points: `${x.toFixed(1)},${y2.toFixed(1)} ${(x - 4).toFixed(1)},${(y2 - 6).toFixed(1)} ${(x + 4).toFixed(1)},${(y2 - 6).toFixed(1)}`,
-    class: 'core-arrow-head'
+// Click handlers
+[
+  ...document.querySelectorAll('[data-key]')
+].forEach(node => {
+  node.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const key = node.dataset.key;
+    if (!key) return;
+    clearActive();
+    markActive(key);
+    openPanel(key);
   });
-  // Up-pointing head at y1
-  el('polygon', {
-    points: `${x.toFixed(1)},${y1.toFixed(1)} ${(x - 4).toFixed(1)},${(y1 + 6).toFixed(1)} ${(x + 4).toFixed(1)},${(y1 + 6).toFixed(1)}`,
-    class: 'core-arrow-head'
-  });
-}
-drawCoreArrow(-1);
-drawCoreArrow(+1);
+});
+// Inner-section groups — clicks fire on the wrapping <g> so the hover
+// grow + click target are the same hit zone.
+geneticsGroup.addEventListener('click',(e) => { e.stopPropagation(); clearActive(); openPanel('genetics'); });
+dispGroup.addEventListener('click',    (e) => { e.stopPropagation(); clearActive(); openPanel('disposition'); });
+selfGroup.addEventListener('click',    (e) => { e.stopPropagation(); clearActive(); openPanel('selfschema'); });
+physGroup.addEventListener('click',    (e) => { e.stopPropagation(); clearActive(); openPanel('physical'); });
+interGroup.addEventListener('click',   (e) => { e.stopPropagation(); clearActive(); openPanel('interpersonal'); });
+envGroup.addEventListener('click',     (e) => { e.stopPropagation(); clearActive(); openPanel('environmental'); });
+cogGroup.addEventListener('click',     (e) => { e.stopPropagation(); clearActive(); openPanel('cognitive'); });
+engGroup.addEventListener('click',     (e) => { e.stopPropagation(); clearActive(); openPanel('engines'); });
 
-// ============ AGE SLIDER INTERACTION ============
-// Stub interaction: drag the handle along the track. As age increases,
-// modulators visually gain weight (top arrow widens, bottom narrows when young; reverses when old).
+document.addEventListener('click', (e) => {
+  if (!panel.contains(e.target) && !e.target.closest('[data-key]')) closePanel();
+});
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closePanel(); });
+
+// ============== AGE SLIDER ==============
+// Newborn → core is largest (drives dominate). Elder → core shrinks, the
+// middle modulator band expands inward (world reshapes the self). Outer
+// "who u r" radius stays constant.
 const track = document.getElementById('timeline-track');
 const handle = document.getElementById('timeline-handle');
+const stateText = document.getElementById('timeline-state');
 let dragging = false;
 
 function setAge(pct) {
   pct = Math.max(0, Math.min(1, pct));
   handle.style.left = (pct * 100) + '%';
-  // Visual hint: shift core arrow stroke widths to suggest who's driving whom.
-  // young (pct < 0.5): top→bottom dominant (strat I drives modulators)
-  // old (pct > 0.5):   bottom→top dominant (modulators reshape strat I)
-  const arrows = document.querySelectorAll('.core-arrow');
-  const heads  = document.querySelectorAll('.core-arrow-head');
-  // We don't differentiate per-direction in this stub — just scale the
-  // overall emphasis so the handle does something visible.
-  const emphasis = 0.7 + Math.abs(pct - 0.5) * 1.2;
-  arrows.forEach(a => a.setAttribute('stroke-width', (1.1 * emphasis).toFixed(2)));
-  heads.forEach(h => h.setAttribute('opacity', (0.6 + Math.abs(pct - 0.5) * 0.8).toFixed(2)));
-}
 
+  // Newborn → spine is mostly genetics + disposition; self-schema is
+  // thin. With age, self-schema swells (life experience structures it),
+  // pushing into the surrounding context rings. Genetics is fixed.
+  const schemaScale = 0.7 + pct * 0.45;          // 0.70 → 1.15
+  const newSchemaR  = Math.min(R_SELFSCHEMA * schemaScale, R_PHYS - 4);
+  selfGroup.querySelectorAll('circle').forEach(c => c.setAttribute('r', newSchemaR.toFixed(1)));
+
+  // Readout
+  if (pct < 0.2)      stateText.textContent = 'newborn — genetics + disposition; self-schema thin';
+  else if (pct < 0.4) stateText.textContent = 'young — self-schema forming';
+  else if (pct < 0.6) stateText.textContent = 'mid-life — balanced spine';
+  else if (pct < 0.8) stateText.textContent = 'mature — self-schema thickens';
+  else                stateText.textContent = 'elder — self-schema dominates';
+}
 function pctFromEvent(e) {
   const rect = track.getBoundingClientRect();
   const x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
   return x / rect.width;
 }
-
 handle.addEventListener('mousedown', (e) => { dragging = true; e.preventDefault(); });
 window.addEventListener('mousemove', (e) => { if (dragging) setAge(pctFromEvent(e)); });
 window.addEventListener('mouseup',   () => { dragging = false; });
 track.addEventListener('click', (e) => { setAge(pctFromEvent(e)); });
-// Touch
-handle.addEventListener('touchstart', (e) => { dragging = true; });
+handle.addEventListener('touchstart', () => { dragging = true; });
 window.addEventListener('touchmove',  (e) => { if (dragging) setAge(pctFromEvent(e)); });
 window.addEventListener('touchend',   () => { dragging = false; });
 
-// initialise
 setAge(0.18);
 </script>
 </body>

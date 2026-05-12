@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>ari onboarding — web</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { height: 100%; width: 100%; }
+  body {
+    background: #0d0d10;
+    color: #d4d4d4;
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;
+    overflow: hidden;
+  }
+  #web { display: block; width: 100vw; height: 100vh; cursor: grab; }
+  #web:active { cursor: grabbing; }
+
+  .edge { stroke: rgba(255,255,255,0.08); stroke-width: 1; fill: none; transition: stroke 0.15s, stroke-width 0.15s; }
+  .edge.highlight { stroke: rgba(255,255,255,0.55); stroke-width: 1.4; }
+
+  .node-group { cursor: pointer; }
+  .node-circle {
+    transition: r 0.15s, fill 0.15s, stroke 0.15s;
+  }
+  .node-label {
+    fill: rgba(255,255,255,0.65);
+    font-size: 10px;
+    font-family: 'Menlo', 'Consolas', monospace;
+    pointer-events: none;
+    transition: fill 0.15s, font-size 0.15s;
+  }
+  .node-group:hover .node-circle { stroke-width: 2.5; }
+  .node-group:hover .node-label { fill: #ffffff; font-size: 11.5px; }
+  .node-group.dim .node-label { font-size: 9px; }
+  .node-group.dim:hover .node-label { font-size: 10.5px; }
+</style>
+</head>
+<body>
+<svg id="web"></svg>
+<script>
+const SVG_NS = 'http://www.w3.org/2000/svg';
+const svg = document.getElementById('web');
+
+// ============== NODES ==============
+// id, label, type, group (stratum number for dimensions)
+const nodes = [
+  { id: 'constraints', label: 'NonIdentity_Constraints_v17.docx', type: 'constraints' },
+  { id: 's1', label: 'Stratum1_MotivationalFoundation.docx', type: 'stratum', group: 1 },
+  { id: 's2', label: 'Stratum2_AestheticExperience.docx', type: 'stratum', group: 2 },
+  { id: 's3', label: 'Stratum3_ExpressiveSurface.docx', type: 'stratum', group: 3 },
+  { id: 'b1', label: 'Branch1_Signaling.docx', type: 'branch' },
+  { id: 'b2', label: 'Branch2_SelfExtension.docx', type: 'branch' },
+  { id: 'b3', label: 'Branch3_SocialIdentity.docx', type: 'branch' },
+  // Stratum 1 — why
+  { id: 'd_schwartz',     label: 'Dim_Schwartz.docx',     type: 'dim', group: 1 },
+  { id: 'd_regfocus',     label: 'Dim_RegFocus.docx',     type: 'dim', group: 1 },
+  { id: 'd_autonomy',     label: 'Dim_Autonomy.docx',     type: 'dim', group: 1 },
+  { id: 'd_selfconcept',  label: 'Dim_SelfConcept.docx',  type: 'dim', group: 1 },
+  // Stratum 2 — how
+  { id: 'd_sps',          label: 'Dim_SPS.docx',          type: 'dim', group: 2 },
+  { id: 'd_complexity',   label: 'Dim_Complexity.docx',   type: 'dim', group: 2 },
+  { id: 'd_expertise',    label: 'Dim_Expertise.docx',    type: 'dim', group: 2 },
+  { id: 'd_emotion',      label: 'Dim_Emotion.docx',      type: 'dim', group: 2 },
+  { id: 'd_uniqueness',   label: 'Dim_Uniqueness.docx',   type: 'dim', group: 2 },
+  // Stratum 3 — what
+  { id: 'd_color',        label: 'Dim_Color.docx',        type: 'dim', group: 3 },
+  { id: 'd_form',         label: 'Dim_Form.docx',         type: 'dim', group: 3 },
+  { id: 'd_texture',      label: 'Dim_Texture.docx',      type: 'dim', group: 3 },
+  { id: 'd_pattern',      label: 'Dim_Pattern.docx',      type: 'dim', group: 3 },
+  { id: 'd_silhouette',   label: 'Dim_Silhouette.docx',   type: 'dim', group: 3 },
+  { id: 'd_adornment',    label: 'Dim_Adornment.docx',    type: 'dim', group: 3 },
+  { id: 'd_bodyrelation', label: 'Dim_BodyRelation.docx', type: 'dim', group: 3 },
+  { id: 'd_signaling',    label: 'Dim_Signaling.docx',    type: 'dim', group: 3 },
+  { id: 'd_temporal',     label: 'Dim_Temporal.docx',     type: 'dim', group: 3 },
+  { id: 'd_occasion',     label: 'Dim_Occasion.docx',     type: 'dim', group: 3 },
+  { id: 'd_formality',    label: 'Dim_Formality.docx',    type: 'dim', group: 3 },
+  { id: 'd_coherence',    label: 'Dim_IdentityCoherence.docx', type: 'dim', group: 3 },
+  { id: 'd_sustain',      label: 'Dim_Sustainability.docx', type: 'dim', group: 3 },
+  { id: 'd_condition',    label: 'Dim_Condition.docx',    type: 'dim', group: 3 },
+];
+
+// ============== EDGES ==============
+const edges = [];
+// constraints → strata + branches
+['s1','s2','s3','b1','b2','b3'].forEach(t => edges.push(['constraints', t]));
+// branches ↔ strata (each branch connects to all 3 strata)
+['b1','b2','b3'].forEach(b => ['s1','s2','s3'].forEach(s => edges.push([b, s])));
+// dimension → its stratum
+nodes.filter(n => n.type === 'dim').forEach(d => {
+  edges.push([d.id, 's' + d.group]);
+});
+
+// ============== FORCE LAYOUT ==============
+const W = window.innerWidth;
+const H = window.innerHeight;
+const CX = W / 2, CY = H / 2;
+
+// Initial positions — small random spread around center
+nodes.forEach((n, i) => {
+  const ang = (i / nodes.length) * Math.PI * 2;
+  const r = 200 + Math.random() * 50;
+  n.x = CX + r * Math.cos(ang) + (Math.random() - 0.5) * 40;
+  n.y = CY + r * Math.sin(ang) + (Math.random() - 0.5) * 40;
+  n.vx = 0; n.vy = 0;
+});
+
+// Tunables
+const REPULSION = 9000;        // node repulsion strength
+const SPRING_K  = 0.018;       // edge spring strength
+const SPRING_LEN = 110;         // edge rest length
+const CENTER_K  = 0.0008;      // center pull
+const DAMPING   = 0.82;
+const ITERATIONS = 600;
+
+// Lookup edges by id for fast iteration
+const nodeMap = Object.fromEntries(nodes.map(n => [n.id, n]));
+
+for (let iter = 0; iter < ITERATIONS; iter++) {
+  // Reset forces
+  nodes.forEach(n => { n.fx = 0; n.fy = 0; });
+  // Repulsion
+  for (let i = 0; i < nodes.length; i++) {
+    for (let j = i + 1; j < nodes.length; j++) {
+      const a = nodes[i], b = nodes[j];
+      const dx = b.x - a.x;
+      const dy = b.y - a.y;
+      const d2 = dx*dx + dy*dy + 0.01;
+      const d = Math.sqrt(d2);
+      const f = REPULSION / d2;
+      const fx = (dx / d) * f;
+      const fy = (dy / d) * f;
+      a.fx -= fx; a.fy -= fy;
+      b.fx += fx; b.fy += fy;
+    }
+  }
+  // Spring on edges
+  edges.forEach(([aId, bId]) => {
+    const a = nodeMap[aId], b = nodeMap[bId];
+    const dx = b.x - a.x;
+    const dy = b.y - a.y;
+    const d = Math.sqrt(dx*dx + dy*dy) + 0.01;
+    const f = SPRING_K * (d - SPRING_LEN);
+    const fx = (dx / d) * f;
+    const fy = (dy / d) * f;
+    a.fx += fx; a.fy += fy;
+    b.fx -= fx; b.fy -= fy;
+  });
+  // Center pull
+  nodes.forEach(n => {
+    n.fx += (CX - n.x) * CENTER_K;
+    n.fy += (CY - n.y) * CENTER_K;
+  });
+  // Update positions
+  nodes.forEach(n => {
+    n.vx = (n.vx + n.fx) * DAMPING;
+    n.vy = (n.vy + n.fy) * DAMPING;
+    n.x += n.vx;
+    n.y += n.vy;
+  });
+}
+
+// ============== RENDER ==============
+const TYPE_STYLE = {
+  constraints: { r: 14, fill: '#e8c275', stroke: '#a08540' },
+  stratum:     { r: 11, fill: '#cf6f5c', stroke: '#8a4538' },
+  branch:      { r: 9,  fill: '#9b6fc4', stroke: '#5e3d8a' },
+  dim:         { r: 5,  fill: '#5fb5ff', stroke: '#2c6fb8' },
+};
+
+function el(tag, attrs = {}, parent = svg, text = null) {
+  const e = document.createElementNS(SVG_NS, tag);
+  for (const [k, v] of Object.entries(attrs)) {
+    if (v !== undefined && v !== null) e.setAttribute(k, v);
+  }
+  if (text !== null) e.textContent = text;
+  parent.appendChild(e);
+  return e;
+}
+
+svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+
+// Edges first (under nodes)
+const edgeLayer = el('g', {});
+edges.forEach(([aId, bId]) => {
+  const a = nodeMap[aId], b = nodeMap[bId];
+  const line = el('line', {
+    x1: a.x.toFixed(1), y1: a.y.toFixed(1),
+    x2: b.x.toFixed(1), y2: b.y.toFixed(1),
+    class: 'edge',
+    'data-a': aId, 'data-b': bId
+  }, edgeLayer);
+});
+
+// Nodes on top
+const nodeLayer = el('g', {});
+nodes.forEach(n => {
+  const style = TYPE_STYLE[n.type];
+  const g = el('g', { class: `node-group ${n.type}`, 'data-id': n.id, transform: `translate(${n.x.toFixed(1)} ${n.y.toFixed(1)})` }, nodeLayer);
+  el('circle', {
+    r: style.r,
+    fill: style.fill,
+    stroke: style.stroke,
+    'stroke-width': 1.5,
+    class: 'node-circle'
+  }, g);
+  // Label name only (without ".docx" repeated)
+  const labelText = n.label.replace('.docx', '');
+  el('text', {
+    x: style.r + 6, y: 4,
+    class: 'node-label'
+  }, g, labelText);
+});
+
+// ============== INTERACTION: highlight edges on node hover ==============
+nodeLayer.querySelectorAll('.node-group').forEach(g => {
+  const id = g.dataset.id;
+  g.addEventListener('mouseenter', () => {
+    edgeLayer.querySelectorAll('.edge').forEach(e => {
+      if (e.dataset.a === id || e.dataset.b === id) e.classList.add('highlight');
+    });
+  });
+  g.addEventListener('mouseleave', () => {
+    edgeLayer.querySelectorAll('.edge.highlight').forEach(e => e.classList.remove('highlight'));
+  });
+});
+
+// ============== Pan + zoom ==============
+let viewX = 0, viewY = 0, scale = 1;
+let isPanning = false, panStart = { x: 0, y: 0 };
+
+function applyTransform() {
+  edgeLayer.setAttribute('transform', `translate(${viewX} ${viewY}) scale(${scale})`);
+  nodeLayer.setAttribute('transform', `translate(${viewX} ${viewY}) scale(${scale})`);
+}
+
+svg.addEventListener('mousedown', (e) => {
+  isPanning = true;
+  panStart = { x: e.clientX - viewX, y: e.clientY - viewY };
+});
+window.addEventListener('mousemove', (e) => {
+  if (!isPanning) return;
+  viewX = e.clientX - panStart.x;
+  viewY = e.clientY - panStart.y;
+  applyTransform();
+});
+window.addEventListener('mouseup', () => { isPanning = false; });
+svg.addEventListener('wheel', (e) => {
+  e.preventDefault();
+  const factor = e.deltaY < 0 ? 1.08 : 1 / 1.08;
+  // Zoom around mouse position
+  const rect = svg.getBoundingClientRect();
+  const mx = e.clientX - rect.left;
+  const my = e.clientY - rect.top;
+  viewX = mx - (mx - viewX) * factor;
+  viewY = my - (my - viewY) * factor;
+  scale *= factor;
+  applyTransform();
+}, { passive: false });
+</script>
+</body>
+</html>
