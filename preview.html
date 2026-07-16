@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The Science of Aesthetic Identity in Dress</title>
+<title>The Science of Aesthetic Identity in Dress — v5</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -16,11 +16,11 @@
   --line-soft: rgba(13,13,13,0.22);
   --line-hair: rgba(13,13,13,0.11);
   --paper: #f5f2ea;
-  --paper-mid: #ede7d7;   /* modulator band — one step darker than core */
-  --paper-outer: #e2dac6; /* engine (outer) band — two steps darker */
+  --paper-mid: #ede7d7;
+  --paper-outer: #e2dac6;
   --accent: #c53d1d;
   --accent-soft: rgba(197,61,29,0.16);
-  --ring-1: #0d0d0d; /* inner — why */
+  --ring-1: #0d0d0d;
   --ring-2: #0d0d0d;
   --ring-3: #0d0d0d;
 }
@@ -59,500 +59,270 @@ body {
 }
 .masthead-right .key { color: var(--ink-mute); text-transform: uppercase; letter-spacing: 0.14em; font-size: 9.5px; display: block; margin-bottom: 5px; }
 
-/* ======== Engines row ======== */
-.section-label {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 10px;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: var(--ink-mute);
-  padding-left: 8px;
-}
-.section-label .num { color: var(--accent); margin-right: 10px; }
-.engines-strip {
-  display: grid;
-  grid-template-columns: 160px 1fr;
-  gap: 32px;
-  align-items: center;
-  margin: 18px 0 0;
-}
-.engines {
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  gap: 10px;
-  align-items: start;
-}
-.engine-card {
-  background: var(--paper);
-  border: 0.75px solid var(--line);
-  padding: 14px 12px 12px;
-  cursor: pointer;
-  transition: background 0.18s, border-color 0.18s, transform 0.18s;
-  position: relative;
-  min-height: 86px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  overflow: hidden;
-}
-.engine-card::before {
-  content: '';
-  position: absolute; top: 0; left: 0; right: 0; height: 2px;
-  background: var(--accent); transform: scaleX(0); transform-origin: left; transition: transform 0.22s;
-}
-.engine-card:hover::before, .engine-card.active::before { transform: scaleX(1); }
-.engine-card:hover, .engine-card.active { background: var(--ink); color: var(--paper); }
-.engine-card:hover .engine-num, .engine-card.active .engine-num { color: var(--accent); }
-.engine-num { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.2em; color: var(--ink-mute); }
-.engine-dot {
-  position: absolute;
-  top: 10px; right: 10px;
-  width: 5px; height: 5px; border-radius: 50%;
-  background: var(--ink);
-  transition: background 0.15s;
-}
-.engine-card:hover .engine-dot, .engine-card.active .engine-dot { background: var(--accent); }
-.engine-title { font-family: 'Cormorant Garamond', serif; font-size: 16px; font-weight: 400; line-height: 1.15; letter-spacing: -0.005em; margin-top: 4px; }
-.engine-sub { font-size: 9.5px; color: var(--ink-mute); line-height: 1.4; margin-top: 4px; letter-spacing: 0.01em; }
-.engine-card:hover .engine-sub, .engine-card.active .engine-sub { color: rgba(245,242,234,0.6); }
-
-/* ======== Main map ======== */
-.map-shell {
-  position: relative;
-  margin-top: 32px;
-  min-height: 900px;
-}
+/* ======== Map ======== */
+.map-shell { position: relative; margin: 0 0 40px; }
 .map-svg { width: 100%; height: auto; display: block; overflow: visible; }
 
 /* SVG element styling */
 .ring { fill: none; stroke: var(--line); stroke-width: 0.75; }
-.ring.inner { stroke: var(--ink); stroke-width: 1; }
-.ring-bg { fill: var(--paper); }
-
-.ring-label {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 15px;
-  fill: var(--ink);
-  font-style: italic;
-  letter-spacing: 0.01em;
-  pointer-events: none;
-}
-.ring-label-tag {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 8.5px;
-  fill: var(--ink-mute);
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  pointer-events: none;
-}
 .ring-hit { fill: transparent; cursor: pointer; }
+.center-dot { fill: var(--ink); }
+.ring-label-tag { font-family: 'JetBrains Mono', monospace; font-size: 8.5px; letter-spacing: 0.22em; fill: var(--ink-mute); text-transform: uppercase; }
+.ring-label { font-family: 'Cormorant Garamond', serif; font-size: 12px; fill: var(--ink-soft); }
 
-.connector {
-  fill: none;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.18s, stroke 0.15s, stroke-width 0.15s, stroke-opacity 0.15s;
-}
-.connector.revealed { opacity: 1; }
-.connector.primary {
-  stroke: var(--ink);
-  stroke-width: 1;
-  stroke-opacity: 0.9;
-}
-.connector.secondary {
-  stroke: var(--ink-mute);
-  stroke-width: 0.75;
-  stroke-opacity: 0.35;
-}
-.connector.distant {
-  stroke: var(--ink-soft);
-  stroke-width: 1;
-  stroke-opacity: 0.4;
-  stroke-dasharray: 2 3;
-}
-/* Hovered state: highlighted relationships take the accent red; everything
-   else shades back to muted ink, giving a red-on-black-faded reading. */
-.dimmed-mode .connector.revealed.primary   { stroke: var(--accent); stroke-width: 1.3; stroke-opacity: 1; }
-.dimmed-mode .connector.revealed.secondary { stroke: var(--accent); stroke-width: 1;   stroke-opacity: 0.75; }
-.dimmed-mode .connector.revealed.distant   { stroke: var(--accent); stroke-width: 1;   stroke-opacity: 0.75; }
+.dim-node { cursor: pointer; }
+.dim-node-circle { fill: var(--bg); stroke: var(--ink); stroke-width: 0.75; transition: fill 0.15s; }
+.dim-node-label { font-family: 'Inter', sans-serif; font-size: 9px; fill: var(--ink-mute); font-weight: 300; }
 
-/* Dimmed mode: inactive shapes fade back; active groups fill solid black
-   with inverted (paper) text, echoing the old engine-card active style. */
-.dimmed-mode .shape-mod-group:not(.active) .shape-mod,
-.dimmed-mode .shape-branch-group:not(.active) .shape-branch { stroke: var(--line-soft); fill-opacity: 0.4; }
-.dimmed-mode .shape-mod-group:not(.active) .shape-label,
-.dimmed-mode .shape-mod-group:not(.active) .shape-label-tag,
-.dimmed-mode .shape-branch-group:not(.active) .shape-label,
-.dimmed-mode .shape-branch-group:not(.active) .shape-label-tag { fill: var(--ink-dim); }
+.connector { fill: none; stroke: var(--ink-dim); stroke-width: 0.6; transition: opacity 0.18s; }
+.connector.primary { stroke-width: 0.9; stroke: rgba(13,13,13,0.4); }
+.connector.secondary { stroke-width: 0.5; stroke-dasharray: 2 2; }
+.connector.distant { stroke-dasharray: 3 3; stroke-width: 0.5; }
 
-.dimmed-mode .shape-mod-group.active .shape-mod,
-.dimmed-mode .shape-branch-group.active .shape-branch {
-  fill: var(--ink);
-  stroke: var(--ink);
-  stroke-width: 1.5;
-}
-.dimmed-mode .shape-mod-group.active .shape-label,
-.dimmed-mode .shape-mod-group.active .shape-label-tag,
-.dimmed-mode .shape-branch-group.active .shape-label,
-.dimmed-mode .shape-branch-group.active .shape-label-tag { fill: var(--paper); }
+.boundary-ring { fill: none; stroke: #999; stroke-width: 1; stroke-dasharray: 5 4; }
+.boundary-tag { font-family: 'JetBrains Mono', monospace; font-size: 8px; letter-spacing: 0.25em; fill: #999; text-transform: uppercase; }
 
-/* Cursor hint on groups */
-.shape-mod-group, .shape-branch-group { cursor: pointer; }
+/* Constraint inward arrows */
+.constraint-arrow { stroke: #999; stroke-width: 1.2; fill: #999; }
+.constraint-label { font-family: 'JetBrains Mono', monospace; font-size: 7.5px; letter-spacing: 0.12em; fill: #888; text-transform: uppercase; }
 
-/* Modulator & branch shapes — rounded wedges in the same line style as
-   the stratum rings, filled with graduated paper tints so the three
-   layers (core → modulator → engine) read as distinct bands. */
-.shape-mod {
-  fill: var(--paper-mid);
-  stroke: var(--line);
-  stroke-width: 0.75;
-  cursor: pointer;
-  transition: stroke 0.15s, stroke-width 0.15s, fill 0.15s;
+/* ======== Age Slider ======== */
+.age-slider-section {
+  margin: 32px auto 40px;
+  max-width: 680px;
+  text-align: center;
 }
-.shape-branch {
-  fill: var(--paper-outer);
-  stroke: var(--line);
-  stroke-width: 0.75;
-  cursor: pointer;
-  transition: stroke 0.15s, stroke-width 0.15s, fill 0.15s;
+.age-slider-label-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 8px;
 }
-.shape-mod:hover, .shape-mod.active,
-.shape-branch:hover, .shape-branch.active {
-  stroke: var(--ink);
-  stroke-width: 1.25;
-}
-.shape-label {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 12px;
-  font-style: italic;
-  fill: var(--ink);
-  letter-spacing: 0.01em;
-  pointer-events: none;
-  text-anchor: middle;
-  dominant-baseline: middle;
-}
-.shape-label.shape-label-branch { font-size: 15px; }
-.shape-label-tag {
+.age-slider-endpoint {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 8px;
-  fill: var(--ink-mute);
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  pointer-events: none;
-  text-anchor: middle;
-}
-
-.dim-node {
-  cursor: pointer;
-}
-.dim-node-circle {
-  fill: var(--bg);
-  stroke: var(--ink);
-  stroke-width: 0.75;
-  transition: fill 0.15s, stroke 0.15s, stroke-width 0.15s;
-}
-.dim-node:hover .dim-node-circle,
-.dim-node.active .dim-node-circle {
-  fill: var(--accent);
-  stroke: var(--accent);
-  stroke-width: 1.5;
-}
-.dim-node-label {
-  font-family: 'Inter', sans-serif;
-  font-size: 10px;
-  font-weight: 400;
-  fill: var(--ink);
-  letter-spacing: 0.008em;
-  transition: fill 0.15s, font-weight 0.15s;
-  pointer-events: none;
-  user-select: none;
-}
-.dim-node:hover .dim-node-label,
-.dim-node.active .dim-node-label {
-  fill: var(--accent);
-  font-weight: 500;
-}
-.dim-node.cross .dim-node-circle {
-  fill: var(--accent);
-  stroke: var(--accent);
-}
-.dim-node.cross .dim-node-label {
-  fill: var(--accent);
-  font-weight: 500;
-}
-.dimmed-mode .dim-node:not(.active):not(.cross) .dim-node-label { fill: var(--ink-dim); }
-.dimmed-mode .dim-node:not(.active):not(.cross) .dim-node-circle { stroke: var(--line-hair); }
-
-.engine-drop {
-  stroke: var(--line-soft);
-  stroke-width: 0.6;
-  transition: stroke 0.18s;
-}
-.engine-drop.active { stroke: var(--accent); stroke-width: 1.3; }
-.dimmed-mode .engine-drop:not(.active) { opacity: 0.15; }
-
-.engine-anchor {
-  fill: transparent;
-  transition: fill 0.15s;
-}
-.engine-anchor.active { fill: transparent; }
-
-.center-dot { fill: var(--accent); }
-.center-label {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 8px;
-  fill: var(--ink-mute);
-  letter-spacing: 0.24em;
-  text-transform: uppercase;
-  pointer-events: none;
-}
-.compass-mark {
-  stroke: var(--line-hair); stroke-width: 0.5;
-}
-.compass-label {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 7.5px;
-  fill: var(--ink-dim);
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  pointer-events: none;
-}
-
-/* ======== Modulators row ======== */
-.modulators-strip {
-  display: grid;
-  grid-template-columns: 220px 1fr;
-  gap: 32px;
-  align-items: stretch;
-  margin-top: 36px;
-  padding-top: 28px;
-  border-top: 0.5px solid var(--line-soft);
-}
-.modulators-intro {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 10px;
+  font-size: 9px;
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--ink-mute);
-  line-height: 1.7;
-  padding-top: 4px;
 }
-.modulators-intro .num { color: var(--accent); display: block; font-size: 30px; font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 300; letter-spacing: 0; line-height: 1; margin-bottom: 8px; }
-.modulators-intro strong { color: var(--ink); font-weight: 400; text-transform: none; letter-spacing: 0.02em; font-size: 11px; display: block; margin-top: 6px; }
-.modulators {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 10px;
+.age-slider-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 15px;
+  color: var(--ink-soft);
+  font-style: italic;
 }
-.mod-card {
-  background: transparent;
-  border: 0.75px solid var(--line);
-  padding: 16px 18px;
+.age-slider-range {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 1px;
+  background: var(--line-soft);
+  outline: none;
   cursor: pointer;
-  transition: background 0.18s, color 0.18s;
-  min-height: 86px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  position: relative;
+  display: block;
+  margin: 0 0 14px;
 }
-.mod-card:hover, .mod-card.active { background: var(--ink); color: var(--paper); }
-.mod-card-num { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 0.2em; color: var(--ink-mute); }
-.mod-card:hover .mod-card-num, .mod-card.active .mod-card-num { color: var(--accent); }
-.mod-card-title { font-family: 'Cormorant Garamond', serif; font-size: 19px; font-weight: 400; line-height: 1.1; letter-spacing: -0.005em; }
-.mod-card-sub { font-size: 9.5px; color: var(--ink-mute); line-height: 1.45; margin-top: 6px; }
-.mod-card:hover .mod-card-sub, .mod-card.active .mod-card-sub { color: rgba(245,242,234,0.55); }
-
-/* ======== Footer ======== */
-.footer {
-  display: flex; justify-content: space-between; align-items: center;
-  margin-top: 56px; padding-top: 22px;
-  border-top: 0.5px solid var(--line-soft);
-  font-family: 'JetBrains Mono', monospace; font-size: 9.5px;
-  letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-mute);
+.age-slider-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--ink);
+  border: 2px solid var(--bg);
+  box-shadow: 0 0 0 1px var(--ink);
+  cursor: pointer;
 }
+.age-slider-range::-moz-range-thumb {
+  width: 12px; height: 12px;
+  border-radius: 50%;
+  background: var(--ink);
+  border: 2px solid var(--bg);
+  box-shadow: 0 0 0 1px var(--ink);
+  cursor: pointer;
+}
+.age-slider-annotation {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9.5px;
+  line-height: 1.65;
+  color: var(--ink-mute);
+  letter-spacing: 0.01em;
+  min-height: 3em;
+}
+.age-slider-annotation strong { color: var(--ink-soft); font-weight: 400; }
 
-/* ======== Draggable/resizable window ======== */
+/* ======== Panel ======== */
 .panel {
   position: fixed;
-  top: 50%; left: 50%;
-  width: 560px;
-  height: 640px;
-  min-width: 320px;
-  min-height: 280px;
-  max-width: calc(100vw - 16px);
-  max-height: calc(100vh - 16px);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(480px, 94vw);
+  max-height: 80vh;
   background: var(--paper);
   border: 0.75px solid var(--line);
-  z-index: 50;
-  opacity: 0;
-  pointer-events: none;
-  transform: translate(-50%, -50%);
-  transition: opacity 0.18s ease;
-  display: flex;
+  display: none;
   flex-direction: column;
-  box-shadow: 0 28px 80px rgba(0,0,0,0.28);
-  overflow: hidden;
-  resize: both;
+  z-index: 100;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.12);
 }
-.panel.visible {
-  opacity: 1;
-  pointer-events: auto;
-}
+.panel.visible { display: flex; }
 .panel-head { cursor: move; user-select: none; }
 .panel.dragging { transition: none; }
 .panel-head {
-  padding: 22px 28px 18px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 18px 20px 14px;
   border-bottom: 0.5px solid var(--line-soft);
-  display: flex; align-items: flex-start; justify-content: space-between;
-  gap: 18px;
 }
 .panel-head-meta { min-width: 0; flex: 1; }
 .panel-eyebrow {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase;
-  color: var(--accent); margin-bottom: 10px;
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+  margin-bottom: 5px;
 }
 .panel-title {
   font-family: 'Cormorant Garamond', serif;
-  font-size: 26px; font-weight: 400; line-height: 1.12;
-  letter-spacing: -0.01em; color: var(--ink);
+  font-size: 22px;
+  font-weight: 300;
+  color: var(--ink);
+  line-height: 1.1;
 }
 .panel-close {
-  width: 28px; height: 28px; border: 0.5px solid var(--line);
-  background: transparent; cursor: pointer; display: flex;
-  align-items: center; justify-content: center;
-  font-size: 14px; font-weight: 300; color: var(--ink);
+  width: 24px; height: 24px;
+  border: 0.5px solid var(--line-soft);
+  background: transparent;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px;
+  color: var(--ink-mute);
   flex-shrink: 0;
-  transition: background 0.15s, color 0.15s;
+  transition: background 0.12s;
 }
 .panel-close:hover { background: var(--ink); color: var(--paper); }
-
 .panel-body { padding: 22px 28px 40px; overflow-y: auto; flex: 1; }
 .panel-body::-webkit-scrollbar { width: 3px; }
 .panel-body::-webkit-scrollbar-track { background: transparent; }
 .panel-body::-webkit-scrollbar-thumb { background: rgba(13,13,13,0.15); }
 
 .panel-profile {
-  border: 0.5px solid var(--line-soft);
-  padding: 14px 18px; margin-bottom: 22px;
+  margin-bottom: 18px;
 }
 .panel-profile-row { display: flex; gap: 14px; font-size: 11px; margin-bottom: 10px; line-height: 1.6; align-items: flex-start; }
 .panel-profile-row:last-child { margin-bottom: 0; }
 .panel-profile-key {
   font-family: 'JetBrains Mono', monospace;
-  color: var(--ink-mute); text-transform: uppercase;
-  letter-spacing: 0.14em; font-size: 8.5px;
-  min-width: 96px; flex-shrink: 0; padding-top: 4px;
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+  width: 110px;
+  flex-shrink: 0;
+  padding-top: 2px;
 }
 .panel-profile-val { color: var(--ink-soft); }
 .panel-profile-val strong { color: var(--ink); font-weight: 400; }
 .panel-profile-chips { display: flex; flex-wrap: wrap; gap: 5px; }
 .panel-profile-chip {
-  font-size: 10px; padding: 3px 9px; border: 0.5px solid var(--line-soft);
-  color: var(--ink-soft); cursor: pointer;
-  transition: all 0.15s;
-  letter-spacing: 0.01em;
-  font-family: 'Inter', sans-serif;
-  background: transparent;
-  border-radius: 2px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  padding: 3px 8px;
+  border: 0.5px solid var(--line-soft);
+  cursor: pointer;
+  transition: all 0.12s;
+  text-transform: uppercase;
 }
 .panel-profile-chip:hover { border-color: var(--ink); background: var(--ink); color: var(--paper); }
 .panel-profile-chip.pathology { border-color: rgba(197,61,29,0.35); color: var(--accent); }
 .panel-profile-chip.pathology:hover { background: var(--accent); color: var(--paper); border-color: var(--accent); }
 
 .panel-text {
-  font-size: 13px; color: var(--ink-soft); line-height: 1.72;
-  margin-bottom: 14px; font-weight: 300;
+  font-size: 12.5px;
+  line-height: 1.75;
+  color: var(--ink-soft);
+  margin-bottom: 14px;
 }
 .panel-text strong { color: var(--ink); font-weight: 500; }
 .panel-text em { font-style: italic; color: var(--ink-soft); }
 .panel-dress-apply {
-  background: var(--accent-soft);
-  border-left: 2px solid var(--accent);
-  padding: 12px 16px; margin: 14px 0;
-  font-size: 12.5px; color: var(--ink-soft); line-height: 1.65;
+  font-size: 12px;
+  line-height: 1.7;
+  color: var(--ink-soft);
+  margin-bottom: 12px;
+  padding-left: 12px;
+  border-left: 1.5px solid var(--accent-soft);
 }
 .panel-dress-apply strong { color: var(--accent); font-weight: 500; }
 .panel-caveat {
-  font-size: 11px; color: var(--ink-mute); font-style: italic;
-  line-height: 1.6; margin: 14px 0;
-  padding-left: 12px; border-left: 1px solid var(--line-soft);
+  font-size: 11px;
+  line-height: 1.65;
+  color: var(--ink-mute);
+  font-style: italic;
+  margin-bottom: 12px;
 }
 .panel-divider { height: 0.5px; background: var(--line-soft); margin: 18px 0; }
 .panel-dims-label {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase;
-  color: var(--ink-mute); margin-bottom: 10px;
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+  margin-bottom: 8px;
 }
 .panel-dims { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
 .panel-dim-tag {
-  font-size: 10.5px; padding: 4px 10px;
-  border: 0.5px solid var(--line-soft); color: var(--ink-soft);
-  cursor: pointer; transition: all 0.15s;
-  letter-spacing: 0.02em;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  padding: 3px 8px;
+  border: 0.5px solid var(--line-soft);
+  color: var(--ink-mute);
+  cursor: pointer;
+  transition: all 0.12s;
 }
 .panel-dim-tag:hover { background: var(--ink); color: var(--paper); border-color: var(--ink); }
 .panel-source {
-  font-size: 11px; color: var(--ink-mute); font-style: italic;
-  line-height: 1.55;
+  font-size: 11px;
+  line-height: 1.6;
+  color: var(--ink-mute);
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: 0.02em;
 }
 .panel-source strong {
-  font-style: normal; font-weight: 500; letter-spacing: 0.12em;
-  font-size: 9px; text-transform: uppercase; color: var(--ink-mute);
-  display: block; margin-bottom: 4px;
-  font-family: 'JetBrains Mono', monospace;
+  display: block;
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+  color: var(--ink-mute);
+  font-weight: 400;
 }
 .panel-related { margin-top: 18px; }
 .panel-related-label {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase;
-  color: var(--ink-mute); margin-bottom: 10px;
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+  margin-bottom: 8px;
 }
 .panel-related-links { display: flex; flex-wrap: wrap; gap: 5px; }
 .panel-related-link {
-  font-size: 11px; padding: 5px 11px;
-  border: 0.5px solid var(--line-soft); color: var(--ink-soft);
-  cursor: pointer; transition: all 0.15s;
-  letter-spacing: 0.02em;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  padding: 3px 8px;
+  border: 0.5px solid var(--line-soft);
+  cursor: pointer;
+  transition: all 0.12s;
+  text-transform: uppercase;
 }
 .panel-related-link:hover { background: var(--ink); color: var(--paper); border-color: var(--ink); }
 
-@media (max-width: 1100px) {
-  .stage { padding: 32px 20px 60px; }
-  .engines-strip { grid-template-columns: 1fr; }
-  .engines { grid-template-columns: repeat(3, 1fr); }
-  .modulators-strip { grid-template-columns: 1fr; }
-  .modulators { grid-template-columns: repeat(2, 1fr); }
-}
-
-@media (max-width: 680px) {
-  .engines { grid-template-columns: repeat(2, 1fr); }
-  .masthead h1 { font-size: 32px; }
-}
-.modulators-strip{display:none!important}
-.engines-strip{display:none!important}
-.boundary-ring{fill:none;stroke:var(--line-hair);stroke-width:0.75;stroke-dasharray:4 6;transition:stroke 0.3s}
-.boundary-tag{font-family:'JetBrains Mono',monospace;font-size:7px;fill:var(--ink-dim);letter-spacing:0.25em;text-transform:uppercase}
-body.constraint-mode .boundary-ring{stroke:var(--accent);stroke-width:1.5;stroke-dasharray:none}
-body.constraint-mode .boundary-tag{fill:var(--accent)}
-body.constraint-mode .dim-node:not(.bound) .dim-node-circle{stroke:var(--line-hair);fill:var(--bg)}
-body.constraint-mode .dim-node.bound .dim-node-circle{fill:var(--accent);stroke:var(--accent);stroke-width:1.5}
-.engine-core-bg{transition:fill 0.2s}
-.engine-node circle{transition:fill 0.15s,stroke 0.15s}
-.engine-node:hover circle,.engine-node.active circle{fill:var(--accent);stroke:var(--accent);stroke-width:1.5}
-.constraints-strip{display:grid;grid-template-columns:220px 1fr;gap:32px;align-items:stretch;margin-top:36px;padding-top:28px;border-top:0.5px solid var(--line-soft)}
-.constraints-intro{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--ink-mute);line-height:1.7;padding-top:4px}
-.constraints-intro .num{color:var(--accent);display:block;font-size:30px;font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;letter-spacing:0;line-height:1;margin-bottom:8px}
-.constraints-intro strong{color:var(--ink);font-weight:400;text-transform:none;letter-spacing:0.02em;font-size:11px;display:block;margin-top:6px}
-.constraints{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
-.con-card{background:transparent;border:0.75px solid var(--line);padding:16px 18px;cursor:pointer;transition:background 0.18s,color 0.18s;min-height:86px;display:flex;flex-direction:column;justify-content:space-between}
-.con-card:hover,.con-card.active{background:var(--ink);color:var(--paper)}
-.con-card-num{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.2em;color:var(--ink-mute)}
-.con-card:hover .con-card-num,.con-card.active .con-card-num{color:var(--accent)}
-.con-card-title{font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:400;line-height:1.1}
-.con-card-sub{font-size:9.5px;color:var(--ink-mute);line-height:1.45;margin-top:6px}
-.con-card:hover .con-card-sub,.con-card.active .con-card-sub{color:rgba(245,242,234,0.55)}
 .panel-effect{margin:12px 0 8px}
 .panel-effect-row{display:flex;align-items:center;gap:10px;margin-bottom:6px}
 .panel-effect-key{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:var(--ink-mute);width:90px;flex-shrink:0}
@@ -567,7 +337,75 @@ body.constraint-mode .dim-node.bound .dim-node-circle{fill:var(--accent);stroke:
 .panel-bounds-chips{display:flex;flex-wrap:wrap;gap:5px}
 .panel-bound-chip{font-family:'Inter',sans-serif;font-size:10px;padding:3px 8px;border:0.5px solid var(--line-soft);cursor:pointer;transition:all 0.15s}
 .panel-bound-chip:hover{background:var(--ink);color:var(--paper)}
-@media(max-width:900px){.constraints-strip{grid-template-columns:1fr}}
+
+/* ======== Dimmed mode ======== */
+body.dimmed-mode .dim-node:not(.active) .dim-node-circle { fill: transparent; stroke: rgba(13,13,13,0.15); }
+body.dimmed-mode .dim-node:not(.active) .dim-node-label { fill: rgba(13,13,13,0.2); }
+body.dimmed-mode .connector:not(.revealed) { opacity: 0.06; }
+body.dimmed-mode .shape-core-group:not(.active) { opacity: 0.25; }
+body.dimmed-mode .shape-mod-group:not(.active) { opacity: 0.25; }
+
+/* ======== Footer ======== */
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 22px 0;
+  border-top: 0.5px solid var(--line-soft);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+}
+
+/* ======== Constraints strip ======== */
+.constraints-strip {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 32px;
+  align-items: start;
+  margin: 32px 0;
+  padding-top: 28px;
+  border-top: 0.5px solid var(--line-soft);
+}
+.constraints-intro {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+  line-height: 1.7;
+}
+.constraints-intro .num { color: var(--accent); font-size: 11px; display: block; margin-bottom: 6px; }
+.constraints-intro strong { display: block; margin-top: 6px; font-weight: 400; font-size: 10px; color: var(--ink-soft); letter-spacing: 0.06em; }
+.constraints {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+}
+.con-card {
+  background: var(--paper);
+  border: 0.75px solid var(--line-soft);
+  padding: 12px 10px 10px;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 72px;
+}
+.con-card:hover, .con-card.active { border-color: var(--ink); background: var(--paper-mid); }
+.con-card-num { font-family: 'JetBrains Mono', monospace; font-size: 8px; letter-spacing: 0.2em; color: var(--accent); }
+.con-card-title { font-size: 10px; color: var(--ink-soft); font-weight: 400; margin-top: 4px; line-height: 1.35; }
+.con-card-sub { font-family: 'JetBrains Mono', monospace; font-size: 8px; letter-spacing: 0.08em; color: var(--ink-mute); margin-top: 6px; line-height: 1.4; }
+
+/* Constraint bound dim node highlight */
+body.constraint-mode .dim-node:not(.bound) { opacity: 0.2; }
+body.constraint-mode .dim-node.bound .dim-node-circle { fill: var(--accent-soft); stroke: var(--accent); }
+body.constraint-mode .dim-node.bound .dim-node-label { fill: var(--accent); }
+
+@media(max-width:900px){.constraints-strip{grid-template-columns:1fr}.constraints{grid-template-columns:repeat(4,1fr)}}
 @media(max-width:600px){.constraints{grid-template-columns:repeat(2,1fr)}}
 </style>
 </head>
@@ -578,34 +416,45 @@ body.constraint-mode .dim-node.bound .dim-node-circle{fill:var(--accent);stroke:
 <!-- ============ MASTHEAD ============ -->
 <div class="masthead">
   <div class="masthead-left">
-    <div class="masthead-eyebrow"><span class="dot"></span>A framework &mdash; Identity map</div>
+    <div class="masthead-eyebrow"><span class="dot"></span>A framework &mdash; Identity map v5</div>
     <h1>The Science of<br><em>Aesthetic Identity in Dress</em></h1>
   </div>
   <div class="masthead-right">
     <span class="key">Read this as</span>
-    Engines act on three strata of identity. Click anything &mdash; engine, ring, dimension, modulator &mdash; to open its full dossier.
+    A causal cascade: who you are (core) → engines as evolutionary substrate → how you perceive → how you act. Click anything to open its full dossier.
   </div>
 </div>
 
 <!-- ============ MAP ============ -->
 <div class="map-shell">
-  <svg class="map-svg" id="map" viewBox="0 0 1360 900" preserveAspectRatio="xMidYMid meet" aria-label="Aesthetic identity map"></svg>
+  <svg class="map-svg" id="map" viewBox="0 0 1000 780" preserveAspectRatio="xMidYMid meet" aria-label="Aesthetic identity map — causal cascade topology"></svg>
 </div>
 
-<!-- ============ MODULATORS ============ -->
-<div class="modulators-strip">
-  <div class="modulators-intro">
-    <span class="num">04</span>
-    Forces
-    <strong>that shape the above for each unique person</strong>
+<!-- ============ AGE SLIDER ============ -->
+<div class="age-slider-section">
+  <div class="age-slider-label-row">
+    <span class="age-slider-endpoint">Newborn</span>
+    <span class="age-slider-title">Strat I ↔ Modulator influence over the lifespan</span>
+    <span class="age-slider-endpoint">Elder</span>
   </div>
-  <div class="modulators" id="modulators"></div>
+  <input type="range" class="age-slider-range" id="age-slider" min="0" max="100" value="35">
+  <div class="age-slider-annotation" id="age-annotation">
+    <strong>Early life:</strong> Modulators (world, culture, habitus) dominate — Strat I is being <em>written</em> by external forces. Identity is highly plastic and socially constituted.
+  </div>
 </div>
 
-<!-- ============ FOOTER ============ -->
-<div class="constraints-strip"><div class="constraints-intro"><span class="num">04</span>Bounds<strong>that the above must operate within for any given person, on any given day</strong></div><div class="constraints" id="constraints-grid"></div></div>
+<!-- ============ CONSTRAINTS STRIP ============ -->
+<div class="constraints-strip">
+  <div class="constraints-intro">
+    <span class="num">07</span>
+    Non-identity constraints
+    <strong>Forces that bound what the above can express on any given day</strong>
+  </div>
+  <div class="constraints" id="constraints-grid"></div>
+</div>
+
 <div class="footer">
-  <div>&mdash; ARI Framework / Identity Map v2</div>
+  <div>&mdash; ARI Framework / Identity Map v5 — causal cascade</div>
   <div>Click any element</div>
 </div>
 
@@ -676,15 +525,15 @@ const DATA = {
     "related": ["stratum2", "stratum3"]
   },
   "stratum3": {
-    "eyebrow": "Stratum III — the outer ring",
-    "title": "What you choose",
+    "eyebrow": "Stratum III — how you act",
+    "title": "How you act",
     "body": "The <strong>directly observable preferences and stylistic choices.</strong> Most variable, most context-dependent, most easily measured — but least explanatory alone. The same expressed preference (wearing all black) can arise from radically different underlying architectures: minimalist aesthetic philosophy, social anxiety armor, grief, subcultural identity signaling, or professional-context default.<br><br>14 dimensions — garment layer (color, form, texture, pattern, silhouette), adornment layer, and a set of orientation axes (signaling, temporal, occasion, coherence, sustainability, condition) plus cultural modulation.",
     "dressApply": "<strong>In dress:</strong> visual choice tasks — image sorting, pairwise comparisons, outfit rating — bypass verbal articulation and reduce social-desirability bias relative to direct self-report. Forced-choice discrete-choice methods are the current best practice for eliciting revealed preference in dress.",
     "source": "Roach-Higgins & Eicher (1992); Palmer & Schloss (2010), <em>PNAS</em>; Bernardoni et al. (2025), <em>CTRJ</em>",
     "related": ["stratum2", "stratum1"]
   },
   "stratum2": {
-    "eyebrow": "Stratum II — the middle ring",
+    "eyebrow": "Stratum II — how you perceive",
     "title": "How you perceive",
     "body": "The <strong>cognitive, perceptual, and emotional processing styles</strong> that determine how aesthetic stimuli are experienced. Moderately stable, partially conscious. The translation layer between deep values and surface choices.<br><br>The master calibration variable is <strong>Openness to Experience</strong> — the single most consistent personality-aesthetics correlate. Silvia (2007) found a large effect on aesthetic interest; Stolovy (2021, n=792) found Openness predicted urban/sophisticated style (OR=1.8) and individuality-seeking style (OR=3.96).",
     "dressApply": "<strong>In dress:</strong> two people with the same Stratum I values (say, self-expression) but different Stratum II processing (high vs. low sensory-processing sensitivity, high vs. low complexity optimum) converge on the same aspirational identity and diverge sharply on what that identity looks like in fabric.",
@@ -692,12 +541,67 @@ const DATA = {
     "related": ["stratum3", "stratum1"]
   },
   "stratum1": {
-    "eyebrow": "Stratum I — the inner ring",
-    "title": "Why you adorn",
+    "eyebrow": "Stratum I — who you are / core drivers",
+    "title": "Who you are — intrinsic core",
     "body": "The <strong>motivational and values-based foundations</strong> of aesthetic identity. Most stable, least consciously accessible, most powerful explanatory variables. Two people wearing identical clothing can have completely different existential cores driving that choice.<br><br>Contains 5 core dimensions anchored in validated cross-domain instruments (PVQ, RFQ, self-monitoring, self-concept clarity, self-discrepancy), applied to the dress domain.",
     "dressApply": "<strong>In dress:</strong> Stratum I is what distinguishes a person who wears minimal clothing because of high aesthetic expertise combined with self-transcendence values from one who does so out of prevention-focused anxiety avoidance — same surface, different identity architecture, different appropriate recommendations.",
     "source": "Schwartz (2012); Higgins (1987, 1997); Deci & Ryan (2000); Campbell et al. (1996); Markus & Nurius (1986)",
     "related": ["stratum2", "stratum3", "evolutionary"]
+  },
+  "modulators-zone": {
+    "eyebrow": "Modulators — extrinsic world influence",
+    "title": "Modulators / world influence",
+    "body": "The <strong>extrinsic forces that co-constitute Stratum I</strong> — not external after-the-fact modifiers, but active co-authors of who you are in dress. Gender, body, habitus, life course, material conditions, and informational flows are not separate from identity; they write it from the outside in, simultaneously with Strat I writing from the inside out.<br><br>The relationship is bidirectional and co-constitutive. Over the lifespan, the balance of influence shifts.",
+    "dressApply": "<strong>In dress:</strong> the same Strat I value (self-transcendence, say) expresses completely differently depending on which modulator context is active — high-habitus cultural capital vs. limited material access vs. high informational exposure to global aesthetics.",
+    "related": ["stratum1", "mod-gender", "mod-body", "mod-habitus", "mod-lifecourse", "mod-material", "mod-informational"]
+  },
+  "mod-gender": {
+    "eyebrow": "Modulator 01",
+    "title": "Gender",
+    "body": "Gender as a constitutive force, not a demographic variable. Dress is one of the primary sites where gender is <em>done</em> (West & Zimmerman, 1987). Butler's performativity: gender is not expressed in dress but produced by it — the repetition of gender-coded dress acts makes gender appear natural. Kaiser (2012) frames this as the fashion-body-identity nexus.",
+    "dressApply": "<strong>In dress:</strong> gender modulates every other dimension simultaneously — the same Strat I value expresses differently depending on which gender context is operative. Non-binary and gender-fluid dressing is not a style preference but an identity-level intervention in gendered dress grammar.",
+    "source": "Butler (1990/2006), <em>Gender Trouble</em>; West & Zimmerman (1987), <em>Gender & Society</em>; Kaiser (2012)",
+    "related": ["stratum1", "dim-body-relation", "mod-body"]
+  },
+  "mod-body": {
+    "eyebrow": "Modulator 02",
+    "title": "Body",
+    "body": "The lived, felt body shapes what dress can mean. Distinct from body image (the cognitive-affective self-assessment), this is the phenomenological body — the body as lived experience (Merleau-Ponty). Disability, illness, pregnancy, aging, size — not reducible to fit or size charts but structuring the entire field of dress possibility.",
+    "dressApply": "<strong>In dress:</strong> body modulation is why identical garments produce radically different experiences in different bodies. It's also the key modulator for body-relation dimension (Stratum III) and mediates between physical reality and aesthetic aspiration.",
+    "source": "Merleau-Ponty (1945/2012); Tiggemann & Lacey (2009); Bernardoni et al. (2025)",
+    "related": ["dim-body-relation", "mod-gender", "stratum1"]
+  },
+  "mod-habitus": {
+    "eyebrow": "Modulator 03",
+    "title": "Habitus",
+    "body": "Bourdieu's habitus: durable, transposable dispositions acquired through early socialization that generate practice. Class, culture, and subcultural capital are embodied as taste — acquired taste feels like natural instinct. The habitus makes some choices unthinkable and others automatic.",
+    "dressApply": "<strong>In dress:</strong> habitus is why middle-class professionals dress differently from working-class professionals even when earning the same salary — the entire aesthetic grammar of class is embodied. Subcultural capital (Thornton, 1995) extends this to youth cultures and taste communities.",
+    "source": "Bourdieu (1979/1984), <em>Distinction</em>; Thornton (1995), <em>Club Cultures</em>; Skeggs (1997)",
+    "related": ["social", "dim-cultural", "stratum1"]
+  },
+  "mod-lifecourse": {
+    "eyebrow": "Modulator 04",
+    "title": "Life course",
+    "body": "Life stage, role transitions, and critical events shape aesthetic identity in time. Bernardoni et al.'s (2025) nine factors that shift the prime aesthetic: aging, body, becoming a mother, education, others (relationships), environment (relocation, climate, occupation). These punctuate rather than replace the prime aesthetic.",
+    "dressApply": "<strong>In dress:</strong> the life-course modulator is why aesthetic identity is not fixed — and why longitudinal tracking is more valid than cross-sectional snapshots. Major role transitions (student → professional, single → parent) reliably produce aesthetic-identity renegotiation.",
+    "source": "Bernardoni et al. (2025), <em>CTRJ</em>; Elder (1994), <em>Annual Review of Sociology</em>",
+    "related": ["stratum1", "dim-body-relation", "mod-body"]
+  },
+  "mod-material": {
+    "eyebrow": "Modulator 05",
+    "title": "Material",
+    "body": "Material conditions — fabric availability, climate, economic access, supply infrastructure — constrain the possible. Not just what you can afford but what you can access (geography, size range, cultural availability). Material conditions shape the entire possibility set within which aesthetic identity is expressed.",
+    "dressApply": "<strong>In dress:</strong> the same aesthetic aspiration expressed differently across material contexts is evidence of this modulator. Economic access modulates luxury vs. non-luxury signaling; climate modulates silhouette and fabric; supply constraints modulate temporal preference.",
+    "source": "Crane (2000); Hamilton (2012)",
+    "related": ["stratum1", "mod-habitus", "dim-sustainability"]
+  },
+  "mod-informational": {
+    "eyebrow": "Modulator 06",
+    "title": "Informational",
+    "body": "Platforms, algorithms, and media flows shape aesthetic awareness and possibility horizon. Social media collapses geographic aesthetic diversity into a global visual feed; algorithmic curation creates echo chambers of aesthetic exposure. The informational environment writes the aesthetic vocabulary available to a person.",
+    "dressApply": "<strong>In dress:</strong> the TikTok aesthetic cycle (clean girl → quiet luxury → mob wife) is an informational modulator phenomenon. Algorithmic aesthetic cycles accelerate temporal preference shifts and intensify need-for-uniqueness avoidance behaviors.",
+    "source": "Crane (2000); Niinimäki (2010); platform research",
+    "related": ["imitation", "dim-temporal", "dim-uniqueness", "stratum1"]
   },
   "dim-color": {
     "eyebrow": "Dimension — Stratum III (garment layer)",
@@ -753,7 +657,7 @@ const DATA = {
     "body": "How the person relates to their own body through dress, on a continuum from <strong>armor</strong> (dress as concealment, defense) through <strong>neutrality</strong> to <strong>revelation</strong> (dress as body-celebrating, foregrounding).<br><br>Well-established axis in body-image-and-dress research (Tiggemann & Lacey, 2009; Tiggemann & Andrew, 2012). Explains why identical garments feel empowering to one wearer and violating to another.",
     "dressApply": "<strong>In dress:</strong> body relation is deeply gendered and shifts across life stages — Bernardoni et al.'s (2025) nine post-prime-change factors include \"the body\" and \"aging body\" as top drivers of aesthetic-preference change.",
     "source": "Tiggemann & Lacey (2009); Tiggemann & Andrew (2012); Bernardoni et al. (2025)",
-    "related": ["stratum3", "mod-body", "path-body", "dim-form"]
+    "related": ["stratum3", "mod-body", "dim-form"]
   },
   "dim-signaling": {
     "eyebrow": "Dimension — Stratum III (orientation)",
@@ -827,7 +731,7 @@ const DATA = {
     "body": "Berlyne's psychobiological model: aesthetic pleasure follows an inverted-U curve with stimulus complexity. <strong>Individual differences in optimal complexity position</strong> are more important than the curve shape — Althuizen & Sgourev (2021, n=1,800+) found limited evidence for a universal inverted-U. Expertise shifts the peak rightward.",
     "dressApply": "<strong>In dress:</strong> maps directly to the minimalist-to-maximalist spectrum. Predicts whether someone gravitates toward Jil Sander or Versace, COS or Gucci, one-color outfit or layered-pattern assembly. Shifts across the developmental trajectory.",
     "source": "Berlyne (1960, 1971); Althuizen & Sgourev (2021); Silvia (2006)",
-    "related": ["dim-fluency", "dim-pattern", "complexity-shift"]
+    "related": ["dim-fluency", "dim-pattern"]
   },
   "dim-fluency": {
     "eyebrow": "Dimension — Stratum II",
@@ -889,7 +793,7 @@ const DATA = {
   "dim-regfocus": {
     "eyebrow": "Dimension — Stratum I",
     "title": "Regulatory focus",
-    "body": "Higgins' regulatory focus theory (1997, 1998) identifies two fundamental self-regulatory systems. Liu, Zhu, Chen & Li (2020): <strong>promotion-focused consumers prefer high design novelty</strong>; prevention-focused consumers prefer low novelty — with processing fluency mediating. Korean research found promotion focus positively correlated with fashion innovativeness and emotional impulse buying.",
+    "body": "Higgins' regulatory focus theory (1997, 1998) identifies two fundamental self-regulatory systems. Liu, Zhu, Chen & Li (2020): <strong>promotion-focused consumers prefer high design novelty</strong>; prevention-focused consumers prefer low novelty — with processing fluency mediating.",
     "dressApply": "<strong>In dress:</strong> among the most powerful predictors of where someone falls on the classic-to-avant-garde spectrum. Promotion focus correlates with trend adoption, novelty-seeking, higher-risk experiments; prevention focus correlates with established-style adherence, lower-risk choices, longer wear-testing before purchase.",
     "source": "Higgins (1997, 1998); Liu et al. (2020); Regulatory Focus Questionnaire",
     "related": ["stratum1", "dim-complexity", "dim-temporal"]
@@ -897,184 +801,52 @@ const DATA = {
   "dim-autonomy": {
     "eyebrow": "Dimension — Stratum I",
     "title": "Autonomy orientation",
-    "body": "Self-Determination Theory (Deci & Ryan, 1985, 2000): autonomous motivation (values, enjoyment) vs. controlled motivation (external regulation, anxiety). Research on 1,997 Chinese youth found direct links between autonomous vs. controlled clothing motivation and behavioral intention.<br><br>Snyder's self-monitoring (1974): high self-monitors adjust to situations (controlled); low self-monitors maintain internal consistency (autonomous).",
-    "dressApply": "<strong>In dress:</strong> autonomy orientation determines whether dress choices are self-referential (what feels right) or audience-referential (what works for this context). Both are legitimate. The pathology is mismatch between actual and perceived self-regulation.",
-    "source": "Deci & Ryan (1985, 2000); Snyder (1974); Snyder & DeBono (1985); O'Cass (2001)",
-    "related": ["stratum1", "selfconstruction", "dim-occasion"]
+    "body": "Self-Determination Theory (Deci & Ryan, 1985, 2000): autonomous motivation (values, enjoyment) vs. controlled motivation (external regulation, anxiety). Research on 1,997 Chinese youth found direct links between autonomous vs. controlled clothing motivation and behavioral intention.",
+    "dressApply": "<strong>In dress:</strong> autonomy-oriented dressers dress for internal alignment; controlled dressers dress for external compliance. The distinction predicts wardrobe satisfaction, fashion involvement, and response to normative pressure.",
+    "source": "Deci & Ryan (1985, 2000); Snyder (1974)",
+    "related": ["stratum1", "dim-occasion"]
   },
   "dim-selfconcept": {
     "eyebrow": "Dimension — Stratum I",
     "title": "Self-concept architecture",
-    "body": "A composite drawing on three theories. <strong>Self-discrepancy</strong> (Higgins, 1987): gap between actual, ideal, and ought selves drives specific emotional states. <strong>Self-concept clarity</strong> (Campbell et al., 1996): low clarity increases appearance-management behaviors. <strong>Possible selves</strong> (Markus & Nurius, 1986): imagined future selves drive dress experimentation.",
-    "dressApply": "<strong>In dress:</strong> the aspirational-vs-actual wardrobe gap is the lived phenomenon of self-discrepancy. The Pinterest-board-vs-closet asymmetry, the \"bought-never-worn\" archive, the clothes-for-the-person-I-want-to-be drawer — all behaviorally visible manifestations.",
-    "source": "Higgins (1987); Campbell et al. (1996); Wang et al. (2023); Markus & Nurius (1986)",
-    "related": ["stratum1", "selfconstruction", "dim-identity-coherence", "path-identity"]
-  },
-  "mod-gender": {
-    "eyebrow": "Modulator 01 — structural force",
-    "title": "Gender",
-    "body": "Gender is constitutive of aesthetic identity in dress, not a demographic variable. Flügel's 1930 <em>Psychology of Clothes</em> identified the \"Great Masculine Renunciation\" — the early-19th-century shift in which men abandoned decorative dress and delegated ornament to women. The field's settled position (Entwistle, 2000; Wilson, 2003; Kaiser, 2012) is that the gendered organization of dress is a <strong>constitutive force</strong>.<br><br>Butler's performativity: gender is itself produced through repeated stylized acts, many of them dress acts.",
-    "dressApply": "<strong>In dress:</strong> gender modulates nearly every Stratum II and III dimension — color saturation, silhouette, occasion modulation, body relation, signaling orientation, adornment load, temporal preference all show systematic gender patterns. The aesthetic-labor burden (Wissinger; Warhurst & Nickson) falls disproportionately on women.",
-    "source": "Flügel (1930); Entwistle (2000); Kaiser (2012); Tseëlon (1995); Butler"
-  },
-  "mod-body": {
-    "eyebrow": "Modulator 02 — structural force",
-    "title": "Body & embodiment",
-    "body": "Entwistle (2000) <em>The Fashioned Body</em>: dress is situated bodily practice. The lived body — shape, size, age, ability, health, pregnancy status — shapes what dress can mean and do.<br><br>Tiggemann's program (2009, 2012) on body image and dress; Frith & Gleeson on men's body image; Twigg (2013) <em>Fashion and Age</em> on the dressed body across the life course.",
-    "dressApply": "<strong>In dress:</strong> bodily change reshapes aesthetic identity. Bernardoni et al.'s (2025) nine post-prime change factors include \"the body,\" \"the aging body,\" \"becoming a mother\" — the body modulator is the most frequent driver of aesthetic-identity shift in adulthood.",
-    "source": "Entwistle (2000); Tiggemann & Lacey (2009); Twigg (2013); Bernardoni et al. (2025)"
-  },
-  "mod-habitus": {
-    "eyebrow": "Modulator 03 — structural force",
-    "title": "Habitus",
-    "body": "Bourdieu's <em>Distinction</em> and habitus: dress-taste is a durable mark of social origin — internalized in childhood, transposable, perceived as natural instinct. Hebdige's (1979) <em>Subculture</em>: subcultural dress as bricolage. Thornton (1995) adds \"subcultural capital\" — in-group legibility.",
-    "dressApply": "<strong>In dress:</strong> habitus is why dressing \"up\" or \"down\" from one's class of origin is usually legible to others even when the wearer believes they have successfully changed register. Subcultural dress-communities (goth, punk, hip-hop, techwear, y2k-revival) have internal grammars that take years to fully read.",
-    "source": "Bourdieu (1979); Hebdige (1979); Thornton (1995); Skeggs (1997); Crane (2000); Kaiser (2012)"
-  },
-  "mod-informational": {
-    "eyebrow": "Modulator 06 — structural force",
-    "title": "Informational environment",
-    "body": "The defining dress phenomenon of the 2020s: algorithmically curated, TikTok-driven, Pinterest-mood-boarded, influencer-mediated dress aesthetics operating on 3–9 month cycles — \"clean girl,\" \"mob wife,\" \"quiet luxury,\" endless \"-core\" suffixes.<br><br>Seaver (2019) on recommender systems as \"traps\" — capture rather than mirror. Abidin (2016) on \"visibility labour.\" Duffy (2017) on aspirational labor.",
-    "dressApply": "<strong>In dress:</strong> algorithmic capture is now a legitimate threat to Stratum I authenticity. Users whose preferences are heavily platform-shaped may develop a Stratum III that does not trace back through Stratum II to Stratum I — producing chronic wardrobe dissatisfaction, aesthetic imposter experience, high turnover.",
-    "caveat": "Academic literature on algorithmic-dress-aesthetics is still thin; much evidence is discourse-analytic. Treat as empirically active but theoretically under-developed.",
-    "source": "Seaver (2019); Abidin (2016); Duffy (2017)"
-  },
-  "mod-lifecourse": {
-    "eyebrow": "Modulator 04 — structural force",
-    "title": "Life course",
-    "body": "The trajectory of roles, responsibilities, and transitions that reshape aesthetic identity across a lifespan. Twigg (2013) <em>Fashion and Age</em>; Bernardoni et al. (2025) on post-prime transitions; Andreasen on role-transition moments as inflection points for consumption behavior. Life course operates orthogonal to age: two 35-year-olds mid-divorce and mid-promotion are at the same age but different life-course positions.",
-    "dressApply": "<strong>In dress:</strong> the life-course modulator predicts the <em>when</em> of aesthetic-identity shift. Role transitions (parenthood, caregiving, grief, promotion, relocation, retirement) reliably produce wardrobe reassessment within 3–18 months.",
-    "caveat": "Placeholder modulator — sources being reconciled with existing Bernardoni and Twigg citations used elsewhere in the framework."
-  },
-  "mod-material": {
-    "eyebrow": "Modulator 05 — structural force",
-    "title": "Material conditions",
-    "body": "Economic access, climate, built environment, and labor context that materially constrain what dress is even possible. Bourdieu's habitus touches this but the material-conditions modulator is distinct: a person can have haute-couture habitus and working-class budget, or vice versa.",
-    "dressApply": "<strong>In dress:</strong> material conditions explain the gap between stated aesthetic and wardrobe reality far more often than taste does. Climate and occupational uniform norms constrain the expressive surface (Stratum III) without touching Stratum I.",
-    "caveat": "Placeholder modulator — a dedicated source pass is still pending."
-  },
-  "branch-signaling": {
-    "eyebrow": "Branch 01 — outer shell",
-    "title": "Signaling",
-    "body": "Dress as message: status display, virtue display, group affiliation, identity claim. The branch most directly engaged with audience perception. Pulls heavily on costly-signaling theory (Zahavi; Miller), countersignaling (Feltovich et al.), and symbolic interactionism.",
-    "dressApply": "<strong>In dress:</strong> signaling orientation determines whether a garment's worth is calibrated against its legibility — who will read it, what it says to them, and whether the wearer wants to be seen as the kind of person who would wear it.",
-    "caveat": "Placeholder branch — modulator interaction strengths are stubbed."
-  },
-  "branch-extension": {
-    "eyebrow": "Branch 02 — outer shell",
-    "title": "Self-extension",
-    "body": "Dress as extension of the self, extending into aspiration and possibility. Belk's extended self (1988, 2013); James's material self. Dress that functions this way is evaluated less against an audience and more against internal coherence — a felt sense of recognition.",
-    "dressApply": "<strong>In dress:</strong> self-extension explains the wardrobe built around who-I-am-becoming, not who I'm performing to. The Pinterest-board-vs-closet gap is most acute in wearers with strong self-extension orientation.",
-    "caveat": "Placeholder branch — modulator interaction strengths are stubbed."
-  },
-  "branch-identity": {
-    "eyebrow": "Branch 03 — outer shell",
-    "title": "Social identity",
-    "body": "Dress as group membership signal: subcultural capital, role-compliant uniform, generational marker. Tajfel's social identity theory; Hebdige on subcultural bricolage. Where signaling is individual-level display, social identity is membership-level legibility.",
-    "dressApply": "<strong>In dress:</strong> social-identity orientation predicts uniform-dressing across a group (tech hoodie, academic Birkenstocks, art-world black) — wearers reliably converge without coordination.",
-    "caveat": "Placeholder branch — modulator interaction strengths are stubbed."
-  },
-  "traj1": {
-    "eyebrow": "Developmental stage 01",
-    "title": "Fluency-dependent preferences",
-    "body": "Early dress-aesthetic identity is governed primarily by <strong>processing fluency</strong> — the easier a stimulus is to process, the more pleasant it feels. Preferences track toward familiar, prototypical, simple designs. The complexity optimum sits low.<br><br>Children's self-clothing preferences begin to stabilize around ages 3–5; pre-adolescent dress is heavily caregiver-mediated.",
-    "dressApply": "<strong>In dress:</strong> this stage is where Bourdieu's habitus is laid down — dress-taste learned pre-verbally, which will later feel like natural instinct.",
-    "source": "Reber, Schwarz & Winkielman (2004); Van de Cruys & Wagemans (2011)"
-  },
-  "traj2": {
-    "eyebrow": "Developmental stage 02",
-    "title": "Socially-calibrated + prime aesthetic imprinting",
-    "body": "Dress-aesthetic preferences become <strong>instruments of social positioning</strong>. High self-monitoring. The adolescent's dress is strategically poised between optimal distinctiveness.<br><br><strong>This is where prime-aesthetic imprinting occurs.</strong> Bernardoni, Stannard & Ruppert-Stroescu (2025) found 66.7% of 30 female participants reported their aesthetic dress preferences were established during <em>emerging adulthood</em>, not childhood (mean age 29.03).",
-    "dressApply": "<strong>In dress:</strong> the late-teens-through-twenties window imprints aesthetic reference baselines that persist for decades. Adults asked to describe their \"ideal\" wardrobe default to aesthetics from this window unless expertise has actively expanded their range.",
-    "source": "Snyder (1974); Piacentini & Mailer (2004); Bernardoni et al. (2025), <em>CTRJ</em>"
-  },
-  "traj3": {
-    "eyebrow": "Developmental stage 03",
-    "title": "Expertise-enabled complexity",
-    "body": "As aesthetic fluency grows, prediction models become more sophisticated. <strong>Experts achieve fluency with complex stimuli</strong>, expanding what feels pleasurable. Silvia (2006): high-expertise individuals found abstract images significantly more interesting.<br><br>Not everyone reaches this stage. Expertise-enabled development requires deliberate exposure, attention, and often communities of practice.",
-    "dressApply": "<strong>In dress:</strong> transition from consumer to curator — the person who once wore trend items because they trended now reads the trend cycle and selectively engages.",
-    "source": "Silvia (2006, 2013); Leder & Nadal (2014); Althuizen & Sgourev (2021)"
-  },
-  "traj4": {
-    "eyebrow": "Developmental stage 04",
-    "title": "Autonomously-motivated style",
-    "body": "The fully matured dress-aesthetic identity is <strong>internally regulated, coherent, stable</strong> — no longer primarily shaped by social cues or fluency defaults. Low self-monitoring. Self-concept clarity is high. Regulatory focus is primarily promotion-oriented.",
-    "dressApply": "<strong>In dress:</strong> the point where a person can articulate <em>why</em> their aesthetic is their aesthetic, in terms of values and self-understanding rather than trend or social legibility.",
-    "caveat": "The assumption that everyone moves toward autonomy is normative and empirically contested. Identity foreclosure is a legitimate stable outcome.",
-    "source": "Deci & Ryan (2000); Campbell et al. (1996); Schwartz (2012)"
-  },
-  "traj5": {
-    "eyebrow": "Developmental stage 05",
-    "title": "Post-prime transitions",
-    "body": "Bernardoni et al. (2025) identify <strong>nine factors</strong> that shift the prime aesthetic across adult life: aging, the aging body, the body, comfort, functionality, becoming a mother, education, others (relationships, new social environments), and environment (relocation, climate, occupational change).<br><br>These punctuate rather than replace the prime aesthetic.",
-    "dressApply": "<strong>In dress:</strong> the stage ARI most needs to detect — the transition moments where an adult's dress preferences are actively changing rather than stably expressing.",
-    "source": "Bernardoni et al. (2025); Twigg (2013); Andreasen on role transitions"
-  },
-  "path-body": {
-    "eyebrow": "Pathology family 01",
-    "title": "Body-mediated pathologies",
-    "body": "Pathologies in which dress-aesthetic identity becomes entangled with body-image dysregulation. Includes: <strong>body-image dissatisfaction expressed through dress</strong>, <strong>camouflage dressing</strong>, <strong>appearance-investment spillover</strong>, <strong>self-objectification loops</strong>.",
-    "dressApply": "<strong>In dress, detectable:</strong> persistent rejection of body-revealing silhouettes, wardrobe turnover tied to body-weight fluctuation rather than aesthetic evolution, fit-related return patterns, and language patterns (\"hiding,\" \"flattering,\" \"minimizing\") distinct from aesthetic language.",
-    "source": "Tiggemann & Lacey (2009); Tiggemann & Andrew (2012); self-objectification theory"
-  },
-  "path-consumption": {
-    "eyebrow": "Pathology family 02",
-    "title": "Consumption-mediated pathologies",
-    "body": "Pathologies where the acquisition of dress exceeds its integration into identity. Includes: <strong>compulsive buying / fashion addiction</strong>, <strong>sustainability-identity conflict</strong>, <strong>fast-fashion shame cycles</strong>, <strong>wardrobe sprawl</strong>.",
-    "dressApply": "<strong>In dress, detectable:</strong> gap between purchase volume and wear frequency, ratio of unworn-with-tags to active wardrobe, co-occurrence of stated sustainability values with fast-fashion purchase patterns, rate at which new purchases replace rather than complement.",
-    "source": "Dittmar (2005); Niinimäki (2010); Joy et al. (2012)"
-  },
-  "path-identity": {
-    "eyebrow": "Pathology family 03",
-    "title": "Identity-mediated pathologies",
-    "body": "Pathologies where the dress-identity relationship itself fails. Includes: <strong>aesthetic imposter syndrome</strong>, <strong>style foreclosure</strong> (dress locked to prime-aesthetic imprint), <strong>incoherent persona rotation</strong>, <strong>aspirational-actual chronic gap</strong> (self-discrepancy as sustained distress).",
-    "dressApply": "<strong>In dress, detectable:</strong> language patterns around self-doubt (\"am I the kind of person who wears this?\"), wardrobe archaeology showing abandoned attempts at multiple aesthetics, chronic mismatch between stated and worn identity, magnitude of the Pinterest-board-vs-closet delta.",
-    "source": "Campbell et al. (1996); Higgins (1987); Marcia on identity foreclosure; Davis (1992)"
-  },
-  "path-structure": {
-    "eyebrow": "Pathology family 04",
-    "title": "Structure-mediated pathologies",
-    "body": "Pathologies produced by the environment. Includes: <strong>algorithmic capture</strong> (Seaver, 2019 — preferences so platform-shaped that Stratum III disconnects from Stratum I), <strong>aesthetic-labor burnout</strong> (Warhurst & Nickson; Wissinger), <strong>fashion-cycle anxiety</strong> (Simmel's dialectic as chronic inadequacy), <strong>platform-driven taste drift</strong>.",
-    "dressApply": "<strong>In dress, detectable:</strong> time-series preference volatility tracking platform aesthetic cycles, self-reported exhaustion around dress decisions, disconnection pattern where preferences do not map onto prime aesthetic, values, or lived contexts — only onto recent platform exposure.",
-    "source": "Seaver (2019); Warhurst & Nickson; Abidin (2016); Duffy (2017)"
+    "body": "Self-concept clarity (Campbell et al., 1996): the degree to which self-beliefs are clearly and confidently defined and internally consistent. Low clarity predicts higher fashion involvement (Browne & Kaldenberg, 1997). Markus & Nurius (1986): possible selves — what you might become — motivate current dress choices.",
+    "dressApply": "<strong>In dress:</strong> high clarity → stable, coherent aesthetic; low clarity → higher wardrobe volatility, more influenced by social comparison and trend cycles. Possible selves are the engine behind aspirational wardrobe building.",
+    "source": "Campbell et al. (1996); Markus & Nurius (1986); Browne & Kaldenberg (1997)",
+    "related": ["stratum1", "dim-identity-coherence"]
   }
 };
 
 // ===== Engines / Strata / Modulators / DIM_MAP =====
 const ENGINES = [
-  {key:'evolutionary',    num:'01', title:'Evolution',                sub:'costly-signal, handicap principle'},
-  {key:'selfconstruction',num:'02', title:'Self-construction',        sub:'dress as extended, aspirational self'},
-  {key:'existential',     num:'03', title:'Existential',              sub:'symbolic armor (TMT)'},
-  {key:'social',          num:'04', title:'Social positioning',       sub:'habitus, status, dramaturgy'},
-  {key:'imitation',       num:'05', title:'Imitation + differentiation', sub:"Simmel's trickle engine"},
-  {key:'neural',          num:'06', title:'Neural reward',            sub:'liking vs wanting'}
+  {key:'evolutionary',    num:'01', title:'Signaling',          sub:'costly-signal, handicap principle'},
+  {key:'selfconstruction',num:'02', title:'Self-extension',     sub:'dress as extended, aspirational self'},
+  {key:'existential',     num:'03', title:'Existential',        sub:'symbolic armor (TMT)'},
+  {key:'social',          num:'04', title:'Social positioning', sub:'habitus, status, dramaturgy'},
+  {key:'imitation',       num:'05', title:'Imitation + diff.',  sub:"Simmel's trickle engine"},
+  {key:'neural',          num:'06', title:'Neural reward',      sub:'liking vs wanting'}
 ];
 
 const STRATA = [
-  {key:'stratum1', num:'I',   title:'Why',            sub:'why you adorn',   pos:'inner'},
-  {key:'stratum2', num:'II',  title:'How you perceive', sub:'processing',    pos:'middle'},
-  {key:'stratum3', num:'III', title:'What you choose',  sub:'expressive surface', pos:'outer'}
+  {key:'stratum1', num:'I',   title:'Who you are',      sub:'intrinsic core drivers',      pos:'inner'},
+  {key:'stratum2', num:'II',  title:'How you perceive', sub:'cognitive manifestation',     pos:'middle'},
+  {key:'stratum3', num:'III', title:'How you act',      sub:'observable output layer',     pos:'outer'}
 ];
 
 const MODULATORS = [
-  {key:'mod-gender',        num:'01', title:'Gender',         sub:'constitutive force, not demographic'},
-  {key:'mod-body',          num:'02', title:'Body',           sub:'lived body shapes what dress can mean'},
-  {key:'mod-habitus',       num:'03', title:'Habitus',        sub:'class, culture, subcultural capital'},
-  {key:'mod-lifecourse',    num:'04', title:'Life course',    sub:'stage, role, transition'},
-  {key:'mod-material',      num:'05', title:'Material',       sub:'fabric, climate, economic access'},
-  {key:'mod-informational', num:'06', title:'Informational',  sub:'platforms, algorithms, media flows'}
+  {key:'mod-gender',        num:'01', title:'Gender',        sub:'constitutive force, not demographic'},
+  {key:'mod-body',          num:'02', title:'Body',          sub:'lived body shapes what dress can mean'},
+  {key:'mod-habitus',       num:'03', title:'Habitus',       sub:'class, culture, subcultural capital'},
+  {key:'mod-lifecourse',    num:'04', title:'Life course',   sub:'stage, role, transition'},
+  {key:'mod-material',      num:'05', title:'Material',      sub:'fabric, climate, economic access'},
+  {key:'mod-informational', num:'06', title:'Informational', sub:'platforms, algorithms, media flows'}
 ];
 
-// Three outer branches. Placeholder data — source docs for "modulator interactions"
-// not yet supplied; wire real strengths when available.
 const BRANCHES = [
   {key:'branch-signaling',  num:'01', title:'Signaling',       sub:'status, virtue, identity display'},
   {key:'branch-extension',  num:'02', title:'Self-extension',  sub:'the body, the extended self, aspiration'},
   {key:'branch-identity',   num:'03', title:'Social identity', sub:'group belonging, role, stage'}
 ];
 
-// Branch → modulator strengths. 'moderate' | 'high' | 'very-high' render a connector;
-// 'low' or omitted renders nothing. PLACEHOLDER — replace with real doc data.
 const BRANCH_MODS = {
   'branch-signaling':  { 'mod-gender':'high',      'mod-habitus':'very-high', 'mod-material':'moderate', 'mod-informational':'high' },
   'branch-extension':  { 'mod-body':'very-high',   'mod-gender':'moderate',   'mod-lifecourse':'high',   'mod-material':'moderate' },
@@ -1111,25 +883,19 @@ const DIM_MAP = {
   'dim-cultural':          { s:3, eng:'social',          secEng:['imitation'], mods:['mod-habitus','mod-informational'], paths:[], stages:['traj1','traj5'], title:'Cultural context' }
 };
 
-// ================ RENDER MODULATORS ================
-const modulatorsEl = document.getElementById('modulators');
-MODULATORS.forEach(m => {
-  const div = document.createElement('div');
-  div.className = 'mod-card';
-  div.dataset.key = m.key;
-  div.innerHTML = `<div><div class="mod-card-num">${m.num}</div><div class="mod-card-title" style="margin-top:4px">${m.title}</div></div><div class="mod-card-sub">${m.sub}</div>`;
-  modulatorsEl.appendChild(div);
-});
-
-// ================ RENDER MAP ================
+// ================ RENDER MAP (Causal Cascade Topology) ================
 const SVG_NS = 'http://www.w3.org/2000/svg';
 const svg = document.getElementById('map');
-const VB = { w: 1360, h: 900 };
-const CX = VB.w / 2;
-const CY = VB.h / 2;
-const R_OUTER = 215;
-const R_MIDDLE = 145;
-const R_INNER = 80;
+const VB = { w: 1000, h: 780 };
+const CX = VB.w / 2;       // 500
+const CY = VB.h / 2 + 20;  // 410 — slight vertical shift to leave room for constraint arrows at top
+
+// Radii — causal cascade layout
+const R_CORE   = 80;   // "who u r" zone (Strat I + Modulators)
+const R_ENGINE = 145;  // engine glow outer edge (soft gradient zone)
+const R_S2     = 215;  // Stratum II ring ("how you perceive")
+const R_S3     = 295;  // Stratum III ring ("how you act")
+const R_CONSTR = 370;  // constraint perimeter (dashed)
 
 function el(tag, attrs = {}, parent = svg) {
   const e = document.createElementNS(SVG_NS, tag);
@@ -1140,174 +906,372 @@ function el(tag, attrs = {}, parent = svg) {
   return e;
 }
 
-// ---- New concentric layout ----
-// Geometry for the new layout: three concentric strata in the center,
-// a ring of six modulator blobs, then a ring of three branch blobs.
-const R_MOD_IN   = 260;
-const R_MOD_OUT  = 310;
-const R_BR_IN    = 345;
-const R_BR_OUT   = 405;
+// ---- Defs: gradients ----
+const defs = el('defs', {});
 
-// Rounded annular wedge — two concentric arcs with a gentle bulge at each
-// angular end. Cap radius = chord length, which gives a shallow curve
-// rather than a full semicircle (bulge ≈ chord/7).
-function wedgePath(cx, cy, rInner, rOuter, thetaStart, thetaEnd) {
-  const halfW = rOuter - rInner;
-  const os = [cx + rOuter * Math.cos(thetaStart), cy + rOuter * Math.sin(thetaStart)];
-  const oe = [cx + rOuter * Math.cos(thetaEnd),   cy + rOuter * Math.sin(thetaEnd)];
-  const is = [cx + rInner * Math.cos(thetaStart), cy + rInner * Math.sin(thetaStart)];
-  const ie = [cx + rInner * Math.cos(thetaEnd),   cy + rInner * Math.sin(thetaEnd)];
-  const largeArc = (thetaEnd - thetaStart) > Math.PI ? 1 : 0;
-  return `M ${os[0].toFixed(1)} ${os[1].toFixed(1)} ` +
-         `A ${rOuter} ${rOuter} 0 ${largeArc} 1 ${oe[0].toFixed(1)} ${oe[1].toFixed(1)} ` +
-         `A ${halfW} ${halfW} 0 0 1 ${ie[0].toFixed(1)} ${ie[1].toFixed(1)} ` +
-         `A ${rInner} ${rInner} 0 ${largeArc} 0 ${is[0].toFixed(1)} ${is[1].toFixed(1)} ` +
-         `A ${halfW} ${halfW} 0 0 1 ${os[0].toFixed(1)} ${os[1].toFixed(1)} Z`;
-}
+// Engine glow gradient (radial) — orange/warm, fades out
+const engGrad = el('radialGradient', {
+  id: 'engine-glow',
+  cx: '50%', cy: '50%', r: '50%',
+  gradientUnits: 'objectBoundingBox'
+}, defs);
+el('stop', { offset: '0%',   'stop-color': '#e8936a', 'stop-opacity': '0' }, engGrad);
+el('stop', { offset: '40%',  'stop-color': '#e8936a', 'stop-opacity': '0.06' }, engGrad);
+el('stop', { offset: '68%',  'stop-color': '#e0824a', 'stop-opacity': '0.22' }, engGrad);
+el('stop', { offset: '82%',  'stop-color': '#d96a30', 'stop-opacity': '0.35' }, engGrad);
+el('stop', { offset: '92%',  'stop-color': '#c8551a', 'stop-opacity': '0.18' }, engGrad);
+el('stop', { offset: '100%', 'stop-color': '#c8551a', 'stop-opacity': '0' }, engGrad);
 
-// Assign an angular position on each ring for each dimension, ordered by engine.
-// For each stratum ring, group dims by primary engine (in ENGINES order), and
-// distribute them around the top 320° of the circle (leaving a 40° gap at bottom).
+// Core zone background
+const coreGrad = el('radialGradient', {
+  id: 'core-bg',
+  cx: '50%', cy: '50%', r: '50%',
+  gradientUnits: 'objectBoundingBox'
+}, defs);
+el('stop', { offset: '0%',   'stop-color': '#dce5f5', 'stop-opacity': '1' }, coreGrad);
+el('stop', { offset: '100%', 'stop-color': '#c8d4ee', 'stop-opacity': '1' }, coreGrad);
+
+// Arrow marker for bidirectional arrows
+const arrowMarker = el('marker', {
+  id: 'arrowhead',
+  markerWidth: '8', markerHeight: '7',
+  refX: '7', refY: '3.5',
+  orient: 'auto'
+}, defs);
+el('polygon', {
+  points: '0 0, 8 3.5, 0 7',
+  fill: '#c53d1d',
+  opacity: '0.85'
+}, arrowMarker);
+
+const arrowMarkerRev = el('marker', {
+  id: 'arrowhead-rev',
+  markerWidth: '8', markerHeight: '7',
+  refX: '1', refY: '3.5',
+  orient: 'auto'
+}, defs);
+el('polygon', {
+  points: '8 0, 0 3.5, 8 7',
+  fill: '#c53d1d',
+  opacity: '0.85'
+}, arrowMarkerRev);
+
+// Small constraint inward arrow marker
+const conMarker = el('marker', {
+  id: 'con-arrow',
+  markerWidth: '7', markerHeight: '7',
+  refX: '6', refY: '3.5',
+  orient: 'auto'
+}, defs);
+el('polygon', {
+  points: '0 0, 7 3.5, 0 7',
+  fill: '#999',
+  opacity: '0.8'
+}, conMarker);
+
+// ---- Layer order (back to front) ----
+const bgLayer = el('g', { id: 'bg-layer' });
+const glowLayer = el('g', { id: 'glow-layer' });
+const ringLayer = el('g', { id: 'ring-layer' });
+const connectorLayer = el('g', { id: 'connectors' });
+const shapeLayer = el('g', { id: 'shapes' });
+const nodeLayer = el('g', { id: 'nodes' });
+const labelLayer = el('g', { id: 'labels' });
+const constraintLayer = el('g', { id: 'constraint-layer' });
+
+// ---- Background rings (fill tones) ----
+// Stratum III band (outermost content ring)
+el('circle', { cx: CX, cy: CY, r: R_S3, fill: '#f5ede4', stroke: 'none' }, bgLayer);
+// Stratum II band
+el('circle', { cx: CX, cy: CY, r: R_S2, fill: '#f0e5e5', stroke: 'none' }, bgLayer);
+// Engine zone background (will be overlaid by glow)
+el('circle', { cx: CX, cy: CY, r: R_ENGINE, fill: '#f8f2ec', stroke: 'none' }, bgLayer);
+// Core zone background
+el('circle', {
+  cx: CX, cy: CY, r: R_CORE,
+  fill: 'url(#core-bg)', stroke: 'none'
+}, bgLayer);
+
+// ---- Engine glow (radial gradient overlay — between core and S2) ----
+const glowSize = R_ENGINE * 2;
+el('ellipse', {
+  cx: CX, cy: CY,
+  rx: R_ENGINE, ry: R_ENGINE,
+  fill: 'url(#engine-glow)',
+  stroke: 'none',
+  opacity: '1'
+}, glowLayer);
+
+// ---- Stratum rings (borders) ----
+// Outer constraint perimeter (dashed)
+el('circle', { cx: CX, cy: CY, r: R_CONSTR, class: 'boundary-ring' }, ringLayer);
+// Strat III ring
+el('circle', { cx: CX, cy: CY, r: R_S3, fill: 'none', stroke: '#c08870', 'stroke-width': '1.2', opacity: '0.7' }, ringLayer);
+// Strat II ring
+el('circle', { cx: CX, cy: CY, r: R_S2, fill: 'none', stroke: '#c0808a', 'stroke-width': '1.0', opacity: '0.6' }, ringLayer);
+// Core zone ring
+el('circle', { cx: CX, cy: CY, r: R_CORE, fill: 'none', stroke: '#8892cc', 'stroke-width': '1.0', opacity: '0.7' }, ringLayer);
+
+// ---- Ring click hit areas ----
+el('circle', {
+  cx: CX, cy: CY,
+  r: (R_S2 + R_S3) / 2,
+  fill: 'none', stroke: 'transparent',
+  'stroke-width': R_S3 - R_S2 - 4,
+  class: 'ring-hit', 'data-key': 'stratum3',
+  'pointer-events': 'stroke', cursor: 'pointer'
+}, ringLayer);
+el('circle', {
+  cx: CX, cy: CY,
+  r: (R_ENGINE + R_S2) / 2,
+  fill: 'none', stroke: 'transparent',
+  'stroke-width': R_S2 - R_ENGINE - 4,
+  class: 'ring-hit', 'data-key': 'stratum2',
+  'pointer-events': 'stroke', cursor: 'pointer'
+}, ringLayer);
+
+// ---- Ring labels ----
+// Constraint perimeter label (top)
+el('text', {
+  x: CX, y: CY - R_CONSTR - 10,
+  'text-anchor': 'middle',
+  class: 'boundary-tag'
+}, labelLayer).textContent = 'CONSTRAINTS — PERIMETER';
+
+// Stratum III label
+el('text', {
+  x: CX, y: CY - R_S3 + 18,
+  'text-anchor': 'middle',
+  class: 'ring-label-tag'
+}, labelLayer).textContent = 'STRATUM III';
+el('text', {
+  x: CX, y: CY - R_S3 + 32,
+  'text-anchor': 'middle',
+  class: 'ring-label'
+}, labelLayer).textContent = 'how you act';
+
+// Stratum II label
+el('text', {
+  x: CX, y: CY - R_S2 + 16,
+  'text-anchor': 'middle',
+  class: 'ring-label-tag'
+}, labelLayer).textContent = 'STRATUM II';
+el('text', {
+  x: CX, y: CY - R_S2 + 30,
+  'text-anchor': 'middle',
+  class: 'ring-label'
+}, labelLayer).textContent = 'how you perceive';
+
+// Engine glow label (subtle, placed at angle within glow zone)
+const ENG_NAMES = ['Signaling', 'Self-extension', 'Social identity'];
+ENG_NAMES.forEach((name, i) => {
+  const angle = -Math.PI / 2 + (i - 1) * (Math.PI * 0.38);
+  const r = (R_CORE + R_S2) / 2 + 8;
+  const ex = CX + r * Math.cos(angle);
+  const ey = CY + r * Math.sin(angle);
+  el('text', {
+    x: ex, y: ey,
+    'text-anchor': 'middle',
+    'dominant-baseline': 'middle',
+    style: 'font-family:JetBrains Mono,monospace;font-size:7.5px;letter-spacing:0.14em;fill:#c05820;opacity:0.7;text-transform:uppercase;'
+  }, labelLayer).textContent = name;
+});
+
+// "who u r" label above core zone
+el('text', {
+  x: CX, y: CY - R_CORE - 10,
+  'text-anchor': 'middle',
+  style: 'font-family:Cormorant Garamond,serif;font-size:11px;font-style:italic;fill:#c53d1d;opacity:0.9;'
+}, labelLayer).textContent = 'who u r';
+
+// ---- Core zone: Strat I + Modulators side by side ----
+const coreW = R_CORE * 1.62;
+const coreH = R_CORE * 1.0;
+const boxW  = coreW * 0.44;
+const boxH  = coreH * 0.62;
+const gap   = coreW * 0.05;
+
+// Strat I box (left side of core)
+const s1x = CX - boxW - gap / 2;
+const s1y = CY;
+const stratIG = el('g', {
+  class: 'shape-core-group',
+  'data-key': 'stratum1',
+  cursor: 'pointer'
+}, shapeLayer);
+el('rect', {
+  x: s1x - boxW / 2, y: s1y - boxH / 2,
+  width: boxW, height: boxH,
+  rx: '8',
+  fill: '#b8cae8', stroke: '#7890cc',
+  'stroke-width': '0.75', opacity: '0.9'
+}, stratIG);
+el('text', {
+  x: s1x, y: s1y - 12,
+  'text-anchor': 'middle',
+  style: 'font-family:JetBrains Mono,monospace;font-size:7px;letter-spacing:0.2em;fill:#3a4a8a;text-transform:uppercase;'
+}, stratIG).textContent = 'STRAT I';
+el('text', {
+  x: s1x, y: s1y + 4,
+  'text-anchor': 'middle',
+  style: 'font-family:Inter,sans-serif;font-size:8.5px;fill:#2a3a7a;font-weight:400;'
+}, stratIG).textContent = 'core drivers';
+el('text', {
+  x: s1x, y: s1y + 16,
+  'text-anchor': 'middle',
+  style: 'font-family:Inter,sans-serif;font-size:7.5px;fill:#4a5a9a;opacity:0.8;'
+}, stratIG).textContent = 'intrinsic';
+
+// Modulators box (right side of core)
+const mx = CX + gap / 2 + boxW / 2;
+const my = CY;
+const modCoreG = el('g', {
+  class: 'shape-core-group',
+  'data-key': 'modulators-zone',
+  cursor: 'pointer'
+}, shapeLayer);
+el('rect', {
+  x: mx - boxW / 2, y: my - boxH / 2,
+  width: boxW, height: boxH,
+  rx: '8',
+  fill: '#d4b8e8', stroke: '#a880cc',
+  'stroke-width': '0.75', opacity: '0.9'
+}, modCoreG);
+el('text', {
+  x: mx, y: my - 12,
+  'text-anchor': 'middle',
+  style: 'font-family:JetBrains Mono,monospace;font-size:7px;letter-spacing:0.2em;fill:#5a2a8a;text-transform:uppercase;'
+}, modCoreG).textContent = 'MODULATORS';
+el('text', {
+  x: mx, y: my + 4,
+  'text-anchor': 'middle',
+  style: 'font-family:Inter,sans-serif;font-size:8.5px;fill:#3a1a7a;font-weight:400;'
+}, modCoreG).textContent = 'world influence';
+el('text', {
+  x: mx, y: my + 16,
+  'text-anchor': 'middle',
+  style: 'font-family:Inter,sans-serif;font-size:7.5px;fill:#6a4aaa;opacity:0.8;'
+}, modCoreG).textContent = 'extrinsic';
+
+// ---- Bidirectional arrows between Strat I and Modulators ----
+const arrowY1 = CY - 8;
+const arrowY2 = CY + 8;
+const arrowX1 = s1x + boxW / 2 + 4;
+const arrowX2 = mx - boxW / 2 - 4;
+
+// Arrow going right (Strat I → Modulators)
+el('line', {
+  x1: arrowX1, y1: arrowY1,
+  x2: arrowX2, y2: arrowY1,
+  stroke: '#c53d1d', 'stroke-width': '1.2',
+  'marker-end': 'url(#arrowhead)',
+  opacity: '0.85'
+}, shapeLayer);
+
+// Arrow going left (Modulators → Strat I)
+el('line', {
+  x1: arrowX2, y1: arrowY2,
+  x2: arrowX1, y2: arrowY2,
+  stroke: '#c53d1d', 'stroke-width': '1.2',
+  'marker-end': 'url(#arrowhead-rev)',
+  opacity: '0.85'
+}, shapeLayer);
+
+// ---- Modulator nodes on engine glow ring (6 nodes, labeled) ----
+const modAngleStep = (Math.PI * 2) / MODULATORS.length;
+const modR = (R_CORE + R_S2) / 2 + 20; // place in glow zone
+const modCenters = {};
+
+MODULATORS.forEach((m, i) => {
+  const angle = -Math.PI / 2 + i * modAngleStep;
+  const px = CX + modR * Math.cos(angle);
+  const py = CY + modR * Math.sin(angle);
+  modCenters[m.key] = { x: px, y: py };
+
+  const g = el('g', {
+    class: 'shape-mod-group',
+    'data-key': m.key,
+    cursor: 'pointer'
+  }, shapeLayer);
+  el('circle', {
+    cx: px, cy: py, r: 14,
+    fill: '#f8e8d0', stroke: '#d06820',
+    'stroke-width': '0.7', opacity: '0.85'
+  }, g);
+  el('text', {
+    x: px, y: py - 3,
+    'text-anchor': 'middle',
+    'dominant-baseline': 'middle',
+    style: 'font-family:JetBrains Mono,monospace;font-size:6px;letter-spacing:0.14em;fill:#8a3a10;text-transform:uppercase;'
+  }, g).textContent = m.num;
+  // Short title below num
+  const shortTitle = m.title.slice(0, 8);
+  el('text', {
+    x: px, y: py + 8,
+    'text-anchor': 'middle',
+    style: 'font-family:Inter,sans-serif;font-size:7px;fill:#6a2800;'
+  }, g).textContent = m.title;
+});
+
+// ---- Dimension nodes ----
+// Distribute dims around S2 (stratum 2) and S3 (stratum 3) rings
 function computeDimPositions() {
   const byStratum = { 1: [], 2: [], 3: [] };
-  // Build list per stratum, sorted so dims of same primary engine are grouped
-  // in the same order as ENGINES.
-  const engOrder = Object.fromEntries(ENGINES.map((e, i) => [e.key, i]));
   Object.entries(DIM_MAP).forEach(([key, info]) => {
     byStratum[info.s].push({ key, info });
   });
-  for (const s of [1, 2, 3]) {
-    byStratum[s].sort((a, b) => {
-      const ae = engOrder[a.info.eng];
-      const be = engOrder[b.info.eng];
-      if (ae !== be) return ae - be;
-      return a.info.title.localeCompare(b.info.title);
-    });
-  }
   const positions = {};
-  for (const s of [1, 2, 3]) {
-    const arr = byStratum[s];
-    const N = arr.length;
-    const r = s === 1 ? R_INNER : s === 2 ? R_MIDDLE : R_OUTER;
-    // Distribute from angle -140° to +140° (so lines from top engines drop naturally)
-    // Angle 0 = top; positive clockwise.
-    const startDeg = -140;
-    const endDeg = 140;
-    arr.forEach((d, i) => {
-      const t = N === 1 ? 0.5 : i / (N - 1);
-      const deg = startDeg + t * (endDeg - startDeg);
-      const rad = (deg - 90) * Math.PI / 180; // convert: 0° up → standard math 90° up
-      const x = CX + r * Math.cos(rad);
-      const y = CY + r * Math.sin(rad);
-      positions[d.key] = { x, y, r, deg, stratum: s };
-    });
-  }
+
+  // Stratum 1 dims — small nodes inside core zone, arranged around center
+  const s1dims = byStratum[1];
+  s1dims.forEach((d, i) => {
+    // Place them in a small arc below and beside the core boxes
+    const t = (i + 0.5) / s1dims.length;
+    const angle = Math.PI * 0.3 + t * Math.PI * 1.4;
+    const r = R_CORE * 0.72;
+    const x = CX + r * Math.cos(angle);
+    const y = CY + r * Math.sin(angle);
+    positions[d.key] = { x, y, stratum: 1 };
+  });
+
+  // Stratum 2 dims — on S2 ring
+  const s2dims = byStratum[2];
+  s2dims.forEach((d, i) => {
+    const t = (i + 0.5) / s2dims.length;
+    const angle = -Math.PI * 0.85 + t * Math.PI * 1.7;
+    const x = CX + R_S2 * Math.cos(angle);
+    const y = CY + R_S2 * Math.sin(angle);
+    positions[d.key] = { x, y, stratum: 2 };
+  });
+
+  // Stratum 3 dims — on S3 ring
+  const s3dims = byStratum[3];
+  s3dims.forEach((d, i) => {
+    const t = (i + 0.5) / s3dims.length;
+    const angle = -Math.PI * 0.92 + t * Math.PI * 1.84;
+    const x = CX + R_S3 * Math.cos(angle);
+    const y = CY + R_S3 * Math.sin(angle);
+    positions[d.key] = { x, y, stratum: 3 };
+  });
+
   return positions;
 }
 const dimPos = computeDimPositions();
 
-// Layered background bands — painted outer-in so each ring shows as a
-// distinct tone: engine band (outer) → modulator band → strata core.
-el('circle', { cx: CX, cy: CY, r: R_BR_OUT, fill: 'var(--paper-outer)', stroke: 'none' });
-el('circle', { cx: CX, cy: CY, r: R_MOD_OUT, fill: 'var(--paper-mid)', stroke: 'none' });
-el('circle', { cx: CX, cy: CY, r: R_OUTER,   fill: 'var(--paper)', stroke: 'none' });
-
-// Stratum rings (stroke only, over the banded background)
-el('circle', { cx: CX, cy: CY, r: R_OUTER, class: 'ring' });
-el('circle', { cx: CX, cy: CY, r: R_MIDDLE, class: 'ring' });
-el('circle', { cx: CX, cy: CY, r: R_INNER, class: 'ring' });
-
-// Ring hit zones: innermost circle = stratum 1; wide-stroked invisible rings for 2 and 3
-el('circle', { cx: CX, cy: CY, r: R_INNER - 2, class: 'ring-hit', 'data-key': 'stratum1' });
-const midR = (R_INNER + R_MIDDLE) / 2;
-el('circle', {
-  cx: CX, cy: CY, r: midR,
-  fill: 'none', stroke: 'transparent',
-  'stroke-width': R_MIDDLE - R_INNER - 4,
-  class: 'ring-hit', 'data-key': 'stratum2',
-  'pointer-events': 'stroke'
-});
-const outR = (R_MIDDLE + R_OUTER) / 2;
-el('circle', {
-  cx: CX, cy: CY, r: outR,
-  fill: 'none', stroke: 'transparent',
-  'stroke-width': R_OUTER - R_MIDDLE - 4,
-  class: 'ring-hit', 'data-key': 'stratum3',
-  'pointer-events': 'stroke'
-});
-
-// Ring labels inside bottom arc of each ring (not overlapping dims)
-const labelY = CY + R_INNER + 30;
-el('text', { x: CX, y: CY + R_OUTER - 22, class: 'ring-label-tag', 'text-anchor': 'middle' }).textContent = 'Stratum III — outer';
-el('text', { x: CX, y: CY + R_OUTER - 8, class: 'ring-label', 'text-anchor': 'middle', 'font-style': 'italic' }).textContent = 'What you choose';
-el('text', { x: CX, y: CY + R_MIDDLE - 22, class: 'ring-label-tag', 'text-anchor': 'middle' }).textContent = 'Stratum II — middle';
-el('text', { x: CX, y: CY + R_MIDDLE - 8, class: 'ring-label', 'text-anchor': 'middle', 'font-style': 'italic' }).textContent = 'How you perceive';
-el('text', { x: CX, y: CY - 6, class: 'ring-label-tag', 'text-anchor': 'middle' }).textContent = 'Stratum I — core';
-el('text', { x: CX, y: CY + 14, class: 'ring-label', 'text-anchor': 'middle', 'font-style': 'italic' }).textContent = 'Why';
-// Center mark
-el('circle', { cx: CX, cy: CY, r: 2, class: 'center-dot' });
-
-// Helper: smooth bezier between two points (used for connector lines)
+// Helper: smooth bezier
 function bezierPath(x1, y1, x2, y2) {
   const mx = (x1 + x2) / 2;
   const my = (y1 + y2) / 2;
   const dx = x2 - x1, dy = y2 - y1;
   const dist = Math.sqrt(dx * dx + dy * dy);
-  const curve = Math.min(dist * 0.18, 40);
+  const curve = Math.min(dist * 0.18, 35);
   const nx = -dy / (dist || 1), ny = dx / (dist || 1);
   const cpx = mx + nx * curve;
   const cpy = my + ny * curve;
   return `M ${x1.toFixed(1)} ${y1.toFixed(1)} Q ${cpx.toFixed(1)} ${cpy.toFixed(1)} ${x2.toFixed(1)} ${y2.toFixed(1)}`;
 }
 
-// Layer groups — connectors below shapes so shapes sit cleanly above lines
-const connectorLayer = el('g', { id: 'connectors' });
-const shapeLayer = el('g', { id: 'shapes' });
-const nodeLayer = el('g', { id: 'nodes' });
-
-// ---- Render modulators: 6 organic blobs at 60° intervals on their ring ----
-// Start top-center (-90°) and wrap clockwise.
-const modAngleStep = (Math.PI * 2) / MODULATORS.length;
-const modSpan = modAngleStep * 0.55; // wedges cover ~55% of slot, leaving breathing room between
-const modCenters = {};
-MODULATORS.forEach((m, i) => {
-  const theta0 = -Math.PI / 2 + i * modAngleStep - modSpan / 2;
-  const theta1 = theta0 + modSpan;
-  const mid = (theta0 + theta1) / 2;
-  const cx = CX + ((R_MOD_IN + R_MOD_OUT) / 2) * Math.cos(mid);
-  const cy = CY + ((R_MOD_IN + R_MOD_OUT) / 2) * Math.sin(mid);
-  modCenters[m.key] = { x: cx, y: cy, mid };
-  const g = el('g', { class: 'shape-mod-group', 'data-key': m.key }, shapeLayer);
-  el('path', {
-    d: wedgePath(CX, CY, R_MOD_IN, R_MOD_OUT, theta0, theta1),
-    class: 'shape-mod'
-  }, g);
-  el('text', { x: cx, y: cy - 6, class: 'shape-label-tag' }, g).textContent = m.num;
-  el('text', { x: cx, y: cy + 7, class: 'shape-label' }, g).textContent = m.title;
-});
-
-// ---- Render branches: 3 larger organic blobs at 120° intervals ----
-const brAngleStep = (Math.PI * 2) / BRANCHES.length;
-const brSpan = brAngleStep * 0.62;
-const branchCenters = {};
-BRANCHES.forEach((b, i) => {
-  const theta0 = -Math.PI / 2 + i * brAngleStep - brSpan / 2;
-  const theta1 = theta0 + brSpan;
-  const mid = (theta0 + theta1) / 2;
-  const cx = CX + ((R_BR_IN + R_BR_OUT) / 2) * Math.cos(mid);
-  const cy = CY + ((R_BR_IN + R_BR_OUT) / 2) * Math.sin(mid);
-  branchCenters[b.key] = { x: cx, y: cy, mid };
-  const g = el('g', { class: 'shape-branch-group', 'data-key': b.key }, shapeLayer);
-  el('path', {
-    d: wedgePath(CX, CY, R_BR_IN, R_BR_OUT, theta0, theta1),
-    class: 'shape-branch'
-  }, g);
-  el('text', { x: cx, y: cy - 10, class: 'shape-label-tag' }, g).textContent = b.num;
-  el('text', { x: cx, y: cy + 8, class: 'shape-label shape-label-branch' }, g).textContent = b.title;
-});
-
-// ---- Connectors: dim → modulator (primary + secondary), branch → modulator (distant) ----
-// Primary modulator for a dimension: first entry of its mods[] array.
+// ---- Connectors: dim → modulator ----
 Object.entries(DIM_MAP).forEach(([dimKey, info]) => {
   const pos = dimPos[dimKey];
   const mods = info.mods || [];
@@ -1324,66 +1288,39 @@ Object.entries(DIM_MAP).forEach(([dimKey, info]) => {
   });
 });
 
-Object.entries(BRANCH_MODS).forEach(([branchKey, strengths]) => {
-  const bc = branchCenters[branchKey];
-  if (!bc) return;
-  Object.entries(strengths).forEach(([modKey, strength]) => {
-    if (strength === 'low' || !strength) return;
-    const mc = modCenters[modKey];
-    if (!mc) return;
-    el('path', {
-      d: bezierPath(bc.x, bc.y, mc.x, mc.y),
-      class: 'connector distant',
-      'data-source': branchKey,
-      'data-target': modKey
-    }, connectorLayer);
-  });
-});
-
-// Render dimension nodes on top
+// ---- Render dimension nodes ----
 Object.entries(DIM_MAP).forEach(([dimKey, info]) => {
   const pos = dimPos[dimKey];
-  const g = el('g', { class: 'dim-node', 'data-key': dimKey, 'data-stratum': pos.stratum, transform: `translate(${pos.x} ${pos.y})` }, nodeLayer);
+  const g = el('g', {
+    class: 'dim-node',
+    'data-key': dimKey,
+    'data-stratum': pos.stratum,
+    transform: `translate(${pos.x} ${pos.y})`
+  }, nodeLayer);
   el('circle', { cx: 0, cy: 0, r: 4.5, class: 'dim-node-circle' }, g);
 
-  // Label placement — place outside the ring by a small offset, text anchor based on angle
-  // Determine label offset direction (radial outward from ring center)
+  // Label placement: radially outward
   const dx = pos.x - CX;
   const dy = pos.y - CY;
   const len = Math.sqrt(dx * dx + dy * dy) || 1;
-  // Labels sit outside the dimension node for outer ring, inside for inner ring, to avoid overlap
-  let offset = 14;
-  let labelOutside = true;
-  if (pos.stratum === 1) {
-    // Inner ring: labels go toward center (inside inner ring) or slightly outside depending on space
-    // Place outside the inner node (between inner ring and middle ring) radially outward toward middle ring direction
-    labelOutside = true;
-    offset = 12;
-  } else if (pos.stratum === 2) {
-    // Middle ring: between middle and outer → radially outward
-    labelOutside = true;
-    offset = 12;
-  } else {
-    // Outer ring: outside outer ring
-    labelOutside = true;
-    offset = 14;
-  }
-  const nx = dx / len;
-  const ny = dy / len;
+  const nx = dx / len, ny = dy / len;
+  const offset = 13;
   const lx = nx * offset;
   const ly = ny * offset;
-  // Decide text-anchor based on angle
+
   let anchor = 'middle';
   if (nx > 0.3) anchor = 'start';
   else if (nx < -0.3) anchor = 'end';
-  // Split label into up to two lines if long
+
+  // Two-line label if long
   const words = info.title.split(' ');
   let line1 = info.title, line2 = '';
-  if (words.length > 2 && info.title.length > 14) {
+  if (words.length > 2 && info.title.length > 12) {
     const mid = Math.ceil(words.length / 2);
     line1 = words.slice(0, mid).join(' ');
     line2 = words.slice(mid).join(' ');
   }
+
   const text = el('text', {
     x: lx, y: ly,
     class: 'dim-node-label',
@@ -1392,18 +1329,44 @@ Object.entries(DIM_MAP).forEach(([dimKey, info]) => {
   }, g);
   if (line2) {
     const t1 = document.createElementNS(SVG_NS, 'tspan');
-    t1.setAttribute('x', lx);
-    t1.setAttribute('dy', '-0.55em');
-    t1.textContent = line1;
-    text.appendChild(t1);
+    t1.setAttribute('x', lx); t1.setAttribute('dy', '-0.55em');
+    t1.textContent = line1; text.appendChild(t1);
     const t2 = document.createElementNS(SVG_NS, 'tspan');
-    t2.setAttribute('x', lx);
-    t2.setAttribute('dy', '1.15em');
-    t2.textContent = line2;
-    text.appendChild(t2);
+    t2.setAttribute('x', lx); t2.setAttribute('dy', '1.15em');
+    t2.textContent = line2; text.appendChild(t2);
   } else {
     text.textContent = info.title;
   }
+});
+
+// ---- Constraint perimeter: 7 inward arrows ----
+const CONSTRAINT_LABELS = ['Environment','Medical','Legal','Occupational','Access','Situational','Safety'];
+const conCount = 7;
+CONSTRAINT_LABELS.forEach((label, i) => {
+  const angle = -Math.PI / 2 + (i / conCount) * Math.PI * 2;
+  const arrowLen = 22;
+  const outerR = R_CONSTR + 12;
+  const innerR = R_CONSTR - arrowLen;
+  const x1 = CX + outerR * Math.cos(angle);
+  const y1 = CY + outerR * Math.sin(angle);
+  const x2 = CX + innerR * Math.cos(angle);
+  const y2 = CY + innerR * Math.sin(angle);
+
+  el('line', {
+    x1, y1, x2, y2,
+    class: 'constraint-arrow',
+    'marker-end': 'url(#con-arrow)'
+  }, constraintLayer);
+
+  // Label at outer tip
+  const lx = CX + (outerR + 14) * Math.cos(angle);
+  const ly = CY + (outerR + 14) * Math.sin(angle);
+  el('text', {
+    x: lx, y: ly,
+    'text-anchor': 'middle',
+    'dominant-baseline': 'middle',
+    class: 'constraint-label'
+  }, constraintLayer).textContent = label;
 });
 
 // ================ INTERACTION ================
@@ -1419,17 +1382,12 @@ function clearHighlights() {
   document.querySelectorAll('.active, .cross, .revealed').forEach(el => el.classList.remove('active', 'cross', 'revealed'));
 }
 
-// Mark the DOM element for a key as active (so it stays bright under dimmed-mode).
 function markActive(key) {
   document.querySelector(`.dim-node[data-key="${key}"]`)?.classList.add('active');
   document.querySelector(`.shape-mod-group[data-key="${key}"]`)?.classList.add('active');
-  document.querySelector(`.shape-branch-group[data-key="${key}"]`)?.classList.add('active');
-  document.querySelector(`.mod-card[data-key="${key}"]`)?.classList.add('active');
-  document.querySelector(`.engine-card[data-key="${key}"]`)?.classList.add('active');
+  document.querySelector(`.shape-core-group[data-key="${key}"]`)?.classList.add('active');
 }
 
-// Reveal all connectors whose source OR target matches `key`; mark both
-// endpoints active so the shading effect highlights the related elements.
 function revealConnectorsFor(key) {
   if (!key) return;
   const keys = [];
@@ -1462,13 +1420,6 @@ function highlightModulator(modKey) {
   revealConnectorsFor(modKey);
 }
 
-function highlightBranch(branchKey) {
-  clearHighlights();
-  document.body.classList.add('dimmed-mode');
-  markActive(branchKey);
-  revealConnectorsFor(branchKey);
-}
-
 function highlightEngine(engKey) {
   clearHighlights();
   document.body.classList.add('dimmed-mode');
@@ -1484,7 +1435,6 @@ function highlightStratum(sKey) {
 function openPanel(key) {
   const d = DATA[key];
   if (!d) return;
-  // Reset window position/size on each open so it starts centered at default.
   panel.style.left = '';
   panel.style.top = '';
   panel.style.transform = '';
@@ -1497,7 +1447,7 @@ function openPanel(key) {
   let html = '';
   if (DIM_MAP[key]) {
     const info = DIM_MAP[key];
-    const stratumName = info.s === 1 ? 'I — why you adorn' : info.s === 2 ? 'II — how you perceive' : 'III — what you choose';
+    const stratumName = info.s === 1 ? 'I — who you are' : info.s === 2 ? 'II — how you perceive' : 'III — how you act';
     const engTitle = DATA[info.eng]?.title || info.eng;
     html += `<div class="panel-profile">`;
     html += `<div class="panel-profile-row"><div class="panel-profile-key">Home stratum</div><div class="panel-profile-val"><strong>${stratumName}</strong></div></div>`;
@@ -1507,12 +1457,6 @@ function openPanel(key) {
     }
     if (info.mods.length) {
       html += `<div class="panel-profile-row"><div class="panel-profile-key">Modulators</div><div class="panel-profile-chips">${info.mods.map(m => `<span class="panel-profile-chip" data-key="${m}">${DATA[m]?.title || m}</span>`).join('')}</div></div>`;
-    }
-    if (info.stages.length) {
-      html += `<div class="panel-profile-row"><div class="panel-profile-key">Forms in</div><div class="panel-profile-chips">${info.stages.map(s => `<span class="panel-profile-chip" data-key="${s}">${DATA[s]?.title || s}</span>`).join('')}</div></div>`;
-    }
-    if (info.paths.length) {
-      html += `<div class="panel-profile-row"><div class="panel-profile-key">Failure modes</div><div class="panel-profile-chips">${info.paths.map(p => `<span class="panel-profile-chip pathology" data-key="${p}">${DATA[p]?.title || p}</span>`).join('')}</div></div>`;
     }
     html += `</div>`;
   }
@@ -1533,7 +1477,6 @@ function openPanel(key) {
   panelBody.innerHTML = html;
   panelBody.scrollTop = 0;
 
-  // Delegate clicks on chips inside panel
   panelBody.querySelectorAll('[data-key]').forEach(link => {
     link.addEventListener('click', (e) => {
       e.stopPropagation();
@@ -1551,7 +1494,7 @@ function closePanel() {
 }
 panelClose.addEventListener('click', closePanel);
 
-// ======= Drag the window by its header =======
+// Drag
 (function enableWindowDrag() {
   let dragging = false, startX = 0, startY = 0, startLeft = 0, startTop = 0;
   panelHead.addEventListener('mousedown', (e) => {
@@ -1582,13 +1525,11 @@ function applyHighlight(key) {
   if (!key) return clearHighlights();
   if (DIM_MAP[key]) highlightDimension(key);
   else if (MODULATORS.find(m => m.key === key)) highlightModulator(key);
-  else if (BRANCHES.find(b => b.key === key)) highlightBranch(key);
   else if (ENGINES.find(e => e.key === key)) highlightEngine(key);
   else if (STRATA.find(s => s.key === key)) highlightStratum(key);
   else clearHighlights();
 }
 
-// Wire interactive elements: click opens panel, hover reveals connectors.
 function wireInteractive(selector, { hoverReveal = true } = {}) {
   document.querySelectorAll(selector).forEach(el => {
     el.addEventListener('click', (e) => {
@@ -1608,31 +1549,48 @@ function wireInteractive(selector, { hoverReveal = true } = {}) {
   });
 }
 
-wireInteractive('.engine-card', { hoverReveal: false });
-wireInteractive('.mod-card');
 wireInteractive('.dim-node');
 wireInteractive('.ring-hit');
 wireInteractive('.shape-mod-group');
-wireInteractive('.shape-branch-group');
+wireInteractive('.shape-core-group');
 
-
-// Escape to close
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') closePanel();
 });
+
+// ======= Age Slider =======
+const ageAnnotations = [
+  { max: 15,  text: '<strong>Early life (newborn–teen):</strong> Modulators dominate completely — Strat I is being <em>written</em> by external forces. Identity is highly plastic and socially constituted. The world writes who you are.' },
+  { max: 28,  text: '<strong>Young adult:</strong> Strat I begins solidifying — core values, regulatory focus, and self-concept emerging. Modulators still exert strong pull via peer group, habitus, and informational environment.' },
+  { max: 45,  text: '<strong>Prime adult:</strong> Bidirectional balance — Strat I increasingly drives choices, but Modulators (body, life-course events, habitus) continue to reshape and refine the core. Co-constitutive equilibrium.' },
+  { max: 65,  text: '<strong>Mid-life:</strong> Strat I dominant — core identity drivers become more stable and self-directing. Modulators shift in character (body, life-course transitions like parenthood/career peak) but respond increasingly to an established Strat I.' },
+  { max: 100, text: '<strong>Elder:</strong> Strat I crystallized — core values, self-concept, and regulatory style highly stable. Modulators shift again (aging body, reduced informational novelty-seeking) but within a Strat I-shaped frame. Identity authors the world more than the world authors identity.' }
+];
+
+const slider = document.getElementById('age-slider');
+const annotation = document.getElementById('age-annotation');
+
+function updateAgeAnnotation(val) {
+  const entry = ageAnnotations.find(a => val <= a.max) || ageAnnotations[ageAnnotations.length - 1];
+  annotation.innerHTML = entry.text;
+}
+
+slider.addEventListener('input', () => updateAgeAnnotation(+slider.value));
+updateAgeAnnotation(+slider.value);
 </script>
+
 <script>
-// Non-identity constraints — additions
+// Non-identity constraints additions
 try {
 
 var CONSTRAINTS = [
-  {key:"con-environment",num:"01",title:"Physical environment",sub:"thermal/physical viability",bounds:["dim-color","dim-texture","dim-form","dim-silhouette","dim-adornment"]},
-  {key:"con-medical",num:"02",title:"Physiology & medical",sub:"body state, allergen, device",bounds:["dim-texture","dim-form","dim-silhouette","dim-body-relation","dim-adornment"]},
-  {key:"con-legal",num:"03",title:"Legal & regulatory",sub:"state/institutional rules",bounds:["dim-color","dim-form","dim-silhouette","dim-signaling","dim-cultural"]},
-  {key:"con-occupational",num:"04",title:"Occupational",sub:"safety, hygiene, performance",bounds:["dim-form","dim-silhouette","dim-texture","dim-color","dim-adornment"]},
-  {key:"con-access",num:"05",title:"Access & availability",sub:"supply, infrastructure, economic floor",bounds:["dim-color","dim-texture","dim-pattern","dim-adornment","dim-condition"]},
-  {key:"con-situational",num:"06",title:"Acute situational",sub:"time-bounded circumstance",bounds:["dim-form","dim-silhouette","dim-occasion","dim-signaling","dim-cultural"]},
-  {key:"con-safety",num:"07",title:"Safety & security",sub:"threat context",bounds:["dim-color","dim-signaling","dim-adornment","dim-silhouette","dim-cultural"]}
+  {key:"con-environment",  num:"01", title:"Physical environment",  sub:"thermal/physical viability",             bounds:["dim-color","dim-texture","dim-form","dim-silhouette","dim-adornment"]},
+  {key:"con-medical",      num:"02", title:"Physiology & medical",  sub:"body state, allergen, device",           bounds:["dim-texture","dim-form","dim-silhouette","dim-body-relation","dim-adornment"]},
+  {key:"con-legal",        num:"03", title:"Legal & regulatory",    sub:"state/institutional rules",              bounds:["dim-color","dim-form","dim-silhouette","dim-signaling","dim-cultural"]},
+  {key:"con-occupational", num:"04", title:"Occupational",          sub:"safety, hygiene, performance",           bounds:["dim-form","dim-silhouette","dim-texture","dim-color","dim-adornment"]},
+  {key:"con-access",       num:"05", title:"Access & availability", sub:"supply, infrastructure, economic floor", bounds:["dim-color","dim-texture","dim-pattern","dim-adornment","dim-condition"]},
+  {key:"con-situational",  num:"06", title:"Acute situational",     sub:"time-bounded circumstance",              bounds:["dim-form","dim-silhouette","dim-occasion","dim-signaling","dim-cultural"]},
+  {key:"con-safety",       num:"07", title:"Safety & security",     sub:"threat context",                         bounds:["dim-color","dim-signaling","dim-adornment","dim-silhouette","dim-cultural"]}
 ];
 
 var CON_PANEL_DATA = {
@@ -1646,65 +1604,6 @@ var CON_PANEL_DATA = {
 };
 Object.keys(CON_PANEL_DATA).forEach(function(k){ DATA[k] = CON_PANEL_DATA[k]; });
 
-// Boundary ring
-var _mapSvg = document.getElementById("map");
-if (_mapSvg) {
-  var _ns = "http://www.w3.org/2000/svg";
-  var bLayer = document.createElementNS(_ns, "g");
-  bLayer.id = "boundary-layer";
-  var bCirc = document.createElementNS(_ns, "circle");
-  bCirc.setAttribute("cx","680"); bCirc.setAttribute("cy","450"); bCirc.setAttribute("r","445");
-  bCirc.classList.add("boundary-ring");
-  var bTxt = document.createElementNS(_ns, "text");
-  bTxt.setAttribute("x","680"); bTxt.setAttribute("y","18");
-  bTxt.setAttribute("text-anchor","middle"); bTxt.classList.add("boundary-tag");
-  bTxt.textContent = "NON-IDENTITY CONSTRAINTS \u2014 PERIMETER";
-  bLayer.appendChild(bCirc); bLayer.appendChild(bTxt);
-  _mapSvg.insertBefore(bLayer, _mapSvg.firstChild);
-}
-
-// Engine core nodes in SVG center
-if (_mapSvg && typeof ENGINES !== "undefined") {
-  var _ns2 = "http://www.w3.org/2000/svg";
-  var ecG = document.createElementNS(_ns2, "g");
-  ecG.id = "engine-core";
-  var ecBg = document.createElementNS(_ns2, "circle");
-  ecBg.setAttribute("cx","680"); ecBg.setAttribute("cy","450"); ecBg.setAttribute("r","65");
-  ecBg.setAttribute("fill","var(--paper-outer)"); ecBg.setAttribute("stroke","var(--line)");
-  ecBg.setAttribute("stroke-width","0.75"); ecBg.setAttribute("opacity","0.55");
-  ecBg.classList.add("engine-core-bg");
-  ecG.appendChild(ecBg);
-  var ecLbl = document.createElementNS(_ns2, "text");
-  ecLbl.setAttribute("x","680"); ecLbl.setAttribute("y","390");
-  ecLbl.setAttribute("text-anchor","middle");
-  ecLbl.setAttribute("style","font-family:JetBrains Mono,monospace;font-size:7px;letter-spacing:0.3em;fill:var(--ink-mute);text-transform:uppercase;");
-  ecLbl.textContent = "ENGINES";
-  ecG.appendChild(ecLbl);
-  var ecPos = [{x:680,y:405},{x:653,y:425},{x:707,y:425},{x:653,y:452},{x:707,y:452},{x:680,y:472}];
-  ENGINES.forEach(function(eng, idx) {
-    var gN = document.createElementNS(_ns2, "g");
-    gN.classList.add("engine-node");
-    gN.setAttribute("data-key", eng.key);
-    gN.setAttribute("cursor","pointer");
-    var cN = document.createElementNS(_ns2, "circle");
-    cN.setAttribute("cx", String(ecPos[idx].x));
-    cN.setAttribute("cy", String(ecPos[idx].y));
-    cN.setAttribute("r","6"); cN.setAttribute("fill","var(--bg)");
-    cN.setAttribute("stroke","var(--ink)"); cN.setAttribute("stroke-width","0.75");
-    cN.classList.add("dim-node-circle");
-    var tN = document.createElementNS(_ns2, "text");
-    tN.setAttribute("x", String(ecPos[idx].x));
-    tN.setAttribute("y", String(ecPos[idx].y + 3));
-    tN.setAttribute("text-anchor","middle");
-    tN.setAttribute("style","font-family:JetBrains Mono,monospace;font-size:6px;fill:var(--ink-mute);letter-spacing:0.1em;");
-    tN.textContent = eng.num;
-    gN.appendChild(cN); gN.appendChild(tN); ecG.appendChild(gN);
-  });
-  var _cdot = _mapSvg.querySelector(".center-dot");
-  if (_cdot) _mapSvg.insertBefore(ecG, _cdot);
-  else _mapSvg.appendChild(ecG);
-}
-
 // Render constraint cards
 var _cGrid = document.getElementById("constraints-grid");
 if (_cGrid) {
@@ -1713,16 +1612,16 @@ if (_cGrid) {
     card.className = "con-card";
     card.setAttribute("data-key", c.key);
     var inner = '<div><div class="con-card-num">' + c.num + '</div>';
-    inner += '<div class="con-card-title" style="margin-top:4px">' + c.title + '</div></div>';
+    inner += '<div class="con-card-title">' + c.title + '</div></div>';
     inner += '<div class="con-card-sub">' + c.sub + '</div>';
     card.innerHTML = inner;
     _cGrid.appendChild(card);
   });
 }
 
-// Highlight logic
+// Highlight logic for constraints
 function highlightConstraint(key) {
-  var con = CONSTRAINTS.find(function(c){return c.key === key;});
+  var con = CONSTRAINTS.find(function(c){ return c.key === key; });
   if (!con) return;
   document.body.classList.add("constraint-mode");
   document.querySelectorAll(".dim-node").forEach(function(n){ n.classList.remove("bound"); });
@@ -1736,7 +1635,6 @@ function clearConstraintMode() {
   document.querySelectorAll(".dim-node.bound").forEach(function(n){ n.classList.remove("bound"); });
 }
 
-// Wire constraint cards
 var _panel = document.getElementById("panel");
 document.querySelectorAll(".con-card").forEach(function(card) {
   card.addEventListener("mouseenter", function() {
@@ -1749,23 +1647,6 @@ document.querySelectorAll(".con-card").forEach(function(card) {
     e.stopPropagation();
     highlightConstraint(card.getAttribute("data-key"));
     if (typeof openPanel === "function") openPanel(card.getAttribute("data-key"));
-  });
-});
-
-// Wire engine SVG nodes
-document.querySelectorAll(".engine-node").forEach(function(node) {
-  node.addEventListener("click", function(e) {
-    e.stopPropagation();
-    if (typeof clearHighlights === "function") clearHighlights();
-    node.classList.add("active");
-    document.body.classList.add("dimmed-mode");
-    if (typeof openPanel === "function") openPanel(node.getAttribute("data-key"));
-  });
-  node.addEventListener("mouseenter", function() {
-    if (_panel && !_panel.classList.contains("visible")) node.classList.add("active");
-  });
-  node.addEventListener("mouseleave", function() {
-    if (_panel && !_panel.classList.contains("visible")) node.classList.remove("active");
   });
 });
 
@@ -1787,7 +1668,7 @@ openPanel = function(key) {
     });
     extra += '</div>';
   }
-  var con = CONSTRAINTS.find(function(c){return c.key === key;});
+  var con = CONSTRAINTS.find(function(c){ return c.key === key; });
   if (con && con.bounds.length) {
     extra += '<div class="panel-bounds"><div class="panel-bounds-label">Bounds these dimensions</div><div class="panel-bounds-chips">';
     con.bounds.forEach(function(dk) {
@@ -1818,9 +1699,8 @@ clearHighlights = function() {
   document.querySelectorAll(".con-card.active").forEach(function(c){ c.classList.remove("active"); });
 };
 
-console.log("[constraints] OK: " + CONSTRAINTS.length + " cards, engine-core=" + !!document.getElementById("engine-core"));
+console.log("[v5 causal cascade] constraints OK: " + CONSTRAINTS.length + " cards");
 } catch(err) { console.error("[constraints] FATAL:", err.message, err.stack); }
-
 </script>
 </body>
 </html>
